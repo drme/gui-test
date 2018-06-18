@@ -13,6 +13,11 @@ public class CheckResult {
 		return message;
 	}
 
+	@Override
+	public String toString() {
+		return "CheckResult [type=" + type + ", message=" + message + ", file=" + file + ", isOK=" + isOK + "]";
+	}
+
 	public String getFile() {
 		return file;
 	}

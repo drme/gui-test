@@ -1,8 +1,15 @@
 package edu.ktu.screenshotanalyser;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class AppImageFiles {
+	@Override
+	public String toString() {
+		return "AppImageFiles [projectName=" + projectName + ", config=" + config + ", files=" + Arrays.toString(files)
+				+ ", baseDir=" + baseDir + "]";
+	}
+
 	public String getBaseDirName() {
 		return baseDir;
 	}

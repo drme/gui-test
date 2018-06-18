@@ -1,6 +1,5 @@
 package edu.ktu.screenshotanalyser.checks;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class CheckRequest {
 	final List<MatOfPoint> contours = new ArrayList<>();
 	final List<ExtractedText> extractedTexts = new ArrayList<>();
 
-	final File originalFile;
+	final String originalFile;
 
 	public List<MatOfPoint> getContours() {
 		return contours;
@@ -23,11 +22,11 @@ public class CheckRequest {
 		return extractedTexts;
 	}
 
-	public File getOriginalFile() {
+	public String getOriginalFile() {
 		return originalFile;
 	}
 
-	public CheckRequest(File originalFile) {
+	public CheckRequest(String originalFile) {
 		this.originalFile = originalFile;
 
 	}

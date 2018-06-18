@@ -44,7 +44,42 @@ public class AnalyzerSettings {
 
 	@Argument(alias = "p", description = "Precision for words detection", required = false)
 	private float precision = 0.60f;
+
+	@Argument(alias = "lang", description = "Language", required = false)
+	private String language = "nor";
 	
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public void setInputDir(String inputDir) {
+		this.inputDir = inputDir;
+	}
+
+	public void setOutputDir(String outputDir) {
+		this.outputDir = outputDir;
+	}
+
+	public void setCvLibrary(String cvLibrary) {
+		this.cvLibrary = cvLibrary;
+	}
+
+	public void setTessDataFolder(String tessDataFolder) {
+		this.tessDataFolder = tessDataFolder;
+	}
+
+	public void setPrecision(float precision) {
+		this.precision = precision;
+	}
+
+	public void setRunChecks(boolean runChecks) {
+		this.runChecks = runChecks;
+	}
+
 	@Override
 	public String toString() {
 		return "AnalyzerRequest [inputDir=" + inputDir + ", outputDir=" + outputDir + ", cvLibrary=" + cvLibrary

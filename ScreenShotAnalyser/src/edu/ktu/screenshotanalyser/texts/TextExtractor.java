@@ -20,12 +20,12 @@ public class TextExtractor implements ITextExtractor{
 	private final ITesseract instance;
 	private final float confidenceLevel;
 
-	public TextExtractor(float confidenceLevel, String tessDataPath) {
+	public TextExtractor(float confidenceLevel, String tessDataPath, String lang) {
 		
 		this.confidenceLevel = confidenceLevel;
 		instance = new Tesseract();
 		instance.setDatapath(new File(tessDataPath).getAbsolutePath());
-		instance.setLanguage("nor");
+		instance.setLanguage(lang);
 	}
 
 	public TextExtractResponse extract(final TextExtractRequest request) throws Throwable {
@@ -42,7 +42,7 @@ public class TextExtractor implements ITextExtractor{
 
 				for (final Word word : words) {
 
-					System.out.println("" + word.getConfidence() + " -> " + word.getText());
+					//System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
 					if (word.getConfidence() > this.confidenceLevel) {
 						sb.append(" " + word.getText());
