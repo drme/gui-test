@@ -1,9 +1,6 @@
 package edu.ktu.screenshotanalyser;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,8 +17,8 @@ import edu.ktu.screenshotanalyser.texts.TextExtractor.TextExtractResponse;
 public class ImageTextsExtractor {
 	private static final Logger logger = Logger.getGlobal();
 	private final IImageContoursProvider imageContoursProvider = new ImageContoursProvider();
-	private ITextExtractor textExtractor;
-	private IReporter reporter;
+	private final ITextExtractor textExtractor;
+	private final IReporter reporter;
 	private final IFilesProvider filesProvider = new DroidBotFilesProvider();
 
 	public ImageTextsExtractor(ITextExtractor textExtractor, IReporter reporter) {
@@ -30,7 +27,8 @@ public class ImageTextsExtractor {
 	}
 
 	public static ImageTextsExtractor fromRequest(AnalyzerSettings request) {
-		return new ImageTextsExtractor(new TextExtractor(request.getPrecision(), request.getTessDataFolder()),
+		return new ImageTextsExtractor(
+				new TextExtractor(request.getPrecision(), request.getTessDataFolder(), request.getLanguage()),
 				new MultIReporter(request.getOutputDir()));
 	}
 
