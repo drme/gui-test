@@ -1,4 +1,4 @@
-package edu.ktu.screenshotanalyser;
+package edu.ktu.screenshotanalyser.texts;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,11 +20,11 @@ public class TextExtractor implements ITextExtractor{
 	private final ITesseract instance;
 	private final float confidenceLevel;
 
-	public TextExtractor(float confidenceLevel) {
+	public TextExtractor(float confidenceLevel, String tessDataPath) {
 		
 		this.confidenceLevel = confidenceLevel;
 		instance = new Tesseract();
-		instance.setDatapath(new File(System.getProperty("user.dir"), "tessdata").getAbsolutePath());
+		instance.setDatapath(new File(tessDataPath).getAbsolutePath());
 		instance.setLanguage("nor");
 	}
 
@@ -55,7 +55,7 @@ public class TextExtractor implements ITextExtractor{
 						String.format("Unexpected exception while analysing %s", file.getAbsolutePath()), ex);
 			}
 		}
-		return new TextExtractResponse(extractedTexts);
+		return new TextExtractResponse(extractedTexts, this.confidenceLevel);
 
 	}
 
@@ -88,8 +88,10 @@ public class TextExtractor implements ITextExtractor{
 
 	public static class TextExtractResponse {
 		final List<ExtractedText> extractedTexts = new ArrayList<>();
+		private float confidenceLevel;
 
-		public TextExtractResponse(List<ExtractedText> extractedTexts) {
+		public TextExtractResponse(List<ExtractedText> extractedTexts, float confidenceLevel) {
+			this.confidenceLevel = confidenceLevel;
 			this.extractedTexts.addAll(extractedTexts);
 		}
 

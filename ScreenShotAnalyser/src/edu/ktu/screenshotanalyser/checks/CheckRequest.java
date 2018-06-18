@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.opencv.core.MatOfPoint;
 
-import edu.ktu.screenshotanalyser.TextExtractor.ExtractedText;
+import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
 
 public class CheckRequest {
 

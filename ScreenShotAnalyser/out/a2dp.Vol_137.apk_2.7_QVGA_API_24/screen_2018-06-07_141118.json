@@ -1,0 +1,207 @@
+{
+  "extractedTexts": [
+    {
+      "orginalWords": [
+        {
+          "text": "B\n",
+          "confidence": 71.805954,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 36,
+            "height": 8
+          }
+        }
+      ],
+      "text": " B\n",
+      "area": {
+        "x": 169,
+        "y": 199,
+        "width": 38,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "aW\n",
+          "confidence": 26.593597,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 26,
+            "height": 8
+          }
+        }
+      ],
+      "text": " aW\n",
+      "area": {
+        "x": 123,
+        "y": 199,
+        "width": 28,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "phone calls?\n",
+          "confidence": 79.99277,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 83,
+            "height": 14
+          }
+        }
+      ],
+      "text": " phone calls?\n",
+      "area": {
+        "x": 66,
+        "y": 166,
+        "width": 85,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "to make and manage\n",
+          "confidence": 88.58687,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 140,
+            "height": 14
+          }
+        }
+      ],
+      "text": " to make and manage\n",
+      "area": {
+        "x": 65,
+        "y": 148,
+        "width": 142,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "Rlow R2DP Volume\n",
+          "confidence": 63.712452,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 136,
+            "height": 11
+          }
+        }
+      ],
+      "text": " Rlow R2DP Volume\n",
+      "area": {
+        "x": 65,
+        "y": 130,
+        "width": 138,
+        "height": 13
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "U\n",
+          "confidence": 64.711395,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 21,
+            "height": 21
+          }
+        }
+      ],
+      "text": " U\n",
+      "area": {
+        "x": 30,
+        "y": 129,
+        "width": 22,
+        "height": 21
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+          "confidence": 67.00682,
+          "rect": {
+            "x": 19,
+            "y": 18,
+            "width": 177,
+            "height": 79
+          }
+        }
+      ],
+      "text": " U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+      "area": {
+        "x": 11,
+        "y": 111,
+        "width": 218,
+        "height": 115
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+          "confidence": 67.00682,
+          "rect": {
+            "x": 18,
+            "y": 17,
+            "width": 177,
+            "height": 79
+          }
+        }
+      ],
+      "text": " U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+      "area": {
+        "x": 12,
+        "y": 112,
+        "width": 216,
+        "height": 113
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "PR\n",
+          "confidence": 0.0,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 56,
+            "height": 11
+          }
+        }
+      ],
+      "text": "",
+      "area": {
+        "x": 175,
+        "y": 2,
+        "width": 65,
+        "height": 13
+      }
+    },
+    {
+      "orginalWords": [],
+      "text": "",
+      "area": {
+        "x": 9,
+        "y": 2,
+        "width": 29,
+        "height": 14
+      }
+    }
+  ],
+  "configName": "2.7_QVGA_API_24",
+  "appName": "a2dp.Vol_137",
+  "shortFileName": "screen_2018-06-07_141118.png",
+  "baseName": "a2dp.Vol_137.apk_2.7_QVGA_API_24"
+}

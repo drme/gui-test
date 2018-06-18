@@ -1,4 +1,4 @@
-package edu.ktu.screenshotanalyser;
+package edu.ktu.screenshotanalyser.reporters;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,18 +15,17 @@ import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import edu.ktu.screenshotanalyser.TextExtractor.ExtractedText;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
 
-public class FoundTextsReporter implements IReporter {
+public class FoundTextsOnImagesReporter implements IReporter {
 	private String outDir;
 	private static final Logger logger = Logger.getGlobal();
 
-	public FoundTextsReporter() {
-		this.outDir = System.getProperty("user.dir") + "\\out\\";
+	public FoundTextsOnImagesReporter(String outDir) {
+		this.outDir = outDir;
 	}
 
-	public void save(ReportRequest request) throws Throwable {
+	public void save(AppExtractInfo request) throws Throwable {
 		List<MatOfPoint> contours = request.getContours();
 		File file = request.getOriginalFile();
 		Mat original = Imgcodecs.imread(file.getAbsolutePath());
@@ -52,7 +51,7 @@ public class FoundTextsReporter implements IReporter {
 		int countourIndex = 0;
 
 		Imgproc.drawContours(mask, contours, countourIndex++, new Scalar(255, 255, 255), Core.FILLED);
-		
+
 		for (ExtractedText extractedText : request.getExtractedTexts()) {
 			String text = extractedText.getText().trim();
 			Rect bounds = extractedText.getArea();
@@ -63,17 +62,41 @@ public class FoundTextsReporter implements IReporter {
 				Imgproc.putText(original, text, bounds.tl(), Core.FONT_ITALIC, 1.0, new Scalar(255));
 			}
 		}
+		File outFile = new File(outDir, request.getOutFile() + ".png");
 
-		String outFile = new File(outDir, file.getName()).getAbsolutePath();
-		Imgcodecs.imwrite(outFile, original);
-		logger.info(String.format("Wrote out file to: %s", outFile));
+		Imgcodecs.imwrite(outFile.getAbsolutePath(), original);
+		logger.info(String.format("Wrote png file to: %s", outFile));
 	}
 
-	public static class ReportRequest {
-		final List<MatOfPoint> contours = new ArrayList<>();
+	public static class AppExtractInfo {
+		final transient List<MatOfPoint> contours = new ArrayList<>();
 		final List<ExtractedText> extractedTexts = new ArrayList<>();
-		final List<CheckResult> checkResults = new ArrayList<>();
-		final File originalFile;
+		final transient File originalFile;
+		private final String configName;
+		private final String appName;
+
+		public String getConfigName() {
+			return configName;
+		}
+
+		public String getAppName() {
+			return appName;
+		}
+
+		public String getShortFileName() {
+			return shortFileName;
+		}
+
+		public String getOutFile() {
+			return this.baseDir + "//" + org.apache.commons.io.FilenameUtils.removeExtension(this.shortFileName);
+		}
+
+		private final String shortFileName;
+		private String baseDir;
+
+		public String getBaseName() {
+			return baseDir;
+		}
 
 		public List<MatOfPoint> getContours() {
 			return contours;
@@ -87,12 +110,14 @@ public class FoundTextsReporter implements IReporter {
 			return originalFile;
 		}
 
-		public ReportRequest(final File originalFile) {
+		public AppExtractInfo(final File originalFile, final String baseName, final String appName,
+				final String configName) {
 			this.originalFile = originalFile;
+			this.baseDir = baseName;
+			this.shortFileName = originalFile.getName();
+			this.appName = appName;
+			this.configName = configName;
 		}
 
-		public List<CheckResult> getCheckResults() {
-			return this.checkResults;
-		}
 	}
 }

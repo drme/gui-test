@@ -3,18 +3,18 @@ package edu.ktu.screenshotanalyser.checks.semantic;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ktu.screenshotanalyser.TextExtractor.ExtractedText;
-import edu.ktu.screenshotanalyser.checks.CheckContext;
 import edu.ktu.screenshotanalyser.checks.CheckRequest;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.ICheck;
+import edu.ktu.screenshotanalyser.context.AppContext;
+import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
 
 public class SL1_MissingTranslationCheck implements ICheck {
 
 	private final String type = "SL1";
 
 	@Override
-	public CheckResult[] analyze(CheckRequest request, CheckContext context) {
+	public CheckResult[] analyze(CheckRequest request, AppContext context) {
 		final List<CheckResult> results = new ArrayList<>();
 
 		for (ExtractedText extractedText : request.getExtractedTexts()) {

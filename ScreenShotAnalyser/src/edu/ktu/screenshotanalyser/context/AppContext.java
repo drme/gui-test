@@ -1,11 +1,11 @@
-package edu.ktu.screenshotanalyser.checks;
+package edu.ktu.screenshotanalyser.context;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class CheckContext {
+public class AppContext {
 
 	private final Map<String, List<ResourceText>> resources = new HashMap<String, List<ResourceText>>();
 
