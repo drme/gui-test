@@ -5,6 +5,22 @@ import java.io.File;
 import com.sampullara.cli.Argument;
 
 public class AnalyzerSettings {
+	public String getTextsDir() {
+		return textsDir;
+	}
+
+	public void setTextsDir(String textsDir) {
+		this.textsDir = textsDir;
+	}
+
+	public String getResourcesDir() {
+		return resourcesDir;
+	}
+
+	public void setResourcesDir(String resourcesDir) {
+		this.resourcesDir = resourcesDir;
+	}
+
 	public String getInputDir() {
 		return inputDir;
 	}
@@ -32,8 +48,14 @@ public class AnalyzerSettings {
 	@Argument(alias = "i", description = "Input directory", required = false)
 	private String inputDir = ".\\samples\\images";
 	
+	@Argument(alias = "r", description = "Resources directory", required = false)
+	private String resourcesDir = ".\\samples\\res";
+	
 	@Argument(alias = "o", description = "Output directory", required = false)
-	private String outputDir =  ".\\out\\";
+	private String outputDir =  ".\\out\\results";
+
+	@Argument(alias = "t", description = "Texts directory", required = false)
+	private String textsDir =  ".\\out\\texts";
 	
 	@Argument(alias = "cv", description = "Path to opencv dll file", required = false)
 	private String cvLibrary = ".\\lib\\opencv_java340.dll";

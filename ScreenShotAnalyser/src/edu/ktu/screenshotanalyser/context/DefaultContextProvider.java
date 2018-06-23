@@ -37,7 +37,6 @@ public class DefaultContextProvider implements IContextProvider {
 
 			@Override
 			public boolean accept(File pathname) {
-				System.out.println(pathname);
 				return pathname.isDirectory() && pathname.getName().startsWith("values");
 
 			}

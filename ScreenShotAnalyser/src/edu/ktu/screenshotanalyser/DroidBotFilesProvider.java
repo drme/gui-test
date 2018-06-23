@@ -5,7 +5,7 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DroidBotFilesProvider implements IFilesProvider {
+public class DroidBotFilesProvider implements IFilesProvider<AppImageFiles> {
 
 	public AppImageFiles[] getFiles(String baseDir) {
 		final List<AppImageFiles> items = new ArrayList<AppImageFiles>();

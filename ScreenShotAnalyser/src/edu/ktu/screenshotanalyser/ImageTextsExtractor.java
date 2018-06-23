@@ -19,7 +19,7 @@ public class ImageTextsExtractor {
 	private final IImageContoursProvider imageContoursProvider = new ImageContoursProvider();
 	private final ITextExtractor textExtractor;
 	private final IReporter reporter;
-	private final IFilesProvider filesProvider = new DroidBotFilesProvider();
+	private final IFilesProvider<AppImageFiles> filesProvider = new DroidBotFilesProvider();
 
 	public ImageTextsExtractor(ITextExtractor textExtractor, IReporter reporter) {
 		this.textExtractor = textExtractor;

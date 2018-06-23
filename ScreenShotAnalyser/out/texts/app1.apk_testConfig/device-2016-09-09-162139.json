@@ -1459,5 +1459,5 @@
   "configName": "testConfig",
   "appName": "app1",
   "shortFileName": "device-2016-09-09-162139.png",
-  "baseName": "app1.apk_testConfig"
+  "baseDir": "app1.apk_testConfig"
 }

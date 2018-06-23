@@ -45,59 +45,101 @@
     {
       "orginalWords": [
         {
-          "text": "messages!\n",
-          "confidence": 76.70593,
+          "text": "phone calls?\n",
+          "confidence": 79.99277,
           "rect": {
             "x": 1,
             "y": 1,
-            "width": 75,
+            "width": 83,
             "height": 14
           }
         }
       ],
-      "text": " messages!\n",
+      "text": " phone calls?\n",
       "area": {
         "x": 66,
         "y": 166,
-        "width": 77,
+        "width": 85,
         "height": 16
       }
     },
     {
       "orginalWords": [
         {
-          "text": "IB — Allow AZDP Volume\n",
-          "confidence": 63.49149,
+          "text": "to make and manage\n",
+          "confidence": 88.58687,
           "rect": {
-            "x": 2,
-            "y": 2,
-            "width": 172,
-            "height": 20
+            "x": 1,
+            "y": 1,
+            "width": 140,
+            "height": 14
           }
         }
       ],
-      "text": " IB — Allow AZDP Volume\n",
+      "text": " to make and manage\n",
       "area": {
-        "x": 28,
-        "y": 127,
-        "width": 175,
-        "height": 24
+        "x": 65,
+        "y": 148,
+        "width": 142,
+        "height": 16
       }
     },
     {
       "orginalWords": [
         {
-          "text": "fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
-          "confidence": 69.44327,
+          "text": "Rlow R2DP Volume\n",
+          "confidence": 63.712452,
           "rect": {
-            "x": 18,
-            "y": 17,
-            "width": 184,
-            "height": 80
+            "x": 1,
+            "y": 1,
+            "width": 136,
+            "height": 11
           }
         }
       ],
-      "text": " fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+      "text": " Rlow R2DP Volume\n",
+      "area": {
+        "x": 65,
+        "y": 130,
+        "width": 138,
+        "height": 13
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "U\n",
+          "confidence": 64.711395,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 21,
+            "height": 21
+          }
+        }
+      ],
+      "text": " U\n",
+      "area": {
+        "x": 30,
+        "y": 129,
+        "width": 22,
+        "height": 21
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+          "confidence": 67.00682,
+          "rect": {
+            "x": 19,
+            "y": 18,
+            "width": 177,
+            "height": 79
+          }
+        }
+      ],
+      "text": " U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
       "area": {
         "x": 11,
         "y": 111,
@@ -108,17 +150,17 @@
     {
       "orginalWords": [
         {
-          "text": "fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
-          "confidence": 69.44327,
+          "text": "U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
+          "confidence": 67.00682,
           "rect": {
-            "x": 17,
-            "y": 16,
-            "width": 184,
-            "height": 80
+            "x": 18,
+            "y": 17,
+            "width": 177,
+            "height": 79
           }
         }
       ],
-      "text": " fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+      "text": " U Allow AZDP Volume\n1o make and manage\nphone calls?\n\nso — muow\n",
       "area": {
         "x": 12,
         "y": 112,
@@ -160,6 +202,6 @@
   ],
   "configName": "2.7_QVGA_API_24",
   "appName": "a2dp.Vol_137",
-  "shortFileName": "screen_2018-06-07_141106.png",
-  "baseName": "a2dp.Vol_137.apk_2.7_QVGA_API_24"
+  "shortFileName": "screen_2018-06-07_141118.png",
+  "baseDir": "a2dp.Vol_137.apk_2.7_QVGA_API_24"
 }
