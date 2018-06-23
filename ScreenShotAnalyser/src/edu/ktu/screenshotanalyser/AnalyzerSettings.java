@@ -13,6 +13,14 @@ public class AnalyzerSettings {
 		this.textsDir = textsDir;
 	}
 
+	public String getImagesDir() {
+		return imagesDir;
+	}
+
+	public void setImagesDir(String imagesDir) {
+		this.imagesDir = imagesDir;
+	}
+
 	public String getResourcesDir() {
 		return resourcesDir;
 	}
@@ -21,9 +29,7 @@ public class AnalyzerSettings {
 		this.resourcesDir = resourcesDir;
 	}
 
-	public String getInputDir() {
-		return inputDir;
-	}
+	
 
 	public String getOutputDir() {
 		return outputDir;
@@ -45,8 +51,8 @@ public class AnalyzerSettings {
 		return runChecks;
 	}
 
-	@Argument(alias = "i", description = "Input directory", required = false)
-	private String inputDir = ".\\samples\\images";
+	@Argument(alias = "i", description = "Droidbot images directory", required = false)
+	private String imagesDir = ".\\samples\\images";
 	
 	@Argument(alias = "r", description = "Resources directory", required = false)
 	private String resourcesDir = ".\\samples\\res";
@@ -78,9 +84,6 @@ public class AnalyzerSettings {
 		this.language = language;
 	}
 
-	public void setInputDir(String inputDir) {
-		this.inputDir = inputDir;
-	}
 
 	public void setOutputDir(String outputDir) {
 		this.outputDir = outputDir;
@@ -102,11 +105,7 @@ public class AnalyzerSettings {
 		this.runChecks = runChecks;
 	}
 
-	@Override
-	public String toString() {
-		return "AnalyzerRequest [inputDir=" + inputDir + ", outputDir=" + outputDir + ", cvLibrary=" + cvLibrary
-				+ ", tessDataFolder=" + tessDataFolder + ", precision=" + precision + ", runChecks=" + runChecks + "]";
-	}
+	
 
 	@Argument(alias = "c", description = "Flag if to run checks", required = false)
 	private boolean runChecks = false;

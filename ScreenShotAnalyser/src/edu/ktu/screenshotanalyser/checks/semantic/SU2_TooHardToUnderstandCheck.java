@@ -37,7 +37,11 @@ public class SU2_TooHardToUnderstandCheck implements ICheck {
 
 			final ReadabilityMeasures measures = new ReadabilityMeasures(readabilityAnalysisLanguage);
 			for (final ResourceText resourceText : languageDetails.getValue()) {
+				
 				final String actualText = resourceText.getValue();
+				if (actualText == null) {
+					continue;
+				}
 				final String[] texts = actualText.split("\\s");
 
 				if (texts.length < minWords) {

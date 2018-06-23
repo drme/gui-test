@@ -34,7 +34,9 @@ public class ScreenShotAnalyser {
 	static ICheck appContextCheck = MultiChecker.getAppContextChecks();
 	static ICheck imageBasedChecks = MultiChecker.getImageBasedChecks();
 	static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	private static void runChecks(String projectName, File resourcesDir, File[] imagesDir, String outDir) throws IOException {
+
+	private static void runChecks(String projectName, File resourcesDir, File[] imagesDir, String outDir)
+			throws IOException {
 		AppContext context = provider.getContext(resourcesDir.getAbsolutePath());
 		List<CheckResult> results = new ArrayList<CheckResult>();
 		results.addAll(Arrays.asList(appContextCheck.analyze(new CheckRequest("-"), context)));
@@ -46,23 +48,25 @@ public class ScreenShotAnalyser {
 				results.addAll(Arrays.asList(imageBasedChecks.analyze(request, context)));
 			}
 		}
-	
-		FileUtils.write(new File(outDir, "violations.json"), gson.toJson(results));
-		
+		if (!results.isEmpty()) {
+			FileUtils.write(new File(outDir, "violations.json"), gson.toJson(results));
+			
+		}
+
 	}
 
 	public static void main(String[] args) throws Throwable {
 
-		String textsDir = "./out/texts";
-		String inputDir = "./samples/images";
-		String resourcesDir = "./samples/res";
-		
+		String baseDir = "./samples";
+		String textsDir = baseDir + "/texts";
+		String droidbotImagesDir = baseDir + "/images";
+		String resourcesDir = baseDir + "/resources";
+
 		String resultsOutDir = "./out/results";
-		
-		
+
 		AnalyzerSettings request = new AnalyzerSettings();
 		List<String> unparsed = Args.parseOrExit(request, new String[0]);
-		request.setInputDir(inputDir);
+		request.setImagesDir(droidbotImagesDir);
 		request.setOutputDir(resultsOutDir);
 		request.setResourcesDir(resourcesDir);
 		request.setTextsDir(textsDir);
@@ -72,15 +76,15 @@ public class ScreenShotAnalyser {
 
 		for (File resourceDir : files) {
 			final String projectname = resourceDir.getName();
-			File[] extractedTexts = new File(textsDir).listFiles(new FileFilter() {
+			File[] extractedTextsDirectories = new File(textsDir).listFiles(new FileFilter() {
 
 				@Override
 				public boolean accept(File pathname) {
 					return pathname.getName().startsWith(projectname);
 				}
 			});
-			System.out.println(extractedTexts.length);
-			runChecks(projectname, resourceDir, extractedTexts, new File(resultsOutDir, projectname).getAbsolutePath());
+			runChecks(projectname, resourceDir, extractedTextsDirectories,
+					new File(resultsOutDir, projectname).getAbsolutePath());
 		}
 	};
 

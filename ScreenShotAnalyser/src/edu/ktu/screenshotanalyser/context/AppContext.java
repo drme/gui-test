@@ -27,7 +27,7 @@ public class AppContext {
 
 	public static class ResourceText {
 		private final String key;
-
+		
 		public String getKey() {
 			return key;
 		}

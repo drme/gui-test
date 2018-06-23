@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -43,6 +44,7 @@ public class DefaultContextProvider implements IContextProvider {
 		});
 
 		for (File f : values) {
+			
 			String[] temp = f.getName().split("-", 2);
 
 			String lang = "default";
@@ -75,6 +77,7 @@ public class DefaultContextProvider implements IContextProvider {
 							.collect(Collectors.toList());
 					context.getKeys().addAll(missingKeys);
 				} catch (Throwable e) {
+System.out.println("Can't read file: "+res.getAbsolutePath());
 					e.printStackTrace();
 				}
 			}
@@ -94,6 +97,16 @@ public class DefaultContextProvider implements IContextProvider {
 
 		@JacksonXmlElementWrapper(localName = "string", useWrapping = false)
 		private ResourceDao[] string = new ResourceDao[0];
+		
+		@JacksonXmlElementWrapper(localName = "item", useWrapping = false)
+		private Object[] item = new Object[0];
+		public Object[] getItem() {
+			return item;
+		}
+
+		public void setItem(Object[] item) {
+			this.item = item;
+		}
 
 		public ResourceDao[] getString() {
 			return string;
@@ -108,9 +121,12 @@ public class DefaultContextProvider implements IContextProvider {
 	@JacksonXmlRootElement(localName = "string")
 	public static class ResourceDao {
 
+		@JacksonXmlCData
 		@JacksonXmlText
 		private String value;
-
+		private String formatted;
+		
+		
 		public String getValue() {
 			return value;
 		}
@@ -125,6 +141,14 @@ public class DefaultContextProvider implements IContextProvider {
 
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		public String getFormatted() {
+			return formatted;
+		}
+
+		public void setFormatted(String formatted) {
+			this.formatted = formatted;
 		}
 
 		@JacksonXmlProperty(isAttribute = true, localName = "name")
