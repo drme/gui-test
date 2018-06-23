@@ -57,7 +57,7 @@ public class ScreenShotAnalyser {
 
 	public static void main(String[] args) throws Throwable {
 
-		String baseDir = "./samples";
+		String baseDir = "D:/darbai/screenshots";
 		String textsDir = baseDir + "/texts";
 		String droidbotImagesDir = baseDir + "/images";
 		String resourcesDir = baseDir + "/resources";
@@ -75,7 +75,9 @@ public class ScreenShotAnalyser {
 		File[] files = provider.getFiles(request.getResourcesDir());
 
 		for (File resourceDir : files) {
+			
 			final String projectname = resourceDir.getName();
+			System.out.println(projectname);
 			File[] extractedTextsDirectories = new File(textsDir).listFiles(new FileFilter() {
 
 				@Override

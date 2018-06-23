@@ -22,13 +22,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 
 public class DefaultContextProvider implements IContextProvider {
-	private final ObjectMapper mapper;
+	private final IResourcesProvider provider = new RegexpBasedResourceProvider();
 
-	public DefaultContextProvider() {
-		final JacksonXmlModule xmlModule = new JacksonXmlModule();
-		xmlModule.setDefaultUseWrapper(false);
-		this.mapper = new XmlMapper(xmlModule);
-	}
+	
 
 	@Override
 	public AppContext getContext(String baseDir) {
@@ -62,7 +58,7 @@ public class DefaultContextProvider implements IContextProvider {
 			});
 			for (final File res : resourceFiles) {
 				try {
-					Resources resources = read(res, mapper);
+					Resources resources = this.provider.getResource(StringUtils.toEncodedString(Files.readAllBytes(res.toPath()), StandardCharsets.UTF_8));
 					List<ResourceText> textResources = Stream.of(resources.getString()).map(x -> {
 
 						return new ResourceText(x.getName(), x.getValue(), res.getAbsolutePath());
@@ -87,10 +83,7 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 		return context;
 	}
 
-	private Resources read(File file, ObjectMapper mapper) throws Throwable {
-		final String f = StringUtils.toEncodedString(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-		return mapper.readValue(f, Resources.class);
-	}
+
 
 	@JacksonXmlRootElement(localName = "resources")
 	public static class Resources {
@@ -124,9 +117,13 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 		@JacksonXmlCData
 		@JacksonXmlText
 		private String value;
-		private String formatted;
 		
 		
+		@Override
+		public String toString() {
+			return "ResourceDao [value=" + value + ", name=" + name + "]";
+		}
+
 		public String getValue() {
 			return value;
 		}
@@ -143,13 +140,7 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 			this.name = name;
 		}
 
-		public String getFormatted() {
-			return formatted;
-		}
-
-		public void setFormatted(String formatted) {
-			this.formatted = formatted;
-		}
+	
 
 		@JacksonXmlProperty(isAttribute = true, localName = "name")
 		private String name;
