@@ -128,7 +128,19 @@
   <version>1.2</version>
 </dependency>
 
-
+<!-- grammar checks -->
+<!-- https://mvnrepository.com/artifact/org.languagetool/languagetool-core -->
+<dependency>
+    <groupId>org.languagetool</groupId>
+    <artifactId>languagetool-core</artifactId>
+    <version>4.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.languagetool/language-all -->
+<dependency>
+    <groupId>org.languagetool</groupId>
+    <artifactId>language-all</artifactId>
+    <version>4.1</version>
+</dependency>
 
   	<!-- Readability -->
   	<!-- https://mvnrepository.com/artifact/de.tudarmstadt.ukp.dkpro.core/de.tudarmstadt.ukp.dkpro.core.readability-asl -->

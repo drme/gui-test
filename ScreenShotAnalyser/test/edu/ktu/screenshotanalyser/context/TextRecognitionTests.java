@@ -2,10 +2,14 @@ package edu.ktu.screenshotanalyser.context;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 import org.junit.Test;
+import org.languagetool.JLanguageTool;
+import org.languagetool.language.BritishEnglish;
+import org.languagetool.rules.RuleMatch;
 
 import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -27,12 +31,26 @@ import net.sf.extjwnl.dictionary.Dictionary;
 public class TextRecognitionTests {
 
 	@Test
+	public void testCheckGrammar() throws IOException {
+		JLanguageTool langTool = new JLanguageTool(new BritishEnglish());
+		// comment in to use statistical ngram data:
+		//langTool.activateLanguageModelRules(new File("/data/google-ngram-data"));
+		List<RuleMatch> matches = langTool.check("A sentence with a error in the Hitchhiker's Guide tot he Galaxy");
+		for (RuleMatch match : matches) {
+		  System.out.println("Potential error at characters " +
+		      match.getFromPos() + "-" + match.getToPos() + ": " +
+		      match.getMessage());
+		  System.out.println("Suggested correction(s): " +
+		      match.getSuggestedReplacements());
+		}
+	}
+	@Test
 	public void testExtractNouns() {
 		Properties props = new Properties();
 		// "tokenize,ssplit,pos,lemma,ner,parse,dcoref"
-		props.put("annotators", "tokenize,ssplit,pos");
+		props.put("annotators", "tokenize,ssplit,pos,lemma,ner,parse,dcoref");
 		edu.stanford.nlp.pipeline.StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		Annotation document = new Annotation("I am going home. Tom is not.");
+		Annotation document = new Annotation("I am going home. Tom is not. Books are great.");
 		pipeline.annotate(document);
 
 		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
@@ -43,6 +61,7 @@ public class TextRecognitionTests {
 			System.out.println(sentence.toString());
 			sentence.get(TokensAnnotation.class).stream().forEach((tok) -> {
 				String PosTagg = tok.get(PartOfSpeechAnnotation.class);
+				System.out.println(tok.category());
 
 				System.out.println(PosTagg + " " + tok.originalText());
 			});
