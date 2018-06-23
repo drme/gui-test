@@ -104,6 +104,30 @@
     <artifactId>stanford-corenlp</artifactId>
     <version>3.9.1</version>
 </dependency>
+<dependency>
+    <groupId>edu.stanford.nlp</groupId>
+    <artifactId>stanford-corenlp</artifactId>
+    <version>3.9.1</version>
+    <classifier>models</classifier>
+</dependency>
+<!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-parser -->
+<dependency>
+    <groupId>edu.stanford.nlp</groupId>
+    <artifactId>stanford-parser</artifactId>
+    <version>3.9.1</version>
+</dependency>
+
+<dependency>
+  <groupId>net.sf.extjwnl</groupId>
+  <artifactId>extjwnl</artifactId>
+  <version>1.9.4</version>
+</dependency>
+<dependency>
+  <groupId>net.sf.extjwnl</groupId>
+  <artifactId>extjwnl-data-wn31</artifactId>
+  <version>1.2</version>
+</dependency>
+
 
 
   	<!-- Readability -->
