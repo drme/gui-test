@@ -72,7 +72,9 @@ public class SD1_SynonymsUsage implements ICheck {
 		final List<CheckResult> results = new ArrayList<>();
 		for (Entry<String, List<ResourceText>> entrySet : context.getResources().entrySet()) {
 			String langKey = entrySet.getKey();
-		
+		    if (!langKey.startsWith("default") && !langKey.startsWith("en") && !langKey.startsWith("uk")) {
+		    	continue;
+		    }
 			List<ResourceText> texts = entrySet.getValue();
 			List<FoundNoun> nouns = new ArrayList<FoundNoun>();
 			for (ResourceText resourceText : texts) {
@@ -105,7 +107,7 @@ public class SD1_SynonymsUsage implements ICheck {
 					for (Synset x : indexWord.getSenses()) {
 						for (Word xW : x.getWords()) {
 							String lemma = xW.getLemma().toLowerCase();
-							if (noun.equals(lemma)) {
+							if (noun.startsWith(lemma)) {
 								continue;
 							}
 							for (FoundNoun nn2 : nouns) {

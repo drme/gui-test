@@ -67,6 +67,7 @@ public class SS1_GrammarCheck implements ICheck {
 		if ("ru".equals(lang)) {
 			return new Russian();
 		}
+		
 		return null;
 	}
 }
