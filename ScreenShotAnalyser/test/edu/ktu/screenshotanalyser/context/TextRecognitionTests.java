@@ -3,6 +3,7 @@ package edu.ktu.screenshotanalyser.context;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -16,6 +17,8 @@ import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.simple.Document;
+import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.util.CoreMap;
 import net.sf.extjwnl.JWNLException;
 import net.sf.extjwnl.data.IndexWord;
@@ -43,6 +46,40 @@ public class TextRecognitionTests {
 		  System.out.println("Suggested correction(s): " +
 		      match.getSuggestedReplacements());
 		}
+	}
+	@Test
+	public void testFindNouns() throws IOException, JWNLException {
+		List<String> nouns = new ArrayList();
+		String sentence = "A sentence with a error in the Hitchhiker's Guide to the Galaxy. Mistake exists.";
+		Document doc = new Document(sentence);
+		for (Sentence s : doc.sentences()) {
+			for (int i = 0; i < s.words().size(); i++) {
+				String tag = s.posTag(i);
+				String word = s.word(i).toLowerCase();
+				if (tag == null || !tag.contains("NN") || nouns.contains(word)) {
+					continue;
+				}
+				nouns.add(word);
+			}
+		}
+		Dictionary dictionary = Dictionary.getDefaultResourceInstance();
+		List<String> syns = new ArrayList();
+		for (String w : nouns) {
+			IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, w);
+			for (Synset x : indexWord.getSenses()) {
+				for (Word xW : x.getWords()) {
+					String lemma = xW.getLemma().toLowerCase();
+					if (w.equals(lemma)) {
+						continue;
+					}
+					if (nouns.contains(lemma)) {
+						System.out.println(w+" "+xW.getLemma());	
+					}
+					
+				}
+			}
+		}
+		
 	}
 	@Test
 	public void testExtractNouns() {

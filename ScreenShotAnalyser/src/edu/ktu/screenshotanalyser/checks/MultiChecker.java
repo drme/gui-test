@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.ktu.screenshotanalyser.checks.semantic.SD1_SynonymsUsage;
 import edu.ktu.screenshotanalyser.checks.semantic.SL1_MissingTranslationCheck;
 import edu.ktu.screenshotanalyser.checks.semantic.SS1_GrammarCheck;
 import edu.ktu.screenshotanalyser.checks.semantic.SU2_TooHardToUnderstandCheck;
@@ -32,7 +33,7 @@ public class MultiChecker implements ICheck {
 	}
 
 	public static ICheck getAppContextChecks() {
-		return new MultiChecker(new SU2_TooHardToUnderstandCheck(), new SS1_GrammarCheck());
+		return new MultiChecker(/*new SU2_TooHardToUnderstandCheck(), new SS1_GrammarCheck(),*/ new SD1_SynonymsUsage());
 	}
 
 	public static ICheck getImageBasedChecks() {
