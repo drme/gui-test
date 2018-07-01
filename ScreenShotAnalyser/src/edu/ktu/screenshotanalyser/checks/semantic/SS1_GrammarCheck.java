@@ -38,7 +38,7 @@ public class SS1_GrammarCheck implements ICheck {
 						for (RuleMatch match : matches) {
 							
 							results.add(CheckResult.Nok(type, "Grammar check failed: " + match.getMessage()+". Possible fixes: "+match.getSuggestedReplacements()+". Text was: "+resourceText.getValue(),
-									resourceText.getFile() + "@" + resourceText.getKey()));
+									resourceText.getFile() + "@" + resourceText.getKey(), langKey));
 						}
 					}
 

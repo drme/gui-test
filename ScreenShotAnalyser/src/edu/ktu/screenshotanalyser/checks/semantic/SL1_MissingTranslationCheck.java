@@ -21,7 +21,7 @@ public class SL1_MissingTranslationCheck implements ICheck {
 			final String text = extractedText.getText();
 			if (context.isPlaceholder(text)) {
 				results.add(CheckResult.Nok(type, String.format("Found missing translation violation for: %s", text),
-						request.getOriginalFile()));
+						request.getOriginalFile(), null));
 			}
 		}
 		return results.toArray(new CheckResult[0]);

@@ -1,7 +1,6 @@
 package edu.ktu.screenshotanalyser.checks.semantic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -11,6 +10,8 @@ import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.ICheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
+import edu.stanford.nlp.simple.Document;
+import edu.stanford.nlp.simple.Sentence;
 
 public class SU2_TooHardToUnderstandCheck implements ICheck {
 
@@ -37,24 +38,26 @@ public class SU2_TooHardToUnderstandCheck implements ICheck {
 
 			final ReadabilityMeasures measures = new ReadabilityMeasures(readabilityAnalysisLanguage);
 			for (final ResourceText resourceText : languageDetails.getValue()) {
-				
+
 				final String actualText = resourceText.getValue();
+
 				if (actualText == null) {
 					continue;
 				}
-				final String[] texts = actualText.split("\\s");
-
-				if (texts.length < minWords) {
+				Document document = new Document(actualText);
+				List<Sentence> sentences = document.sentences();
+				int sentencesCount = sentences.size();
+				List<String> words = new ArrayList<>();
+				sentences.forEach(x -> words.addAll(x.words()));
+				if (words.size() < minWords) {
 					continue;
 				}
-				final int sentences = actualText.split("\\.").length;
-				final double fog = measures.fog(Arrays.asList(texts), sentences);
+				final double fog = measures.fog(words, sentencesCount);
 				if (fog > this.threshold) {
-					results.add(
-							CheckResult.Nok(type,
-									String.format("Found text violating readalibity index: %s (max: %s) for text: %s",
-											fog, threshold, actualText),
-							resourceText.getFile() + "@" + resourceText.getKey()));
+					results.add(CheckResult.Nok(type,
+							String.format("Found text violating readalibity index: %s (max: %s) for text: %s", fog,
+									threshold, actualText),
+							resourceText.getFile() + "@" + resourceText.getKey(), resourceLanguage));
 				}
 			}
 		}
