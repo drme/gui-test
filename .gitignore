@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#ffff mavennn and broken repos...
+#*.jar
 *.war
 *.ear
 *.zip
