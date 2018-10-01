@@ -1,0 +1,228 @@
+{
+  "extractedTexts": [
+    {
+      "orginalWords": [
+        {
+          "text": "B\n",
+          "confidence": 71.805954,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 36,
+            "height": 8
+          }
+        }
+      ],
+      "text": " B\n",
+      "area": {
+        "x": 169,
+        "y": 208,
+        "width": 38,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "aW\n",
+          "confidence": 27.09771,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 26,
+            "height": 8
+          }
+        }
+      ],
+      "text": " aW\n",
+      "area": {
+        "x": 123,
+        "y": 208,
+        "width": 28,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "vour device?\n",
+          "confidence": 70.651184,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 83,
+            "height": 14
+          }
+        }
+      ],
+      "text": " vour device?\n",
+      "area": {
+        "x": 65,
+        "y": 175,
+        "width": 85,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "media. and fles on\n",
+          "confidence": 76.20576,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 123,
+            "height": 14
+          }
+        }
+      ],
+      "text": " media. and fles on\n",
+      "area": {
+        "x": 66,
+        "y": 156,
+        "width": 125,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "to access photos\n",
+          "confidence": 69.7737,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 119,
+            "height": 14
+          }
+        }
+      ],
+      "text": " to access photos\n",
+      "area": {
+        "x": 65,
+        "y": 139,
+        "width": 121,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "B Alow AZOP Volume\n",
+          "confidence": 46.18371,
+          "rect": {
+            "x": 2,
+            "y": 0,
+            "width": 172,
+            "height": 18
+          }
+        }
+      ],
+      "text": " B Alow AZOP Volume\n",
+      "area": {
+        "x": 28,
+        "y": 121,
+        "width": 175,
+        "height": 19
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "**\n",
+          "confidence": 30.36267,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 23,
+            "height": 16
+          }
+        }
+      ],
+      "text": " **\n",
+      "area": {
+        "x": 29,
+        "y": 124,
+        "width": 23,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "[ Allow A20P Volume\no a00e5s photos,\nmedia, and files on\nyour device?\n\nso — muow\n",
+          "confidence": 67.74666,
+          "rect": {
+            "x": 18,
+            "y": 19,
+            "width": 178,
+            "height": 96
+          }
+        }
+      ],
+      "text": " [ Allow A20P Volume\no a00e5s photos,\nmedia, and files on\nyour device?\n\nso — muow\n",
+      "area": {
+        "x": 11,
+        "y": 102,
+        "width": 218,
+        "height": 133
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "[ Allow A20P Volume\no a00e5s photos,\nmedia, and files on\nyour device?\n\nso — muow\n",
+          "confidence": 67.74666,
+          "rect": {
+            "x": 17,
+            "y": 18,
+            "width": 178,
+            "height": 96
+          }
+        }
+      ],
+      "text": " [ Allow A20P Volume\no a00e5s photos,\nmedia, and files on\nyour device?\n\nso — muow\n",
+      "area": {
+        "x": 12,
+        "y": 103,
+        "width": 216,
+        "height": 131
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "PP\n",
+          "confidence": 1.9774246,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 58,
+            "height": 11
+          }
+        }
+      ],
+      "text": " PP\n",
+      "area": {
+        "x": 175,
+        "y": 2,
+        "width": 65,
+        "height": 13
+      }
+    },
+    {
+      "orginalWords": [],
+      "text": "",
+      "area": {
+        "x": 9,
+        "y": 2,
+        "width": 29,
+        "height": 14
+      }
+    }
+  ],
+  "configName": "2.7_QVGA_API_24",
+  "appName": "a2dp.Vol_137",
+  "shortFileName": "screen_2018-06-07_141053.png",
+  "baseDir": "a2dp.Vol_137.apk_2.7_QVGA_API_24"
+}

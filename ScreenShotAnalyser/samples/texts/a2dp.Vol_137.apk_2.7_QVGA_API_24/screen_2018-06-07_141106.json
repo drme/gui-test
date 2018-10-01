@@ -1,0 +1,165 @@
+{
+  "extractedTexts": [
+    {
+      "orginalWords": [
+        {
+          "text": "B\n",
+          "confidence": 71.805954,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 36,
+            "height": 8
+          }
+        }
+      ],
+      "text": " B\n",
+      "area": {
+        "x": 169,
+        "y": 199,
+        "width": 38,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "aW\n",
+          "confidence": 26.593597,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 26,
+            "height": 8
+          }
+        }
+      ],
+      "text": " aW\n",
+      "area": {
+        "x": 123,
+        "y": 199,
+        "width": 28,
+        "height": 10
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "messages!\n",
+          "confidence": 76.70593,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 75,
+            "height": 14
+          }
+        }
+      ],
+      "text": " messages!\n",
+      "area": {
+        "x": 66,
+        "y": 166,
+        "width": 77,
+        "height": 16
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "IB — Allow AZDP Volume\n",
+          "confidence": 63.49149,
+          "rect": {
+            "x": 2,
+            "y": 2,
+            "width": 172,
+            "height": 20
+          }
+        }
+      ],
+      "text": " IB — Allow AZDP Volume\n",
+      "area": {
+        "x": 28,
+        "y": 127,
+        "width": 175,
+        "height": 24
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+          "confidence": 69.44327,
+          "rect": {
+            "x": 18,
+            "y": 17,
+            "width": 184,
+            "height": 80
+          }
+        }
+      ],
+      "text": " fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+      "area": {
+        "x": 11,
+        "y": 111,
+        "width": 218,
+        "height": 115
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+          "confidence": 69.44327,
+          "rect": {
+            "x": 17,
+            "y": 16,
+            "width": 184,
+            "height": 80
+          }
+        }
+      ],
+      "text": " fI — Allow A2DP Volume\n1o send and view SMS\nmessages?\nso — muow\n",
+      "area": {
+        "x": 12,
+        "y": 112,
+        "width": 216,
+        "height": 113
+      }
+    },
+    {
+      "orginalWords": [
+        {
+          "text": "PR\n",
+          "confidence": 0.0,
+          "rect": {
+            "x": 1,
+            "y": 1,
+            "width": 56,
+            "height": 11
+          }
+        }
+      ],
+      "text": "",
+      "area": {
+        "x": 175,
+        "y": 2,
+        "width": 65,
+        "height": 13
+      }
+    },
+    {
+      "orginalWords": [],
+      "text": "",
+      "area": {
+        "x": 9,
+        "y": 2,
+        "width": 29,
+        "height": 14
+      }
+    }
+  ],
+  "configName": "2.7_QVGA_API_24",
+  "appName": "a2dp.Vol_137",
+  "shortFileName": "screen_2018-06-07_141106.png",
+  "baseDir": "a2dp.Vol_137.apk_2.7_QVGA_API_24"
+}
