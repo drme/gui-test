@@ -81,7 +81,7 @@ public class SU2_TooHardToUnderstandCheck implements ICheck
 
 					// TODO: skip garbage texts, combine index to somethig useable... select index that wprks with single sentence...
 					
-					if ((flecshReading > 70) && (smogIndex > 10))
+					if ((flecshReading < 70) && (smogIndex > 10))
 					{
 						System.out.println("[" + text + "] - FleschReadingEase: " + flecshReading + ", ari: " + ari);
 

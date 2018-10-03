@@ -136,11 +136,12 @@
     <version>4.1</version>
 </dependency>
 <!-- https://mvnrepository.com/artifact/org.languagetool/language-all -->
-<dependency>
-    <groupId>org.languagetool</groupId>
-    <artifactId>language-all</artifactId>
-    <version>4.1</version>
-</dependency>
+
+	<dependency>
+		<groupId>org.languagetool</groupId>
+		<artifactId>language-all</artifactId>
+		<version>4.1</version>
+	</dependency>
 
   	<!-- Readability -->
   	<!-- https://mvnrepository.com/artifact/de.tudarmstadt.ukp.dkpro.core/de.tudarmstadt.ukp.dkpro.core.readability-asl -->
@@ -162,7 +163,15 @@ bloody broken maven....
         </dependency>
 
      -->
+<!-- 
 
+<dependency>
+  <groupId>org.languagetool</groupId>
+  <artifactId>language-en</artifactId>
+  <version>4.2</version>
+</dependency>
+
+  	 -->
   	
   </dependencies>
   

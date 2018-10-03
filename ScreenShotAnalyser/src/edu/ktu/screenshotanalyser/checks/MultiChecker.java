@@ -33,12 +33,19 @@ public class MultiChecker implements ICheck {
 		return results.stream().distinct().collect(Collectors.toList()).toArray(new CheckResult[0]);
 	}
 
-	public static ICheck getAppContextChecks() {
-		return new MultiChecker(new SU2_TooHardToUnderstandCheck(), new SS1_GrammarCheck(), new SD1_SynonymsUsage());
+	public static ICheck getAppContextChecks()
+	{
+		List<ICheck> checkers = new ArrayList<>();
+
+		checkers.add(new SU2_TooHardToUnderstandCheck());
+		//checkers.add(new SS1_GrammarCheck());
+		//checkers.add(new SD1_SynonymsUsage());
+		
+		return new MultiChecker(checkers.toArray(new ICheck[0]));
 	}
 
 	public static ICheck getImageBasedChecks() {
-		return new MultiChecker(new SL1_MissingTranslationCheck());
+		return new MultiChecker(/*new SL1_MissingTranslationCheck() */) ;
 	}
 
 }

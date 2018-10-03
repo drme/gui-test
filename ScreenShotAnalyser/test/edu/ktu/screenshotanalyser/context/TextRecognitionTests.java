@@ -63,7 +63,7 @@ public class TextRecognitionTests {
 			}
 		}
 		Dictionary dictionary = Dictionary.getDefaultResourceInstance();
-		List<String> syns = new ArrayList();
+		List<String> syns = new ArrayList<String>();
 		for (String w : nouns) {
 			IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, w);
 			for (Synset x : indexWord.getSenses()) {

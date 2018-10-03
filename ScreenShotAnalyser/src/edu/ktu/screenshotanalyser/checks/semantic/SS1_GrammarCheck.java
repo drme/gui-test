@@ -36,6 +36,13 @@ public class SS1_GrammarCheck implements ICheck {
 					for (ResourceText resourceText : texts) {
 						List<RuleMatch> matches = langTool.check(resourceText.getValue());
 						for (RuleMatch match : matches) {
+
+							System.out.println("Grammar check failed: " + match.getMessage()
+							
+							//+". Possible fixes: "+match.getSuggestedReplacements()
+							
+							+". Text was: "+resourceText.getValue());
+							
 							
 							results.add(CheckResult.Nok(type, "Grammar check failed: " + match.getMessage()+". Possible fixes: "+match.getSuggestedReplacements()+". Text was: "+resourceText.getValue(),
 									resourceText.getFile() + "@" + resourceText.getKey(), langKey));
