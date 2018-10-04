@@ -173,6 +173,30 @@ bloody broken maven....
 
   	 -->
   	
+  	
+  	<!-- AI comes to defects detection  -->
+  	
+<dependency>
+  <groupId>org.tensorflow</groupId>
+  <artifactId>tensorflow</artifactId>
+  <version>1.11.0</version>
+</dependency>
+  	
+  	
+<dependency>
+  <groupId>org.tensorflow</groupId>
+  <artifactId>libtensorflow</artifactId>
+  <version>1.11.0</version>
+</dependency>
+<dependency>
+  <groupId>org.tensorflow</groupId>
+  <artifactId>libtensorflow_jni_gpu</artifactId>
+  <version>1.11.0</version>
+</dependency>
+  	
+  	
+  	
+  	
   </dependencies>
   
 </project>

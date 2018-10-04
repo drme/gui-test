@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import edu.ktu.screenshotanalyser.checks.semantic.SD1_SynonymsUsage;
 import edu.ktu.screenshotanalyser.checks.semantic.SL1_MissingTranslationCheck;
 import edu.ktu.screenshotanalyser.checks.semantic.SS1_GrammarCheck;
+import edu.ktu.screenshotanalyser.checks.semantic.SS4_UntactfullMessagesCheck;
 import edu.ktu.screenshotanalyser.checks.semantic.SU2_TooHardToUnderstandCheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 
@@ -37,9 +38,10 @@ public class MultiChecker implements ICheck {
 	{
 		List<ICheck> checkers = new ArrayList<>();
 
-		checkers.add(new SU2_TooHardToUnderstandCheck());
+		//checkers.add(new SU2_TooHardToUnderstandCheck());
 		//checkers.add(new SS1_GrammarCheck());
 		//checkers.add(new SD1_SynonymsUsage());
+		checkers.add(new SS4_UntactfullMessagesCheck());
 		
 		return new MultiChecker(checkers.toArray(new ICheck[0]));
 	}
