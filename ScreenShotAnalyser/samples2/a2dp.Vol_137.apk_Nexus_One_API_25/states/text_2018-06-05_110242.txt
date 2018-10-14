@@ -1,0 +1,44 @@
+About WebView
+WebView version : 55.0.2883.91
+enableSmoothTransition : false
+getAcceptThirdPartyCookies : false
+getAllowContentAccess : true
+getAllowFileAccess : true
+getAllowFileAccessFromFileURLs : false
+getAllowUniversalAccessFromFileURLs : false
+getBlockNetworkImage : false
+getBlockNetworkLoads : false
+getBuiltInZoomControls : false
+getCursiveFontFamily : cursive
+getDatabaseEnabled : true
+getDatabasePath : 
+getDefaultTextEncodingName : UTF-8
+getDisplayZoomControls : true
+getDomStorageEnabled : true
+getFantasyFontFamily : fantasy
+getFixedFontFamily : monospace
+getJavaScriptCanOpenWindowsAutomatically : false
+getJavaScriptEnabled : true
+getLightTouchEnabled : false
+getLoadWithOverviewMode : false
+getLoadsImagesAutomatically : true
+getMediaPlaybackRequiresUserGesture : true
+getNavDump : false
+getOffscreenPreRaster : false
+getPluginsEnabled : false
+getPluginsPath : 
+getSansSerifFontFamily : sans-serif
+getSaveFormData : true
+getSavePassword : false
+getSerifFontFamily : serif
+getStandardFontFamily : sans-serif
+getUseDoubleTree : false
+getUseWebViewBackgroundForOverscrollBackground : false
+getUseWideViewPort : false
+getUserAgentString : Mozilla/5.0 (Linux; Android 7.1.1; Android SDK built for x86 Build/NYC; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/55.0.2883.91 Mobile Safari/537.36
+getVideoOverlayForEmbeddedEncryptedVideoEnabled : false
+supportMultipleWindows : false
+supportZoom : true
+toString : com.android.webview.chromium.ContentSettingsAdapter@c3bd4b9
+
+OK

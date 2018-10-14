@@ -15,13 +15,13 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.Word;
 
-public class TextExtractor implements ITextExtractor{
+public class TextExtractor implements ITextExtractor {
 	private static final Logger logger = Logger.getGlobal();
 	private final ITesseract instance;
 	private final float confidenceLevel;
 
 	public TextExtractor(float confidenceLevel, String tessDataPath, String lang) {
-		
+
 		this.confidenceLevel = confidenceLevel;
 		instance = new Tesseract();
 		instance.setDatapath(new File(tessDataPath).getAbsolutePath());
@@ -31,6 +31,7 @@ public class TextExtractor implements ITextExtractor{
 	public TextExtractResponse extract(final TextExtractRequest request) throws Throwable {
 		final File file = request.getFile();
 		final BufferedImage image = ImageIO.read(file);
+		System.out.println(file.getName());
 		final List<Rect> bounds = request.getBounds();
 		final List<ExtractedText> extractedTexts = new ArrayList<>();
 		for (final Rect area : bounds) {
@@ -40,9 +41,10 @@ public class TextExtractor implements ITextExtractor{
 
 				final StringBuilder sb = new StringBuilder();
 
+				
 				for (final Word word : words) {
 
-					//System.out.println("" + word.getConfidence() + " -> " + word.getText());
+					 System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
 					if (word.getConfidence() > this.confidenceLevel) {
 						sb.append(" " + word.getText());
@@ -109,6 +111,10 @@ public class TextExtractor implements ITextExtractor{
 		}
 
 		public TextExtractRequest(File file, List<Rect> bounds) {
+			this.file = file;
+		}
+
+		public TextExtractRequest(File file) {
 			this.file = file;
 			this.bounds.addAll(bounds);
 		}

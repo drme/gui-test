@@ -1,0 +1,3 @@
+Allow A2DP Volume to access photos, media, and files on your device?
+DENY
+ALLOW

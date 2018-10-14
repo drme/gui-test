@@ -1,0 +1,10 @@
+{
+  "stop_state": "22e56451a76df4f325ad9cd3ec0032c4", 
+  "event_str": "IntentEvent(intent='am start a2dp.Vol/a2dp.Vol.main')", 
+  "tag": "2018-06-05_105830", 
+  "event": {
+    "intent": "am start a2dp.Vol/a2dp.Vol.main", 
+    "event_type": "intent"
+  }, 
+  "start_state": "226848ce69f4d58998ed6a753cd98252"
+}

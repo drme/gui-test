@@ -1,10 +1,11 @@
-package edu.ktu.screenshotanalyser;
+package edu.ktu.screenshotanalyser.contours;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -16,6 +17,12 @@ import org.opencv.imgproc.Imgproc;
 
 public class ImageContoursProvider implements IImageContoursProvider {
 	private static final Logger logger = Logger.getGlobal();
+	static {
+		System.out.println(Core.NATIVE_LIBRARY_NAME);
+		//String libPath = System.getProperty("java.library.path");
+	//	System.getProperties().setProperty("java.library.path","./lib/"+Core.NATIVE_LIBRARY_NAME+".dll");
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
 
 	public ImageContoursResponse getContours(ImageContoursProviderRequest request) {
 

@@ -1,0 +1,48 @@
+{
+  "stop_state": "041e551c5292e704753a774f85bc1fee", 
+  "event_str": "TouchEvent(state=1b5c1ec389e0fec3d37808bea71629ba, view=f650aedcefd2fd417970fd2644fb3284)", 
+  "tag": "2018-06-05_110020", 
+  "event": {
+    "y": null, 
+    "x": null, 
+    "event_type": "touch", 
+    "view": {
+      "content_description": null, 
+      "resource_id": "android:id/button2", 
+      "text": "DELETE", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "110*72", 
+      "checked": false, 
+      "temp_id": 15, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]android:id/button2", 
+      "is_password": false, 
+      "parent": 13, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "f650aedcefd2fd417970fd2644fb3284", 
+      "enabled": true, 
+      "bounds": [
+        [
+          220, 
+          466
+        ], 
+        [
+          330, 
+          538
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]android:id/button2[text]DELETE[enabled,,]"
+    }
+  }, 
+  "start_state": "1b5c1ec389e0fec3d37808bea71629ba"
+}

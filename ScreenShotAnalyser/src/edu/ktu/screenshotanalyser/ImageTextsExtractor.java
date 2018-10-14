@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.ktu.screenshotanalyser.ImageContoursProvider.ImageContoursProviderRequest;
-import edu.ktu.screenshotanalyser.ImageContoursProvider.ImageContoursResponse;
 import edu.ktu.screenshotanalyser.reporters.FoundTextsOnImagesReporter.AppExtractInfo;
+import edu.ktu.screenshotanalyser.contours.IImageContoursProvider;
+import edu.ktu.screenshotanalyser.contours.ImageContoursProvider;
+import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursProviderRequest;
+import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursResponse;
 import edu.ktu.screenshotanalyser.reporters.IReporter;
 import edu.ktu.screenshotanalyser.reporters.MultIReporter;
 import edu.ktu.screenshotanalyser.texts.ITextExtractor;

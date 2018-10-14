@@ -1,0 +1,3 @@
+Allow A2DP Volume to send and view SMS messages?
+DENY
+ALLOW

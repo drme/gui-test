@@ -1,0 +1,48 @@
+{
+  "stop_state": "1918505138c775b781b90f20a68a3175", 
+  "event_str": "TouchEvent(state=b21de94a91c4fcdfbcf9e57130fdad9c, view=a75faefd65faf40435599e1d0aa35cde)", 
+  "tag": "2018-06-05_110001", 
+  "event": {
+    "y": null, 
+    "x": null, 
+    "event_type": "touch", 
+    "view": {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/ServButton", 
+      "text": "STOP SERVICE", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "137*83", 
+      "checked": false, 
+      "temp_id": 13, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/ServButton", 
+      "is_password": false, 
+      "parent": 10, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "a75faefd65faf40435599e1d0aa35cde", 
+      "enabled": true, 
+      "bounds": [
+        [
+          328, 
+          135
+        ], 
+        [
+          465, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/ServButton[text]STOP SERVICE[enabled,,]"
+    }
+  }, 
+  "start_state": "b21de94a91c4fcdfbcf9e57130fdad9c"
+}

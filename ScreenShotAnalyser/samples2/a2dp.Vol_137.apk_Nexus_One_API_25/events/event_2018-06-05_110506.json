@@ -1,0 +1,48 @@
+{
+  "stop_state": "d38ec70c847a2aea3825f0cdf70dfbd7", 
+  "event_str": "TouchEvent(state=d38ec70c847a2aea3825f0cdf70dfbd7, view=8cf42444b5911553d2df19ef1e1fc7a4)", 
+  "tag": "2018-06-05_110506", 
+  "event": {
+    "y": null, 
+    "x": null, 
+    "event_type": "touch", 
+    "view": {
+      "content_description": "x+AAAAAElFTkSuQmCC", 
+      "resource_id": null, 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "75*39", 
+      "checked": false, 
+      "temp_id": 13, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Image[resource_id]None", 
+      "is_password": false, 
+      "parent": 12, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Image", 
+      "scrollable": false, 
+      "package": "org.chromium.webview_shell", 
+      "long_clickable": false, 
+      "view_str": "8cf42444b5911553d2df19ef1e1fc7a4", 
+      "enabled": true, 
+      "bounds": [
+        [
+          12, 
+          146
+        ], 
+        [
+          87, 
+          185
+        ]
+      ], 
+      "signature": "[class]android.widget.Image[resource_id]None[text]None[enabled,,]"
+    }
+  }, 
+  "start_state": "d38ec70c847a2aea3825f0cdf70dfbd7"
+}
