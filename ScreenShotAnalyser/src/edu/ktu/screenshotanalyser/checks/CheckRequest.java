@@ -13,6 +13,21 @@ public class CheckRequest {
 	final List<ExtractedText> extractedTexts = new ArrayList<>();
 
 	final String originalFile;
+	final String device;
+	private double w;
+	private double h;
+
+	public double getW() {
+		return w;
+	}
+
+	public double getH() {
+		return h;
+	}
+
+	public String getDevice() {
+		return device;
+	}
 
 	public List<MatOfPoint> getContours() {
 		return contours;
@@ -28,6 +43,14 @@ public class CheckRequest {
 
 	public CheckRequest(String originalFile) {
 		this.originalFile = originalFile;
+		this.device = null;
+	}
+
+	public CheckRequest(String originalFile, String device, double w, double h) {
+		this.originalFile = originalFile;
+		this.device = device;
+		this.w = w;
+		this.h = h;
 
 	}
 }

@@ -31,11 +31,12 @@ public class TextExtractor implements ITextExtractor {
 	public TextExtractResponse extract(final TextExtractRequest request) throws Throwable {
 		final File file = request.getFile();
 		final BufferedImage image = ImageIO.read(file);
-		System.out.println(file.getName());
+		
 		final List<Rect> bounds = request.getBounds();
 		final List<ExtractedText> extractedTexts = new ArrayList<>();
 		for (final Rect area : bounds) {
 			try {
+				System.out.println(area);
 				final BufferedImage img = image.getSubimage(area.x, area.y, area.width, area.height);
 				final List<Word> words = instance.getWords(img, 0);
 
@@ -112,11 +113,11 @@ public class TextExtractor implements ITextExtractor {
 
 		public TextExtractRequest(File file, List<Rect> bounds) {
 			this.file = file;
+			this.bounds.addAll(bounds);
 		}
 
 		public TextExtractRequest(File file) {
 			this.file = file;
-			this.bounds.addAll(bounds);
 		}
 
 		public File getFile() {

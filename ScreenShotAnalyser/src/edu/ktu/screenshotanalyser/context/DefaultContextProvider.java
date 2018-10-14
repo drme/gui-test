@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -23,8 +18,6 @@ import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 
 public class DefaultContextProvider implements IContextProvider {
 	private final IResourcesProvider provider = new RegexpBasedResourceProvider();
-
-	
 
 	@Override
 	public AppContext getContext(String baseDir) {
@@ -40,7 +33,7 @@ public class DefaultContextProvider implements IContextProvider {
 		});
 
 		for (File f : values) {
-			
+
 			String[] temp = f.getName().split("-", 2);
 
 			String lang = "default";
@@ -58,7 +51,8 @@ public class DefaultContextProvider implements IContextProvider {
 			});
 			for (final File res : resourceFiles) {
 				try {
-					Resources resources = this.provider.getResource(StringUtils.toEncodedString(Files.readAllBytes(res.toPath()), StandardCharsets.UTF_8));
+					Resources resources = this.provider
+							.getResource(new String(Files.readAllBytes(res.toPath()), StandardCharsets.UTF_8));
 					List<ResourceText> textResources = Stream.of(resources.getString()).map(x -> {
 
 						return new ResourceText(x.getName(), x.getValue(), res.getAbsolutePath());
@@ -73,7 +67,7 @@ public class DefaultContextProvider implements IContextProvider {
 							.collect(Collectors.toList());
 					context.getKeys().addAll(missingKeys);
 				} catch (Throwable e) {
-System.out.println("Can't read file: "+res.getAbsolutePath());
+					System.out.println("Can't read file: " + res.getAbsolutePath());
 					e.printStackTrace();
 				}
 			}
@@ -83,16 +77,15 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 		return context;
 	}
 
-
-
 	@JacksonXmlRootElement(localName = "resources")
 	public static class Resources {
 
 		@JacksonXmlElementWrapper(localName = "string", useWrapping = false)
 		private ResourceDao[] string = new ResourceDao[0];
-		
+
 		@JacksonXmlElementWrapper(localName = "item", useWrapping = false)
 		private Object[] item = new Object[0];
+
 		public Object[] getItem() {
 			return item;
 		}
@@ -117,8 +110,7 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 		@JacksonXmlCData
 		@JacksonXmlText
 		private String value;
-		
-		
+
 		@Override
 		public String toString() {
 			return "ResourceDao [value=" + value + ", name=" + name + "]";
@@ -139,8 +131,6 @@ System.out.println("Can't read file: "+res.getAbsolutePath());
 		public void setName(String name) {
 			this.name = name;
 		}
-
-	
 
 		@JacksonXmlProperty(isAttribute = true, localName = "name")
 		private String name;

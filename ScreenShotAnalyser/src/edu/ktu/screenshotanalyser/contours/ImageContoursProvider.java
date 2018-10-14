@@ -18,9 +18,6 @@ import org.opencv.imgproc.Imgproc;
 public class ImageContoursProvider implements IImageContoursProvider {
 	private static final Logger logger = Logger.getGlobal();
 	static {
-		System.out.println(Core.NATIVE_LIBRARY_NAME);
-		//String libPath = System.getProperty("java.library.path");
-	//	System.getProperties().setProperty("java.library.path","./lib/"+Core.NATIVE_LIBRARY_NAME+".dll");
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 
@@ -28,6 +25,7 @@ public class ImageContoursProvider implements IImageContoursProvider {
 
 		File file = request.getFile();
 		Mat original = Imgcodecs.imread(file.getAbsolutePath());
+
 		Mat gray = new Mat();
 		Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
 
@@ -49,11 +47,32 @@ public class ImageContoursProvider implements IImageContoursProvider {
 				new Point(0, 0));
 		final ImageContoursResponse response = new ImageContoursResponse();
 		response.getContours().addAll(contours);
+		response.setHeight(original.size().height);
+
+		response.setWidth(original.size().width);
 		return response;
 	}
 
 	public static class ImageContoursResponse {
 		private final List<MatOfPoint> contours = new ArrayList<>();
+		private double width = 0;
+		private double height = 0;
+
+		public double getWidth() {
+			return width;
+		}
+
+		public void setWidth(double width) {
+			this.width = width;
+		}
+
+		public double getHeight() {
+			return height;
+		}
+
+		public void setHeight(double height) {
+			this.height = height;
+		}
 
 		public List<MatOfPoint> getContours() {
 			return contours;

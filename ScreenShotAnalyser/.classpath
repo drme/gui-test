@@ -40,5 +40,6 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/lingpipe-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/opencv-340.jar"/>
+	<classpathentry kind="lib" path="lib/apktool_2.3.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
