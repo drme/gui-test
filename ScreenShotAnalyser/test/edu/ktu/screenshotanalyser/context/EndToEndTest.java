@@ -22,6 +22,7 @@ import edu.ktu.screenshotanalyser.Screen;
 import edu.ktu.screenshotanalyser.checks.CheckRequest;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.MultiChecker;
+import edu.ktu.screenshotanalyser.checks.experiments.TM1_MissingTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.TS2_UnreadableTextCheck;
 import edu.ktu.screenshotanalyser.contours.ImageContoursProvider;
 import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursProviderRequest;
@@ -115,7 +116,7 @@ public class EndToEndTest {
 
 			DefaultContextProvider contextProvider = new DefaultContextProvider();
 			AppContext context = contextProvider.getContext(apkExtractedResources.getAbsolutePath());
-			MultiChecker checker = new MultiChecker(new TS2_UnreadableTextCheck());
+			MultiChecker checker = new MultiChecker(new TS2_UnreadableTextCheck(), new TM1_MissingTextCheck());
 
 			for (Screen sc : alLScreens) {
 				CheckRequest request = new CheckRequest(sc.originalFile.getAbsolutePath(), sc.device, sc.width,
@@ -124,7 +125,7 @@ public class EndToEndTest {
 				request.getActualTexts().addAll(Arrays.asList(sc.actualTexts));
 				CheckResult[] results = checker.analyze(request, context);
 				for (CheckResult r : results) {
-					System.out.println(r.getMessage() + " " + r.getFile());
+					System.out.println(r.getType() + " " + r.getMessage() + " " + r.getFile());
 				}
 
 			}

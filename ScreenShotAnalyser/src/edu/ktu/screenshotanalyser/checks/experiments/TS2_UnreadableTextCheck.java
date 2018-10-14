@@ -25,7 +25,6 @@ public class TS2_UnreadableTextCheck implements ICheck {
 	@Override
 	public CheckResult[] analyze(CheckRequest request, AppContext context) {
 		List<CheckResult> results = new ArrayList<>();
-		System.out.println(request.getDevice());
 		if (!this.devices.containsKey(request.getDevice())) {
 			System.out.println("Can't find device: " + request.getDevice());
 			return new CheckResult[0];
