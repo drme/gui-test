@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -119,9 +120,8 @@ public class EndToEndTest {
 			for (Screen sc : alLScreens) {
 				CheckRequest request = new CheckRequest(sc.originalFile.getAbsolutePath(), sc.device, sc.width,
 						sc.height);
-				request.getContours().addAll(sc.contours);
 				request.getExtractedTexts().addAll(sc.extractedTexts);
-
+				request.getActualTexts().addAll(Arrays.asList(sc.actualTexts));
 				CheckResult[] results = checker.analyze(request, context);
 				for (CheckResult r : results) {
 					System.out.println(r.getMessage() + " " + r.getFile());

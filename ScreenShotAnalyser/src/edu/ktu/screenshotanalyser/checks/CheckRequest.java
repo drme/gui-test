@@ -9,8 +9,12 @@ import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
 
 public class CheckRequest {
 
-	final List<MatOfPoint> contours = new ArrayList<>();
 	final List<ExtractedText> extractedTexts = new ArrayList<>();
+	final List<String> actualTexts = new ArrayList<>();
+
+	public List<String> getActualTexts() {
+		return actualTexts;
+	}
 
 	final String originalFile;
 	final String device;
@@ -27,10 +31,6 @@ public class CheckRequest {
 
 	public String getDevice() {
 		return device;
-	}
-
-	public List<MatOfPoint> getContours() {
-		return contours;
 	}
 
 	public List<ExtractedText> getExtractedTexts() {
