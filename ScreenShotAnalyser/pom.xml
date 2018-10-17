@@ -71,13 +71,13 @@
     <version>1.1.2</version>
 </dependency>
    <!--  Images -->
-<!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
+<!-- https://mvnrepository.com/artifact/org.openpnp/opencv 
 <dependency>
     <groupId>org.openpnp</groupId>
     <artifactId>opencv</artifactId>
-    <version>3.2.0-1</version>
+    <version>3.4.2-0</version>
 </dependency>
-
+-->
   	<dependency>
   		<groupId>net.sourceforge.tess4j</groupId>
   		<artifactId>tess4j</artifactId>
@@ -150,6 +150,18 @@
     <artifactId>de.tudarmstadt.ukp.dkpro.core.readability-asl</artifactId>
     <version>1.9.2</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/net.dongliu/apk-parser -->
+<dependency>
+    <groupId>net.dongliu</groupId>
+    <artifactId>apk-parser</artifactId>
+    <version>2.6.4</version>
+</dependency>
+<dependency>
+  <groupId>org.boofcv</groupId>
+  <artifactId>boofcv-core</artifactId>
+  <version>0.30</version>
+</dependency>
+
 
 
 <!--

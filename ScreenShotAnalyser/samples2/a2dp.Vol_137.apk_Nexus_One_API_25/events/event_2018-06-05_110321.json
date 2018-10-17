@@ -1,0 +1,48 @@
+{
+  "stop_state": "b21de94a91c4fcdfbcf9e57130fdad9c", 
+  "event_str": "TouchEvent(state=d5f1995771099df934a39361bc7c5750, view=b9fcc788ade095aeac5c96d8dabae7c1)", 
+  "tag": "2018-06-05_110321", 
+  "event": {
+    "y": null, 
+    "x": null, 
+    "event_type": "touch", 
+    "view": {
+      "content_description": null, 
+      "resource_id": "android:id/button1", 
+      "text": "OK", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "96*72", 
+      "checked": false, 
+      "temp_id": 15, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]android:id/button1", 
+      "is_password": false, 
+      "parent": 13, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "b9fcc788ade095aeac5c96d8dabae7c1", 
+      "enabled": true, 
+      "bounds": [
+        [
+          342, 
+          458
+        ], 
+        [
+          438, 
+          530
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]android:id/button1[text]OK[enabled,,]"
+    }
+  }, 
+  "start_state": "d5f1995771099df934a39361bc7c5750"
+}

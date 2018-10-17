@@ -9,13 +9,28 @@ import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
 
 public class CheckRequest {
 
-	final List<MatOfPoint> contours = new ArrayList<>();
 	final List<ExtractedText> extractedTexts = new ArrayList<>();
+	final List<String> actualTexts = new ArrayList<>();
+
+	public List<String> getActualTexts() {
+		return actualTexts;
+	}
 
 	final String originalFile;
+	final String device;
+	private double w;
+	private double h;
 
-	public List<MatOfPoint> getContours() {
-		return contours;
+	public double getW() {
+		return w;
+	}
+
+	public double getH() {
+		return h;
+	}
+
+	public String getDevice() {
+		return device;
 	}
 
 	public List<ExtractedText> getExtractedTexts() {
@@ -28,6 +43,14 @@ public class CheckRequest {
 
 	public CheckRequest(String originalFile) {
 		this.originalFile = originalFile;
+		this.device = null;
+	}
+
+	public CheckRequest(String originalFile, String device, double w, double h) {
+		this.originalFile = originalFile;
+		this.device = device;
+		this.w = w;
+		this.h = h;
 
 	}
 }

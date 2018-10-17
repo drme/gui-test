@@ -1,0 +1,48 @@
+{
+  "stop_state": "1918505138c775b781b90f20a68a3175", 
+  "event_str": "TouchEvent(state=041e551c5292e704753a774f85bc1fee, view=00140dcb2be9804d048c8cdd36473cd6)", 
+  "tag": "2018-06-05_110111", 
+  "event": {
+    "y": null, 
+    "x": null, 
+    "event_type": "touch", 
+    "view": {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/Button01", 
+      "text": "FIND DEVICES", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "128*83", 
+      "checked": false, 
+      "temp_id": 12, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Button01", 
+      "is_password": false, 
+      "parent": 10, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "00140dcb2be9804d048c8cdd36473cd6", 
+      "enabled": true, 
+      "bounds": [
+        [
+          192, 
+          135
+        ], 
+        [
+          320, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Button01[text]FIND DEVICES[enabled,,]"
+    }
+  }, 
+  "start_state": "041e551c5292e704753a774f85bc1fee"
+}

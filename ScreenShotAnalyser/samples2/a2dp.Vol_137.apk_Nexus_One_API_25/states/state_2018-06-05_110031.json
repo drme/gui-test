@@ -1,0 +1,715 @@
+{
+  "views": [
+    {
+      "content_description": null, 
+      "resource_id": null, 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        1, 
+        16
+      ], 
+      "size": "480*800", 
+      "checked": false, 
+      "temp_id": 0, 
+      "selected": false, 
+      "child_count": 2, 
+      "content_free_signature": "[class]android.widget.FrameLayout[resource_id]None", 
+      "is_password": false, 
+      "parent": -1, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.FrameLayout", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "925c0bd784b639e7ddaad1d743130a1e", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          0
+        ], 
+        [
+          480, 
+          800
+        ]
+      ], 
+      "signature": "[class]android.widget.FrameLayout[resource_id]None[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/decor_content_parent", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        2, 
+        7
+      ], 
+      "size": "480*800", 
+      "checked": false, 
+      "temp_id": 1, 
+      "selected": false, 
+      "child_count": 2, 
+      "content_free_signature": "[class]android.view.ViewGroup[resource_id]android:id/decor_content_parent", 
+      "is_password": false, 
+      "parent": 0, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.view.ViewGroup", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "805a10c6f2e8a9fd89fcc4f62c143bec", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          0
+        ], 
+        [
+          480, 
+          800
+        ]
+      ], 
+      "signature": "[class]android.view.ViewGroup[resource_id]android:id/decor_content_parent[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/action_bar_container", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        3
+      ], 
+      "size": "480*84", 
+      "checked": false, 
+      "temp_id": 2, 
+      "selected": false, 
+      "child_count": 1, 
+      "content_free_signature": "[class]android.widget.FrameLayout[resource_id]android:id/action_bar_container", 
+      "is_password": false, 
+      "parent": 1, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.FrameLayout", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "4b3cdfb9f75e1d50c2215873d272e7f7", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          36
+        ], 
+        [
+          480, 
+          120
+        ]
+      ], 
+      "signature": "[class]android.widget.FrameLayout[resource_id]android:id/action_bar_container[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/action_bar", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        4, 
+        5
+      ], 
+      "size": "480*84", 
+      "checked": false, 
+      "temp_id": 3, 
+      "selected": false, 
+      "child_count": 2, 
+      "content_free_signature": "[class]android.view.ViewGroup[resource_id]android:id/action_bar", 
+      "is_password": false, 
+      "parent": 2, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.view.ViewGroup", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "5db0207b1f7694c26ee762342ad958ff", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          36
+        ], 
+        [
+          480, 
+          120
+        ]
+      ], 
+      "signature": "[class]android.view.ViewGroup[resource_id]android:id/action_bar[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": null, 
+      "text": "A2DP Volume Version: 2.12.9.2", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "384*41", 
+      "checked": false, 
+      "temp_id": 4, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.TextView[resource_id]None", 
+      "is_password": false, 
+      "parent": 3, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.TextView", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "6785347a44d97d92d2b1cc04a5f9ef30", 
+      "enabled": true, 
+      "bounds": [
+        [
+          24, 
+          57
+        ], 
+        [
+          408, 
+          98
+        ]
+      ], 
+      "signature": "[class]android.widget.TextView[resource_id]None[text]A2DP Volume Version: 2.12.9.2[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": null, 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        6
+      ], 
+      "size": "60*84", 
+      "checked": false, 
+      "temp_id": 5, 
+      "selected": false, 
+      "child_count": 1, 
+      "content_free_signature": "[class]android.widget.LinearLayout[resource_id]None", 
+      "is_password": false, 
+      "parent": 3, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.LinearLayout", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "28ac07f5946f8c41e2c31da9d81d7c30", 
+      "enabled": true, 
+      "bounds": [
+        [
+          420, 
+          36
+        ], 
+        [
+          480, 
+          120
+        ]
+      ], 
+      "signature": "[class]android.widget.LinearLayout[resource_id]None[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": "More options", 
+      "resource_id": null, 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "60*72", 
+      "checked": false, 
+      "temp_id": 6, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.ImageButton[resource_id]None", 
+      "is_password": false, 
+      "parent": 5, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.ImageButton", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": true, 
+      "view_str": "605fcc396c00f18ed90794ac0bdbed2b", 
+      "enabled": true, 
+      "bounds": [
+        [
+          420, 
+          42
+        ], 
+        [
+          480, 
+          114
+        ]
+      ], 
+      "signature": "[class]android.widget.ImageButton[resource_id]None[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/content", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        8
+      ], 
+      "size": "480*680", 
+      "checked": false, 
+      "temp_id": 7, 
+      "selected": false, 
+      "child_count": 1, 
+      "content_free_signature": "[class]android.widget.FrameLayout[resource_id]android:id/content", 
+      "is_password": false, 
+      "parent": 1, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.FrameLayout", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "cb7cab7442189b53e09afa3c38ae0c6e", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          120
+        ], 
+        [
+          480, 
+          800
+        ]
+      ], 
+      "signature": "[class]android.widget.FrameLayout[resource_id]android:id/content[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": null, 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        9, 
+        10, 
+        14
+      ], 
+      "size": "480*185", 
+      "checked": false, 
+      "temp_id": 8, 
+      "selected": false, 
+      "child_count": 3, 
+      "content_free_signature": "[class]android.widget.LinearLayout[resource_id]None", 
+      "is_password": false, 
+      "parent": 7, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.LinearLayout", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "c8155f45a7cdd732cdc4c71851c54438", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          120
+        ], 
+        [
+          480, 
+          305
+        ]
+      ], 
+      "signature": "[class]android.widget.LinearLayout[resource_id]None[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/TableRow01", 
+      "text": null, 
+      "visible": false, 
+      "checkable": false, 
+      "children": [], 
+      "size": "480*0", 
+      "checked": false, 
+      "temp_id": 9, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.TableRow[resource_id]a2dp.Vol:id/TableRow01", 
+      "is_password": false, 
+      "parent": 8, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.TableRow", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "6e219d16b051693859cbd3b623b72e4b", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          120
+        ], 
+        [
+          480, 
+          120
+        ]
+      ], 
+      "signature": "[class]android.widget.TableRow[resource_id]a2dp.Vol:id/TableRow01[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/TableRow02", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        11, 
+        12, 
+        13
+      ], 
+      "size": "450*83", 
+      "checked": false, 
+      "temp_id": 10, 
+      "selected": false, 
+      "child_count": 3, 
+      "content_free_signature": "[class]android.widget.TableRow[resource_id]a2dp.Vol:id/TableRow02", 
+      "is_password": false, 
+      "parent": 8, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.TableRow", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "22850f6f8cf36864e366f4a4774a915c", 
+      "enabled": true, 
+      "bounds": [
+        [
+          15, 
+          135
+        ], 
+        [
+          465, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.TableRow[resource_id]a2dp.Vol:id/TableRow02[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/Locationbtn", 
+      "text": "STORED LOCATION", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "177*83", 
+      "checked": false, 
+      "temp_id": 11, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Locationbtn", 
+      "is_password": false, 
+      "parent": 10, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": true, 
+      "view_str": "6a4a5d7076cc68d9ec0c2aad532e128f", 
+      "enabled": true, 
+      "bounds": [
+        [
+          15, 
+          135
+        ], 
+        [
+          192, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Locationbtn[text]STORED LOCATION[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/Button01", 
+      "text": "FIND DEVICES", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "128*83", 
+      "checked": false, 
+      "temp_id": 12, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Button01", 
+      "is_password": false, 
+      "parent": 10, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "00140dcb2be9804d048c8cdd36473cd6", 
+      "enabled": true, 
+      "bounds": [
+        [
+          192, 
+          135
+        ], 
+        [
+          320, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/Button01[text]FIND DEVICES[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "a2dp.Vol:id/ServButton", 
+      "text": "START SERVICE", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "145*83", 
+      "checked": false, 
+      "temp_id": 13, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/ServButton", 
+      "is_password": false, 
+      "parent": 10, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.Button", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "5378fed1acce7c2cc6a6fa0365c229db", 
+      "enabled": true, 
+      "bounds": [
+        [
+          320, 
+          135
+        ], 
+        [
+          465, 
+          218
+        ]
+      ], 
+      "signature": "[class]android.widget.Button[resource_id]a2dp.Vol:id/ServButton[text]START SERVICE[enabled,,]"
+    }, 
+    {
+      "content_description": "Bluetooth Devices", 
+      "resource_id": "a2dp.Vol:id/ListView01", 
+      "text": null, 
+      "visible": true, 
+      "checkable": false, 
+      "children": [
+        15
+      ], 
+      "size": "480*72", 
+      "checked": false, 
+      "temp_id": 14, 
+      "selected": false, 
+      "child_count": 1, 
+      "content_free_signature": "[class]android.widget.ListView[resource_id]a2dp.Vol:id/ListView01", 
+      "is_password": false, 
+      "parent": 8, 
+      "focusable": true, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.widget.ListView", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": true, 
+      "view_str": "b09a3e6e24931de73b20f206fcc1815e", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          233
+        ], 
+        [
+          480, 
+          305
+        ]
+      ], 
+      "signature": "[class]android.widget.ListView[resource_id]a2dp.Vol:id/ListView01[text]None[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/text1", 
+      "text": "no data", 
+      "visible": true, 
+      "checkable": false, 
+      "children": [], 
+      "size": "480*72", 
+      "checked": false, 
+      "temp_id": 15, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.widget.TextView[resource_id]android:id/text1", 
+      "is_password": false, 
+      "parent": 14, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": true, 
+      "class": "android.widget.TextView", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": true, 
+      "view_str": "92b2d42c7967bf4fa3cd8047187731c5", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          233
+        ], 
+        [
+          480, 
+          305
+        ]
+      ], 
+      "signature": "[class]android.widget.TextView[resource_id]android:id/text1[text]no data[enabled,,]"
+    }, 
+    {
+      "content_description": null, 
+      "resource_id": "android:id/statusBarBackground", 
+      "text": null, 
+      "visible": false, 
+      "checkable": false, 
+      "children": [], 
+      "size": "480*36", 
+      "checked": false, 
+      "temp_id": 16, 
+      "selected": false, 
+      "child_count": 0, 
+      "content_free_signature": "[class]android.view.View[resource_id]android:id/statusBarBackground", 
+      "is_password": false, 
+      "parent": 0, 
+      "focusable": false, 
+      "editable": false, 
+      "focused": false, 
+      "clickable": false, 
+      "class": "android.view.View", 
+      "scrollable": false, 
+      "package": "a2dp.Vol", 
+      "long_clickable": false, 
+      "view_str": "7d712569d0354496225aae747c8a5d90", 
+      "enabled": true, 
+      "bounds": [
+        [
+          0, 
+          0
+        ], 
+        [
+          480, 
+          36
+        ]
+      ], 
+      "signature": "[class]android.view.View[resource_id]android:id/statusBarBackground[text]None[enabled,,]"
+    }
+  ], 
+  "state_str_content_free": "fea7933b3e4163025365e825ed982a58", 
+  "activity_stack": [
+    "a2dp.Vol/.main"
+  ], 
+  "background_services": [
+    "a2dp.Vol/.NotificationCatcher", 
+    "com.google.android.gms/.ads.identifier.service.AdvertisingIdService", 
+    "com.google.android.music/.dial.DialMediaRouteProviderService", 
+    "com.google.android.gms/.deviceconnection.service.DeviceConnectionWatcherService", 
+    "com.android.systemui/.keyguard.KeyguardService", 
+    "com.google.android.gms/.droidguard.DroidGuardService", 
+    "com.android.systemui/.ImageWallpaper", 
+    "com.google.android.gms/com.google.android.location.geocode.GeocodeService", 
+    "com.google.android.gms/.auth.setup.devicesignals.LockScreenService", 
+    "com.google.android.gms/.gcm.GcmService", 
+    "com.google.android.music/.download.artwork.ArtDownloadService", 
+    "com.android.phone/.vvm.omtp.scheduling.TaskSchedulerService", 
+    "com.google.android.gms/.analytics.service.AnalyticsService", 
+    "com.google.android.gms/.auth.account.service.WorkAccountService", 
+    "com.google.android.gms/.chimera.GmsBoundBrokerService", 
+    "com.google.android.gms/.usagereporting.service.UsageReportingService", 
+    "com.google.android.gms/.pseudonymous.service.PseudonymousIdService", 
+    "com.google.android.googlequicksearchbox/com.google.android.apps.gsa.nowoverlayservice.DrawerOverlayService", 
+    "com.google.android.gms/.phenotype.service.PhenotypeService", 
+    "com.google.android.ext.services/android.ext.services.notification.Ranker", 
+    "io.github.ylimit.droidbotapp/.DroidBotIME", 
+    "com.google.android.gms/.update.SystemUpdateService", 
+    "com.google.android.gms/com.google.android.location.fused.FusedLocationService", 
+    "com.google.android.gms/.auth.account.be.legacy.AuthCronService", 
+    "com.google.android.gms/.herrevad.services.LightweightNetworkQualityAndroidService", 
+    "com.google.android.gms/.cast.media.CastMediaRouteProviderService", 
+    "com.google.android.gms/.gcm.http.GoogleHttpService", 
+    "io.github.ylimit.droidbotapp/io.github.privacystreams.accessibility.PSAccessibilityService", 
+    "com.google.android.gms/com.google.android.location.geofencer.service.GeofenceProviderService", 
+    "com.google.android.gms/.clearcut.uploader.QosUploaderService", 
+    "com.android.systemui/.SystemUIService", 
+    "com.google.android.talk/com.google.android.apps.hangouts.concurrent.impl.ConcurrentService", 
+    "android/.hardware.location.GeofenceHardwareService", 
+    "com.google.android.gms/.chimera.GmsIntentOperationService", 
+    "com.google.android.gms/com.google.android.location.internal.server.GoogleLocationService", 
+    "com.google.android.gms/com.google.android.location.network.NetworkLocationService", 
+    "com.google.android.gms/com.google.android.location.internal.GoogleLocationManagerService", 
+    "com.android.server.telecom/.components.TelecomService", 
+    "com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService", 
+    "android/com.android.internal.backup.LocalTransportService", 
+    "com.google.android.gms/.auth.be.appcert.AppCertService", 
+    "android/com.android.server.content.SyncJobService", 
+    "com.google.android.gms/.common.stats.GmsCoreStatsService", 
+    "com.google.android.gms/.clearcut.service.ClearcutLoggerService", 
+    "com.google.android.gms/com.google.android.location.internal.server.HardwareArProviderService", 
+    "com.android.mms.service/.MmsService", 
+    "com.android.phone/.TelephonyDebugService", 
+    "com.google.android.gms/.backup.BackupTransportService"
+  ], 
+  "state_str": "041e551c5292e704753a774f85bc1fee", 
+  "tag": "2018-06-05_110031", 
+  "foreground_activity": "a2dp.Vol/.main"
+}

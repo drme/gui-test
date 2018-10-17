@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="target/classes" path="src">
 		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="ScreenShotAnalyser/lib"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -34,10 +35,11 @@
 	<classpathentry kind="lib" path="lib/log4j-over-slf4j-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/logback-classic-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/logback-core-1.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/opencv-340.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/tess4j-3.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/lingpipe-4.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/opencv-340.jar"/>
+	<classpathentry kind="lib" path="lib/apktool_2.3.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
