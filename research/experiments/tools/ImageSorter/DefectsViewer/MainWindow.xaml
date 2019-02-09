@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DefectsViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" PreviewKeyDown="WindowPreviewKeyDown" SizeChanged="WindowSizeChanged">
+        Title="MainWindow" Height="533.193" Width="800" PreviewKeyDown="WindowPreviewKeyDown" SizeChanged="WindowSizeChanged">
     <Grid Background="#FFB0ADAD">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -15,7 +15,7 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="200"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Image x:Name="ImageView"  Grid.Column="0"  MouseLeftButtonDown="ImageView_MouseLeftButtonDown" MouseRightButtonDown="ImageView_MouseRightButtonDown" />
@@ -23,18 +23,22 @@
             <Grid Grid.Column="1">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="284"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Button Content="Unreadable" HorizontalAlignment="Center"  Grid.Row="0" VerticalAlignment="Center" Click="UnreadableClick" />
-                <Button Content="Unstranslated" HorizontalAlignment="Center"  Grid.Row="1" VerticalAlignment="Center" Click="UntranslatedClick" />
-                <Button Content="Wasted Space" HorizontalAlignment="Center"  Grid.Row="2" VerticalAlignment="Center" Click="WastedSpaceClick" />
-                <Button Content="Clipped Text" HorizontalAlignment="Center"  Grid.Row="3" VerticalAlignment="Center" Click="ClippedTextClick" />
-                <Button Content="Bad Colors" HorizontalAlignment="Center"  Grid.Row="4" VerticalAlignment="Center" Click="BadColorsClick" />
+                <Button Content="Unreadable" HorizontalAlignment="Center"  Grid.Row="0" VerticalAlignment="Center" Click="UnreadableClick" Margin="10,10,113,254" Height="20" Width="77" />
+                <Button Content="Unstranslated" HorizontalAlignment="Center" VerticalAlignment="Center" Click="UntranslatedClick" Margin="10,35,113,229" Height="20" Width="77" />
+                <Button Content="Wasted Space" HorizontalAlignment="Center" VerticalAlignment="Center" Click="WastedSpaceClick" Margin="9,60,113,202" Height="22" Width="78" />
+                <Button Content="Clipped Text" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ClippedTextClick" Margin="10,112,113,152" Height="20" Width="77" />
+                <Button Content="Bad Colors" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BadColorsClick" Margin="10,87,113,177" Height="20" Width="77" />
+                <RichTextBox Name="RichTextBoxStatus" HorizontalAlignment="Left" Height="168" Margin="-1,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="201" TextChanged="RichTextBox_TextChanged">
+                    <FlowDocument/>
+                </RichTextBox>
+                <Button Content="NotEnoughSpace" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="9,137,84,127" Height="20" Width="107" Click="NotEnoughSpace_Click" />
+                <Button Content="TooSmallText" HorizontalAlignment="Center" VerticalAlignment="Center" Click="TooSmallText_Click" Margin="101,112,22,152" Height="20" Width="77" />
+                <Button Content="BadScaling" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BadScaling_Click" Margin="101,62,22,202" Height="20" Width="77" />
+                <Button Content="Clear" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,188,83,76" Height="20" Width="107" Click="Clear_Click" />
 
 
             </Grid>
@@ -55,9 +59,9 @@
             <Button Content=">>" HorizontalAlignment="Center"  Grid.Column="4" VerticalAlignment="Center" Click="NextImageClick" Height="25" Margin="26,15,24,10" Width="50"/>
             <Button Content="Invalid" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkInvalid" Height="25" Margin="63,15,267,10" Width="62" RenderTransformOrigin="2.654,0.602"/>
             <Button Content="OK" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkOkClick" Height="25" Margin="10,15,347,10" Width="35" RenderTransformOrigin="8.179,0.501"/>
-            <Button Content="Defects" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DefectsClick" Height="25" Margin="10,13,28,12" Width="62" RenderTransformOrigin="-1.255,0.753"/>
-            <Button Content="Unknown" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkUnknown" Height="25" Margin="151,15,179,10" Width="62" RenderTransformOrigin="2.654,0.602"/>
-            <Button Content="Later" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkLaterClick" Height="25" Margin="238,13,92,12" Width="62" RenderTransformOrigin="2.654,0.602"/>
+            <Button Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DefectsClick" Height="25" Margin="10,13,28,12" Width="62" RenderTransformOrigin="-1.255,0.753"/>
+            <Button Content="Later" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkLaterClick" Height="25" Margin="140,15,190,10" Width="62" RenderTransformOrigin="2.654,0.602"/>
+            <Button Content="Save" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Click="Save" Height="25" Margin="12,-232,26,257" Width="62" RenderTransformOrigin="2.654,0.602"/>
 
         </Grid>
 

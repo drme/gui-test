@@ -13,9 +13,16 @@ namespace DefectsViewer
         public const string TextPlacement = "TP1";
         public const string FontSizes = "TS1";
         public const string UnreadableText = "TS2";
-		public const String UntranslatedText = "SL2";
+        public const string ClashingBackground = "TB1";
+        public const string PartialText = "TC1";
+        public const string ClippedText = "TC2";
+        public const string WrongEncoding = "TE1";
+        public const string MissingText = "TM1";
+
+        public const string NotEnoughSpace = "NS1";
+
+        public const String UntranslatedText = "SL2";
 		public const String WastedSpace = "WS1";
-		public const String ClippedText = "TC2";
 		public const String BadColors = "BC1";
         public const String BadScaling = "BS1";
         public const String InvisibleControl = "IC1";
@@ -26,6 +33,15 @@ namespace DefectsViewer
 
     class ImagesSorter : ImagesManager
 	{
+
+        public static Dictionary<string, string> defectTypes = new Dictionary<string, string>()
+        {
+            {"IC1", "InvisibleControl" },
+            {"TSC", "TooSmallControl" },
+            {"TSC2", "TooSmallControl" },
+
+
+        };
         private readonly string badFile;
         private readonly string okFile;
         private readonly string invalidFile;
@@ -73,7 +89,7 @@ namespace DefectsViewer
 
         private void ScanFolder(DirectoryInfo folder)
 		{
-            if (images.Count > 10000)
+            if (images.Count > 1000)
             {
                 return;
             }
@@ -110,16 +126,18 @@ namespace DefectsViewer
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 			File.AppendAllText(okFile, fileName + "\n");
+            System.Diagnostics.Debug.WriteLine("Marked ok " + fileName);
 
-			this.images.Remove(this.ActiveImage);
+            this.images.Remove(this.ActiveImage);
 		}
       
         public override void MarkLater()
 		{
-			var fileName = this.ActiveImage.FullName;
+         
+            var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
-
-			File.AppendAllText(laterFile, fileName + "\n");
+            System.Diagnostics.Debug.WriteLine("Marked later "+ fileName);
+            File.AppendAllText(laterFile, fileName + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
@@ -128,8 +146,8 @@ namespace DefectsViewer
 		{
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
-
-			File.AppendAllText(badFile, fileName + "|" + string.Join(",",type) + "\n");
+            System.Diagnostics.Debug.WriteLine("Marked bad " + fileName);
+            File.AppendAllText(badFile, fileName + "|" + string.Join(",",type) + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
@@ -138,6 +156,7 @@ namespace DefectsViewer
         {
             var fileName = this.ActiveImage.FullName;
             fileName = fileName.Substring(this.root.FullName.Length);
+            System.Diagnostics.Debug.WriteLine("Marked invalid " + fileName);
 
             File.AppendAllText(invalidFile, fileName+ "\n");
 
