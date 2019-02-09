@@ -186,6 +186,7 @@ namespace DefectsViewer
 
         private void DefectsClick(object sender, RoutedEventArgs e)
         {
+            Reset();
             this.sorter = new ImagesManager(baseFolder);
             ShowActiveImage();
         }
@@ -256,7 +257,7 @@ namespace DefectsViewer
             {
                 var dh = this.actualH / ah;
                 var dw = this.actualW / aw;
-                var area = new Rect(X0 * dw, Y0 * dh, w * dw, h * dh);
+                var area = new Rect((int)(X0 * dw), (int)(Y0 * dh), (int)(w * dw), (int)(h * dh));
                 this.rects.Add(area);
             }
             ShowActiveImage();
