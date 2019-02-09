@@ -49,7 +49,7 @@ namespace DefectsViewer
         private List<string> sortedImages = new List<string>();
         
         private readonly string laterFile;
-
+        Random r = new Random();
         public ImagesSorter(String rootFolder) : base(null)
         {
 
@@ -67,6 +67,7 @@ namespace DefectsViewer
             RemoveImagesFrom(invalidFile);
 
             ScanFolder(this.root);
+            this.sortedImages = sortedImages.OrderBy(x => (r.Next())).ToList();
 
         }
 
