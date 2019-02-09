@@ -22,8 +22,8 @@ namespace DefectsViewer
         public const string NotEnoughSpace = "NS1";
 
         public const String UntranslatedText = "SL2";
-		public const String WastedSpace = "WS1";
-		public const String BadColors = "BC1";
+	public const String WastedSpace = "WS1";
+	public const String BadColors = "BC1";
         public const String BadScaling = "BS1";
         public const String InvisibleControl = "IC1";
         public const String MisalignedControl = "MC1";
@@ -150,7 +150,7 @@ namespace DefectsViewer
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
             System.Diagnostics.Debug.WriteLine("Marked bad " + fileName);
-            File.AppendAllText(badFile, fileName + "|" + string.Join(",",type) + "\n");
+            File.AppendAllText(badFile, fileName + "|" + string.Join("|",type) + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
