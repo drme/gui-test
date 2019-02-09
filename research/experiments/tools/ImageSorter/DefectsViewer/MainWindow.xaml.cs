@@ -20,7 +20,10 @@ namespace DefectsViewer
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private ImagesManager sorter = new ImagesSorter("d:/_r/");
+        private static string baseFolder = @"E:\darbai\sh\OneDrive_1_2-8-2019\app-screenshots\_results_\nokia3.1\ab.damumed";
+          //  @"E:\darbai\sh\OneDrive_1_2-8-2019\app-screenshots\_results_\";
+
+        private ImagesManager sorter = new ImagesSorter(baseFolder);
 
 		public MainWindow()
 		{
@@ -75,24 +78,33 @@ namespace DefectsViewer
 		private void MarkDefect(String defect)
 		{
 			this.sorter.MarkBad(defect);
-
 			ShowActiveImage();
 		}
 
-		private void UnreadableClick(object sender, RoutedEventArgs e)
+        private void MarkInvalid(object sender, RoutedEventArgs e)
+        {
+            this.sorter.MarkInvalid();
+            ShowActiveImage();
+        }
+
+        private void UnreadableClick(object sender, RoutedEventArgs e)
 		{
-			MarkDefect(DefectTypes.TooSmallText);
+			MarkDefect(DefectTypes.UnreadableText);
 		}
 
-		private void UntranslatedClick(object sender, RoutedEventArgs e)
+        private void MarkUnknown(object sender, RoutedEventArgs e)
+        {
+            MarkDefect(DefectTypes.Unknown);
+        }
+
+        private void UntranslatedClick(object sender, RoutedEventArgs e)
 		{
 			MarkDefect(DefectTypes.UntranslatedText);
 		}
 
 		private void DefectsClick(object sender, RoutedEventArgs e)
 		{
-			this.sorter = new ImagesManager("d:/_r/");
-
+			this.sorter = new ImagesManager(baseFolder);
 			ShowActiveImage();
 		}
 
@@ -133,5 +145,20 @@ namespace DefectsViewer
 		{
 			MarkDefect(DefectTypes.BadColors);
 		}
-	}
+
+        private void ImageView_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ImageView_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ImageView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+    }
 }

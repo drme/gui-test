@@ -10,79 +10,90 @@ namespace DefectsViewer
 {
 	struct DefectTypes
 	{
-		public const String TooSmallText = "TS2";
+        public const string TextPlacement = "TP1";
+        public const string FontSizes = "TS1";
+        public const string UnreadableText = "TS2";
 		public const String UntranslatedText = "SL2";
 		public const String WastedSpace = "WS1";
 		public const String ClippedText = "TC2";
 		public const String BadColors = "BC1";
-	}
+        public const String BadScaling = "BS1";
+        public const String InvisibleControl = "IC1";
 
-	class ImagesSorter : ImagesManager
+        public const String Unknown = "???";
+
+    }
+
+    class ImagesSorter : ImagesManager
 	{
-		public ImagesSorter(String rootFolder) : base(null)
+        private readonly string badFile;
+        private readonly string okFile;
+        private readonly string invalidFile;
+
+        private List<string> sortedImages = new List<string>();
+        
+        private readonly string laterFile;
+
+        public ImagesSorter(String rootFolder) : base(null)
+        {
+
+
+            this.root = new DirectoryInfo(rootFolder);
+
+          
+            this.badFile = Path.Combine(rootFolder, "bad.txt");
+            this.okFile = Path.Combine(rootFolder, "ok.txt");
+            this.invalidFile = Path.Combine(rootFolder, "invalid.txt");
+            this.laterFile = Path.Combine(rootFolder, "later.txt");
+
+            RemoveImagesFrom(badFile);
+            RemoveImagesFrom(okFile);
+            RemoveImagesFrom(invalidFile);
+
+            ScanFolder(this.root);
+
+        }
+
+        private void RemoveImagesFrom(string file0)
+        {
+            if (File.Exists(file0))
+            {
+                using (var file = new StreamReader(file0))
+                {
+                    String fileName;
+
+                    while ((fileName = file.ReadLine()) != null)
+                    {
+                        string img = this.root.FullName+ fileName.Split('|')[0];
+                        sortedImages.Add(img);
+                    }
+                }
+            }
+        }
+
+        private void ScanFolder(DirectoryInfo folder)
 		{
-			this.root = new DirectoryInfo(rootFolder);
-
-			ScanFolder(this.root);
-
-			var okFile = new FileInfo(rootFolder + "/ok.txt");
-
-			if (okFile.Exists)
-			{
-				using (var file = new StreamReader(okFile.FullName))
-				{
-					String fileName;
-
-					while ((fileName = file.ReadLine()) != null)
-					{
-						RemoveImageFromList(fileName);
-					}
-				}
-			}
-
-			var badFile = new FileInfo(rootFolder + "/bad.txt");
-
-			if (badFile.Exists)
-			{
-				using (var file = new StreamReader(badFile.FullName))
-				{
-					String fileName;
-
-					while ((fileName = file.ReadLine()) != null)
-					{
-						RemoveImageFromList(fileName.Split('|')[0]);
-					}
-				}
-			}
-
-			var laterFile = new FileInfo(rootFolder + "/later.txt");
-
-			if (laterFile.Exists)
-			{
-				using (var file = new StreamReader(laterFile.FullName))
-				{
-					String fileName;
-
-					while ((fileName = file.ReadLine()) != null)
-					{
-						RemoveImageFromList(fileName);
-					}
-				}
-			}
-		}
-
-		private void ScanFolder(DirectoryInfo folder)
-		{
+            if (images.Count > 10000)
+            {
+                return;
+            }
 			if ((folder.Name == "views") || (folder.Name == "temp"))
 			{
 				return;
 			}
-
+     
 			foreach (var file in folder.GetFiles())
 			{
+                
+               
+
 				if ((file.Extension == ".jpg") || (file.Extension == ".png"))
 				{
-					this.images.Add(file);
+                    if (this.sortedImages.Contains(file.FullName))
+                    {
+                        continue;
+                    }
+                    this.images.Add(file);
 				}
 			}
 
@@ -92,51 +103,45 @@ namespace DefectsViewer
 			}
 		}
 
-		private void RemoveImageFromList(String fileName)
-		{
-			var sortedFile = new FileInfo(this.root.FullName + "/" + fileName);
-
-			foreach (var f in this.images)
-			{
-				if (f.FullName == sortedFile.FullName)
-				{
-					Debug.WriteLine("Already sorted out: " + fileName);
-
-					this.images.Remove(f);
-
-					break;
-				}
-			}
-		}
+		
 
 		public override void MarkOk()
 		{
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
-
-			File.AppendAllText(this.root.FullName + "/ok.txt", fileName + "\n");
+			File.AppendAllText(okFile, fileName + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
-
-		public override void MarkLater()
+      
+        public override void MarkLater()
 		{
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 
-			File.AppendAllText(this.root.FullName + "/later.txt", fileName + "\n");
+			File.AppendAllText(laterFile, fileName + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
 
-		public override void MarkBad(String type)
+		public override void MarkBad(params string[] type)
 		{
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 
-			File.AppendAllText(this.root.FullName + "/bad.txt", fileName + "|" + type + "\n");
+			File.AppendAllText(badFile, fileName + "|" + string.Join(",",type) + "\n");
 
 			this.images.Remove(this.ActiveImage);
 		}
-	}
+     
+        public override void MarkInvalid()
+        {
+            var fileName = this.ActiveImage.FullName;
+            fileName = fileName.Substring(this.root.FullName.Length);
+
+            File.AppendAllText(invalidFile, fileName+ "\n");
+
+            this.images.Remove(this.ActiveImage);
+        }
+    }
 }

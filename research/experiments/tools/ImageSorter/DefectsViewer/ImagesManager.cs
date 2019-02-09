@@ -62,11 +62,15 @@ namespace DefectsViewer
 		{
 		}
 
-		public virtual void MarkBad(String type)
+		public virtual void MarkBad(params string[] type)
 		{
 		}
+        public virtual void MarkInvalid()
+        {
 
-		public void NextImage()
+        }
+
+        public void NextImage()
 		{
 			this.activeImage++;
 			this.activeImage %= this.images.Count;
