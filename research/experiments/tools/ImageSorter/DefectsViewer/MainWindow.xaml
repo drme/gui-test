@@ -39,6 +39,7 @@
                 <Button Content="TooSmallText" HorizontalAlignment="Center" VerticalAlignment="Center" Click="TooSmallText_Click" Margin="101,112,22,152" Height="20" Width="77" />
                 <Button Content="BadScaling" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BadScaling_Click" Margin="101,62,22,202" Height="20" Width="77" />
                 <Button Content="Clear" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,188,83,76" Height="20" Width="107" Click="Clear_Click" />
+                <Button Content="Missaligned" HorizontalAlignment="Center"  Grid.Row="0" VerticalAlignment="Center" Click="Misaligned_Click" Margin="101,10,22,254" Height="20" Width="77" />
 
 
             </Grid>

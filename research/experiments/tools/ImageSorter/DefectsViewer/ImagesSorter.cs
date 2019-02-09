@@ -26,7 +26,9 @@ namespace DefectsViewer
 		public const String BadColors = "BC1";
         public const String BadScaling = "BS1";
         public const String InvisibleControl = "IC1";
+        public const String MisalignedControl = "MC1";
 
+        //Misaligned controls
         public const String Unknown = "???";
 
     }

@@ -278,6 +278,11 @@ namespace DefectsViewer
             MarkDefect(DefectTypes.FontSizes);
         }
 
+        private void Misaligned_Click(object sender, RoutedEventArgs e)
+        {
+            MarkDefect(DefectTypes.MisalignedControl);
+        }
+
         private void NotEnoughSpace_Click(object sender, RoutedEventArgs e)
         {
             MarkDefect(DefectTypes.NotEnoughSpace);
@@ -290,6 +295,7 @@ namespace DefectsViewer
             ShowActiveImage();
 
         }
+
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
