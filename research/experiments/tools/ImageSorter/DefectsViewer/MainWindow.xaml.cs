@@ -23,7 +23,8 @@ namespace DefectsViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static string baseFolder = @"E:\darbai\sh\OneDrive_1_2-8-2019\app-screenshots\_results_\";
+        private static string baseFolder = "D:/_r/";
+            //@"E:\darbai\sh\OneDrive_1_2-8-2019\app-screenshots\_results_\";
         //  @"E:\darbai\sh\OneDrive_1_2-8-2019\app-screenshots\_results_\";
 
         private ImagesManager sorter = new ImagesSorter(baseFolder);
@@ -70,12 +71,13 @@ namespace DefectsViewer
             this.updateStatus();
         }
 
-        private void ShowActiveImage()
-        {
-            var image = new BitmapImage(new Uri(this.sorter.ActiveImage.FullName));
+		private void ShowActiveImage()
+		{
+			var image = new BitmapImage(new Uri(this.sorter.ActiveImage.FullName));
 
-            ShowImage(image);
-        }
+			ShowImage(image);
+		}
+
         double actualW = -1;
         double actualH = -1;
         private void ShowImage(BitmapImage src)
@@ -122,26 +124,27 @@ namespace DefectsViewer
                 double ww = src.PixelHeight;
 
 
-                this.Title = this.sorter.Status + " " + ww + "x" + hh;
             }
 
-        }
-     
+			this.Title = this.sorter.Status + " " + src.PixelWidth + "x" + src.PixelHeight;
+		}
 
-        private void MarkDefect(String defect)
-        {   if (this.defects.ContainsKey(defect))
-            {
-                defects[defect].AddRange(rects);
-            }
-            else
-            {
-                defects.Add(defect, new List<Rect>(rects));
-            }
-            
-            updateStatus();
-            rects.Clear();
-            ShowActiveImage();
-        }
+
+		private void MarkDefect(String defect)
+		{
+			if (this.defects.ContainsKey(defect))
+			{
+				defects[defect].AddRange(rects);
+			}
+			else
+			{
+				defects.Add(defect, new List<Rect>(rects));
+			}
+
+			updateStatus();
+			rects.Clear();
+			ShowActiveImage();
+		}
 
         private void MarkInvalid(object sender, RoutedEventArgs e)
         {
@@ -170,19 +173,20 @@ namespace DefectsViewer
             ShowActiveImage();
 
         }
-        private void updateStatus()
-        {
-            RichTextBoxStatus.Document.Blocks.Clear();
-            foreach (var d in defects)
-            {
-                RichTextBoxStatus.Document.Blocks.Add(new Paragraph(new Run(d.Key+" " + "@[" + string.Join(",", d.Value.Select(p => $"({p.X}x{p.Y},{p.X + p.Width}x{p.Y + p.Height})"))+"]")));
-            }
-           
-        }
-        private void UntranslatedClick(object sender, RoutedEventArgs e)
-        {
-            MarkDefect(DefectTypes.UntranslatedText);
-        }
+		private void updateStatus()
+		{
+			RichTextBoxStatus.Document.Blocks.Clear();
+
+			foreach (var d in defects)
+			{
+				RichTextBoxStatus.Document.Blocks.Add(new Paragraph(new Run(d.Key + " " + "@[" + string.Join(",", d.Value.Select(p => $"({p.X}x{p.Y},{p.X + p.Width}x{p.Y + p.Height})")) + "]")));
+			}
+		}
+
+		private void UntranslatedClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.UntranslatedText);
+		}
 
         private void DefectsClick(object sender, RoutedEventArgs e)
         {
@@ -191,10 +195,10 @@ namespace DefectsViewer
             ShowActiveImage();
         }
 
-        private void BadScaling_Click(object sender, RoutedEventArgs e)
-        {
-            MarkDefect(DefectTypes.BadScaling);
-        }
+		private void BadScaling_Click(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.BadScaling);
+		}
         
         private void WindowPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -221,25 +225,25 @@ namespace DefectsViewer
             e.Handled = true;
         }
 
-        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            ShowActiveImage();
-        }
+		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			ShowActiveImage();
+		}
 
-        private void WastedSpaceClick(object sender, RoutedEventArgs e)
-        {
-            MarkDefect(DefectTypes.WastedSpace);
-        }
+		private void WastedSpaceClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.WastedSpace);
+		}
 
-        private void ClippedTextClick(object sender, RoutedEventArgs e)
-        {
-            MarkDefect(DefectTypes.ClippedText);
-        }
+		private void ClippedTextClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.ClippedText);
+		}
 
-        private void BadColorsClick(object sender, RoutedEventArgs e)
-        {
-            MarkDefect(DefectTypes.BadColors);
-        }
+		private void BadColorsClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.BadColors);
+		}
 
 
 
@@ -283,7 +287,52 @@ namespace DefectsViewer
             MarkDefect(DefectTypes.MisalignedControl);
         }
 
-        private void NotEnoughSpace_Click(object sender, RoutedEventArgs e)
+		private void BadSpellingClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.BadSpelling);
+		}
+
+		private void TechnicalJargonClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.TechnicalJargon);
+		}
+
+		private void LowResImageClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.LowResImage);
+		}
+
+		private void ClippedControlClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.ClippedControl);
+		}
+
+		private void NoMarginsClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.NoMargins);
+		}
+
+		private void UncenteredClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.Uncentered);
+		}
+
+		private void UnfilledPlaceholderClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.UnfilledPlaceholder);
+		}
+
+		private void BadMarginsClick(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(DefectTypes.BadMargins);
+		}
+
+		private void DefectButton_Click(object sender, RoutedEventArgs e)
+		{
+			MarkDefect(((DefectButton)sender).Defect);
+		}
+
+		private void NotEnoughSpace_Click(object sender, RoutedEventArgs e)
         {
             MarkDefect(DefectTypes.NotEnoughSpace);
         }

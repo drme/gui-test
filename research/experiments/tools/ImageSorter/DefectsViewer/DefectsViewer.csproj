@@ -79,6 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DefectButton.cs" />
     <Compile Include="ImagesManager.cs" />
     <Compile Include="ImagesSorter.cs" />
     <Compile Include="MainWindow.xaml.cs">
