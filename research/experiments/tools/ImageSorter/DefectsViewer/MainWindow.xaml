@@ -33,8 +33,10 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -63,14 +65,16 @@
                 <local:DefectButton Defect="{x:Static local:DefectTypes.ObscuredControl}"  HorizontalAlignment="Center" Grid.Row="8" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
                 <local:DefectButton Defect="{x:Static local:DefectTypes.NoAntiAliasing}"  HorizontalAlignment="Center" Grid.Row="9" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
                 <local:DefectButton Defect="{x:Static local:DefectTypes.EmptyView}"  HorizontalAlignment="Center" Grid.Row="9" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.ClashingBackground}" Content="ClashinbBackground" HorizontalAlignment="Center" Grid.Row="10" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.UnalignedControlls}" HorizontalAlignment="Center" Grid.Row="10" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.CrowdedControlls}" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.ObscuredText}" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.UnlabeledEntry}" HorizontalAlignment="Center" Grid.Row="12" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
 
 
-                <RichTextBox Name="RichTextBoxStatus" HorizontalAlignment="Left"  VerticalContentAlignment="Stretch" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" TextChanged="RichTextBox_TextChanged" Height="300">
+                <RichTextBox Name="RichTextBoxStatus" HorizontalAlignment="Left"  VerticalContentAlignment="Stretch" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" TextChanged="RichTextBox_TextChanged" Height="300">
                     <FlowDocument/>
                 </RichTextBox>
-
-                <Button Content="Clear" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Clear_Click" />
-
 
             </Grid>
 
@@ -84,15 +88,22 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
 
-            <Button Content=">>" HorizontalAlignment="Center"  Grid.Column="4" VerticalAlignment="Center" Click="NextImageClick" Height="25" Margin="26,15,24,10" Width="50"/>
+            <Button Content=">>" HorizontalAlignment="Center"  Grid.Column="6" VerticalAlignment="Center" Click="NextImageClick" Height="25" Margin="26,15,24,10" Width="50"/>
             <Button Content="Invalid" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkInvalid" Height="25" Margin="63,15,267,10" Width="62" RenderTransformOrigin="2.654,0.602"/>
             <Button Content="OK" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkOkClick" Height="25" Margin="10,15,347,10" Width="35" RenderTransformOrigin="8.179,0.501"/>
             <Button Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Click="DefectsClick" Height="25" Margin="10,13,28,12" Width="62" RenderTransformOrigin="-1.255,0.753"/>
             <Button Content="Later" HorizontalAlignment="Center"  Grid.Column="2" VerticalAlignment="Center" Click="MarkLaterClick" Height="25" Margin="140,15,190,10" Width="62" RenderTransformOrigin="2.654,0.602"/>
-            <Button Content="Save" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Click="Save" Height="25"  Width="62" RenderTransformOrigin="2.654,0.602"/>
+            
+            <Button Content="Save" HorizontalAlignment="Center"  Grid.Column="5" VerticalAlignment="Center" Click="Save" Height="25"  Width="62" RenderTransformOrigin="2.654,0.602"/>
+
+            <Button Content="Clear" HorizontalAlignment="Center"  Grid.Column="3" VerticalAlignment="Center" Click="Clear_Click" Height="25" />
+            <Button Content="Same as Previous" HorizontalAlignment="Center"  Grid.Column="4" VerticalAlignment="Center" Click="SameAsPreviousClick" Height="25"/>
+
 
         </Grid>
 

@@ -32,6 +32,10 @@ namespace DefectsViewer
         Dictionary<string, List<Rect>> defects = new Dictionary<string, List<Rect>>();
         List<Rect> rects = new List<Rect>();
 
+
+		private List<String> previousDefects = new List<String>();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -51,6 +55,8 @@ namespace DefectsViewer
             this.sorter.MarkOk();
             Reset();
             ShowActiveImage();
+
+			this.previousDefects.Clear();
         }
 
         private void MarkLaterClick(object sender, RoutedEventArgs e)
@@ -58,9 +64,11 @@ namespace DefectsViewer
             this.sorter.MarkLater();
             Reset();
             ShowActiveImage();
-        }
 
-        private void Reset()
+			this.previousDefects.Clear();
+		}
+
+		private void Reset()
         {
             X0 = -1;
             X1 = -1;
@@ -75,12 +83,12 @@ namespace DefectsViewer
 		{
 			var image = new BitmapImage(new Uri(this.sorter.ActiveImage.FullName));
 
-			ShowImage(image);
+			ShowImage(image, this.sorter.ActiveImage.FullName);
 		}
 
         double actualW = -1;
         double actualH = -1;
-        private void ShowImage(BitmapImage src)
+        private void ShowImage(BitmapImage src, String fileName)
         {
 
             ImageSource s = src;
@@ -126,7 +134,7 @@ namespace DefectsViewer
 
             }
 
-			this.Title = this.sorter.Status + " " + src.PixelWidth + "x" + src.PixelHeight;
+			this.Title = this.sorter.Status + " " + src.PixelWidth + "x" + src.PixelHeight + " " + fileName;
 		}
 
 
@@ -144,6 +152,11 @@ namespace DefectsViewer
 			updateStatus();
 			rects.Clear();
 			ShowActiveImage();
+
+			if (false == this.previousDefects.Contains(defect))
+			{
+				this.previousDefects.Add(defect);
+			}
 		}
 
         private void MarkInvalid(object sender, RoutedEventArgs e)
@@ -218,7 +231,15 @@ namespace DefectsViewer
             {
                 Save(sender, null);
             }
-            else if (e.Key == Key.I || e.Key == Key.D)
+			else if (e.Key == Key.C)
+			{
+				MarkDefect(DefectTypes.ClippedControl);
+			}
+			else if (e.Key == Key.E)
+			{
+				MarkDefect(DefectTypes.EmptyView);
+			}
+			else if (e.Key == Key.I || e.Key == Key.D)
             {
                 MarkInvalid(sender, null);
             }
@@ -279,8 +300,7 @@ namespace DefectsViewer
 
         private void TooSmallText_Click(object sender, RoutedEventArgs e)
         {
-            MarkDefect(DefectTypes.FontSizes);
-        }
+       }
 
         private void Misaligned_Click(object sender, RoutedEventArgs e)
         {
@@ -332,12 +352,21 @@ namespace DefectsViewer
 			MarkDefect(((DefectButton)sender).Defect);
 		}
 
+		private void SameAsPreviousClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var defect in this.previousDefects)
+			{
+				MarkDefect(defect);
+			}
+		}
+
 		private void NotEnoughSpace_Click(object sender, RoutedEventArgs e)
         {
             MarkDefect(DefectTypes.NotEnoughSpace);
         }
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
+			this.previousDefects.Clear();
 
             Reset();
       

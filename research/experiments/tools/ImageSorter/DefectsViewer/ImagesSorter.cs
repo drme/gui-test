@@ -38,6 +38,10 @@ namespace DefectsViewer
 		public const String ObscuredControl = "ObscuredControl";
 		public const String NoAntiAliasing = "NoAntiAliasing";
 		public const String EmptyView = "EmptyView";
+		public const String UnalignedControlls = "UnalignedControls";
+		public const String CrowdedControlls = "CrowdedControlls";
+		public const String ObscuredText = "ObscuredText";
+		public const String UnlabeledEntry = "UnlabeledEntryField";
 
 
 		//Misaligned controls

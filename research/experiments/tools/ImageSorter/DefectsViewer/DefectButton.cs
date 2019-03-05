@@ -19,7 +19,11 @@ namespace DefectsViewer
 			}
 			set
 			{
-				this.Content = value;
+				if (this.Content == null)
+				{
+					this.Content = value;
+				}
+
 				this.defect = value;
 			}
 		}
