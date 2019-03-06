@@ -524,8 +524,3 @@ n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015348.png
 n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015353.png
 n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015400.png
 n5-320x480\com.cricbuzz.android.vernacular\states\screen_2019-01-27_035122.png
-n5-320x480\com.cyberlink.powerdirector.DRA140225_01\states\screen_2019-01-27_074910.png
-n5-320x480\com.cyberlink.powerdirector.DRA140225_01\states\screen_2019-01-27_074925.png
-n5-320x480\com.cyberlink.powerdirector.DRA140225_01\states\screen_2019-01-27_074931.png
-n5-320x480\com.dogs.six\states\screen_2019-01-29_094753.png
-n5-320x480\com.guideapk.apureapp.newsse\states\screen_2019-01-29_015118.png

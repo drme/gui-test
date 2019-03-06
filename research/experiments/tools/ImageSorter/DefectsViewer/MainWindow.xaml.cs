@@ -81,7 +81,7 @@ namespace DefectsViewer
 
 		private void ShowActiveImage()
 		{
-			var image = new BitmapImage(new Uri(this.sorter.ActiveImage.FullName));
+			var image = this.sorter.ActiveImage.Length > 0 ? new BitmapImage(new Uri(this.sorter.ActiveImage.FullName)) : null;
 
 			ShowImage(image, this.sorter.ActiveImage.FullName);
 		}
@@ -90,51 +90,59 @@ namespace DefectsViewer
         double actualH = -1;
         private void ShowImage(BitmapImage src, String fileName)
         {
+			if (null == src)
+			{
+				this.ImageView.Source = new RenderTargetBitmap(100, 100, 96, 96, PixelFormats.Pbgra32);
 
-            ImageSource s = src;
-            actualH = src.PixelHeight;
-            actualW = src.PixelWidth;
-
-
-
-            RenderTargetBitmap rtb = new RenderTargetBitmap(src.PixelWidth, src.PixelHeight, 96, 96, PixelFormats.Pbgra32);
-
-            DrawingVisual dv = new DrawingVisual();
-            using (DrawingContext dc = dv.RenderOpen())
-            {
-                dc.DrawImage(src, new Rect(0, 0, src.PixelWidth, src.PixelHeight));
-                foreach (Rect area in rects)
-                {
-                    dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromRgb(255, 0, 0)), 1.5), area);
-                }
-            }
-
-
-            rtb.Render(dv);
-
-            s = rtb;
-          
+				this.Title = this.sorter.Status + " " + fileName;
+			}
+			else
+			{
+				ImageSource s = src;
+				actualH = src.PixelHeight;
+				actualW = src.PixelWidth;
 
 
 
+				RenderTargetBitmap rtb = new RenderTargetBitmap(src.PixelWidth, src.PixelHeight, 96, 96, PixelFormats.Pbgra32);
+
+				DrawingVisual dv = new DrawingVisual();
+				using (DrawingContext dc = dv.RenderOpen())
+				{
+					dc.DrawImage(src, new Rect(0, 0, src.PixelWidth, src.PixelHeight));
+					foreach (Rect area in rects)
+					{
+						dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromRgb(255, 0, 0)), 1.5), area);
+					}
+				}
 
 
-            this.ImageView.Source = s;
-            var p = PresentationSource.FromVisual(this);
+				rtb.Render(dv);
 
-            if (null != p)
-            {
-                Matrix m = p.CompositionTarget.TransformToDevice;
-                var dx = m.M11;
-                var dy = m.M22;
-
-                double hh = src.PixelHeight;
-                double ww = src.PixelHeight;
+				s = rtb;
 
 
-            }
+				RenderOptions.SetBitmapScalingMode(s, BitmapScalingMode.NearestNeighbor);
 
-			this.Title = this.sorter.Status + " " + src.PixelWidth + "x" + src.PixelHeight + " " + fileName;
+
+
+				this.ImageView.Source = s;
+				var p = PresentationSource.FromVisual(this);
+
+				if (null != p)
+				{
+					Matrix m = p.CompositionTarget.TransformToDevice;
+					var dx = m.M11;
+					var dy = m.M22;
+
+					double hh = src.PixelHeight;
+					double ww = src.PixelHeight;
+
+
+				}
+
+				this.Title = this.sorter.Status + " " + src.PixelWidth + "x" + src.PixelHeight + " " + fileName;
+			}
 		}
 
 
@@ -234,6 +242,10 @@ namespace DefectsViewer
 			else if (e.Key == Key.C)
 			{
 				MarkDefect(DefectTypes.ClippedControl);
+			}
+			else if (e.Key == Key.T)
+			{
+				MarkDefect(DefectTypes.ClippedText);
 			}
 			else if (e.Key == Key.E)
 			{

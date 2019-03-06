@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="200"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="ImageView"  Grid.Column="0"  MouseLeftButtonDown="ImageView_MouseLeftButtonDown" MouseRightButtonDown="ImageView_MouseRightButtonDown" />
+            <Image x:Name="ImageView"  Grid.Column="0"  MouseLeftButtonDown="ImageView_MouseLeftButtonDown" MouseRightButtonDown="ImageView_MouseRightButtonDown"  />
 
             <Grid Grid.Column="1" Background="AliceBlue">
 
@@ -55,7 +55,6 @@
                 <Button Content="Low Res Image" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"   Click="LowResImageClick" />
                 <Button Content="ClippedControl" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Click="ClippedControlClick" />
                 <Button Content="NoMargins" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"  Click="NoMarginsClick" />
-                <Button Content="TooSmallText" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Click="TooSmallText_Click" />
                 <Button Content="BadScaling" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Click="BadScaling_Click" />
                 <Button Content="Missaligned" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="1"  VerticalAlignment="Center" Click="Misaligned_Click"  />
                 <Button Content="Uncentered" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0"  VerticalAlignment="Center" Click="UncenteredClick"  />
