@@ -523,4 +523,3 @@ n5-320x480\com.coolringtones.topringtones2017.ringtonesforoppo\states\screen_201
 n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015348.png
 n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015353.png
 n5-320x480\com.cricbuzz.android\states\screen_2019-01-28_015400.png
-n5-320x480\com.cricbuzz.android.vernacular\states\screen_2019-01-27_035122.png
