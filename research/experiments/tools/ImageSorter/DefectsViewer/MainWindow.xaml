@@ -36,6 +36,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
@@ -70,9 +71,10 @@
                 <local:DefectButton Defect="{x:Static local:DefectTypes.ObscuredText}" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
                 <local:DefectButton Defect="{x:Static local:DefectTypes.UnlabeledEntry}" HorizontalAlignment="Center" Grid.Row="12" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
                 <local:DefectButton Defect="{x:Static local:DefectTypes.MissingText}" Content="MissingText" HorizontalAlignment="Center" Grid.Row="12" Grid.Column="1"  VerticalAlignment="Center" Click="DefectButton_Click"  />
+                <local:DefectButton Defect="{x:Static local:DefectTypes.WrongEncoding}" Content="WrongEncoding" HorizontalAlignment="Center" Grid.Row="13" Grid.Column="0"  VerticalAlignment="Center" Click="DefectButton_Click"  />
 
 
-                <RichTextBox Name="RichTextBoxStatus" HorizontalAlignment="Left"  VerticalContentAlignment="Stretch" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" TextChanged="RichTextBox_TextChanged" Height="300">
+                <RichTextBox Name="RichTextBoxStatus" HorizontalAlignment="Left"  VerticalContentAlignment="Stretch" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" TextChanged="RichTextBox_TextChanged" Height="300">
                     <FlowDocument/>
                 </RichTextBox>
 

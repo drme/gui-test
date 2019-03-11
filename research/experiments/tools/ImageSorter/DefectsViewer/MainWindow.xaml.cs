@@ -251,11 +251,15 @@ namespace DefectsViewer
 			{
 				MarkDefect(DefectTypes.EmptyView);
 			}
-			else if (e.Key == Key.I || e.Key == Key.D)
+			else if (e.Key == Key.I)
             {
                 MarkInvalid(sender, null);
             }
-            e.Handled = true;
+			else if (e.Key == Key.U)
+			{
+				MarkDefect(DefectTypes.UntranslatedText);
+			}
+			e.Handled = true;
         }
 
 		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
