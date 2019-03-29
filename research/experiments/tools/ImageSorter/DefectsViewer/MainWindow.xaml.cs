@@ -126,7 +126,7 @@ namespace DefectsViewer
 
 
 
-				this.ImageView.Source = s;
+				this.ImageView.Source = src;//s;
 				var p = PresentationSource.FromVisual(this);
 
 				if (null != p)

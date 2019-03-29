@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="200"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="ImageView"  Grid.Column="0"  MouseLeftButtonDown="ImageView_MouseLeftButtonDown" MouseRightButtonDown="ImageView_MouseRightButtonDown"  />
+            <local:MyImage x:Name="ImageView"  Grid.Column="0"  MouseLeftButtonDown="ImageView_MouseLeftButtonDown" MouseRightButtonDown="ImageView_MouseRightButtonDown"  />
 
             <Grid Grid.Column="1" Background="AliceBlue">
 
