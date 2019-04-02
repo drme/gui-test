@@ -259,6 +259,10 @@ namespace DefectsViewer
 			{
 				MarkDefect(DefectTypes.UntranslatedText);
 			}
+			else if (e.Key == Key.W)
+			{
+				MarkDefect(DefectTypes.WastedSpace);
+			}
 			e.Handled = true;
         }
 

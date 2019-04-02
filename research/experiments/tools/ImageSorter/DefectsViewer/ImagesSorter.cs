@@ -42,6 +42,7 @@ namespace DefectsViewer
 		public const String CrowdedControlls = "CrowdedControlls";
 		public const String ObscuredText = "ObscuredText";
 		public const String UnlabeledEntry = "UnlabeledEntryField";
+		public const String TooLargeControl = "TooLargeControl";
 
 
 		//Misaligned controls
