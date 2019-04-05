@@ -2422,3 +2422,13 @@ _Nexus_One_API_25\WambaPhotoStream_v1.1.1\states\screen_2018-06-05_212646.png
 _Nexus_One_API_25\WambaPhotoStream_v1.1.1\states\screen_2018-06-05_212832.png
 _Nexus_One_API_25\WordPress_v9.9\states\screen_2018-06-05_215348.png
 _Nexus_One_API_25\ZoobornsforAndroid_v1.4.8\states\screen_2018-06-05_222030.png
+n5-480x800\com.azure.authenticator\states\screen_2018-12-23_031308.png
+n5-480x800\com.best.weather.forecast.network\states\screen_2018-12-23_031646.png
+n5-480x800\com.bhanu.bhanu1.tamilnews\states\screen_2018-12-23_032626.png
+n5-480x800\com.chanel.weather.forecast.accu\states\screen_2018-12-23_040600.png
+n5-480x800\com.chanel.weather.forecast.accu\states\screen_2018-12-23_040608.png
+n5-480x800\com.chanel.weather.forecast.accu\states\screen_2018-12-23_040709.png
+n5-480x800\com.chbreeze.jikbang4a\states\screen_2018-12-23_041132.png
+n5-480x800\com.chbreeze.jikbang4a\states\screen_2018-12-23_041204.png
+n5-480x800\com.colorjoy.learn.to.draw.glow.comics\states\screen_2018-12-23_042429.png
+n5-480x800\com.eTransport.LT.taxi1424\states\screen_2018-12-23_050545.png
