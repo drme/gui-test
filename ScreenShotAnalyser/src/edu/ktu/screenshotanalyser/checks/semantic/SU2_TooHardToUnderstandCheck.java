@@ -6,16 +6,16 @@ import java.util.Map.Entry;
 import com.ipeirotis.readability.engine.Readability;
 import com.ipeirotis.readability.enums.MetricType;
 import de.tudarmstadt.ukp.dkpro.core.readability.measure.ReadabilityMeasures;
-import edu.ktu.screenshotanalyser.checks.CheckRequest;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
-import edu.ktu.screenshotanalyser.checks.ICheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
+import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
 
 /**
  * https://ipeirotis-hrd.appspot.com/
  */
-public class SU2_TooHardToUnderstandCheck implements ICheck
+public class SU2_TooHardToUnderstandCheck implements IRuleChecker
 {
 	private final String type = "SU2";
 	//private final double threshold;

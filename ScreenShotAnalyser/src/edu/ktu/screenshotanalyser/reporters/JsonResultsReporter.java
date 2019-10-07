@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.reporters;
 
+/*
 import java.io.File;
 import java.io.FileWriter;
 
@@ -31,3 +32,6 @@ public class JsonResultsReporter implements IReporter {
 	}
 
 }
+
+
+*/

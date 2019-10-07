@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.texts;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -10,60 +11,87 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import org.opencv.core.Rect;
-
+import org.slf4j.LoggerFactory;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.Word;
+import net.sourceforge.tess4j.util.LoggHelper;
 
-public class TextExtractor implements ITextExtractor {
-	private static final Logger logger = Logger.getGlobal();
-	private final ITesseract instance;
+public class TextExtractor implements ITextExtractor
+{
+	private final ITesseract tesseract;
 	private final float confidenceLevel;
 
-	public TextExtractor(float confidenceLevel, String tessDataPath, String lang) {
-
+	public TextExtractor(float confidenceLevel, String language)
+	{
+		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Tesseract.class.getName());
+		logger.setLevel(ch.qos.logback.classic.Level.OFF);
+		
+		//logger.getRootLogger().setLevel(Level.OFF);		
+		
 		this.confidenceLevel = confidenceLevel;
-		instance = new Tesseract();
-		instance.setDatapath(new File(tessDataPath).getAbsolutePath());
-		instance.setLanguage(lang);
+
+		this.tesseract = new Tesseract();
+		this.tesseract.setDatapath(new File("./tessdata").getAbsolutePath()); // TODO: folder in app settings
+		this.tesseract.setLanguage(language);
 	}
 
-	public TextExtractResponse extract(final TextExtractRequest request) throws Throwable {
-		final File file = request.getFile();
-		final BufferedImage image = ImageIO.read(file);
-		
-		final List<Rect> bounds = request.getBounds();
-		final List<ExtractedText> extractedTexts = new ArrayList<>();
-		for (final Rect area : bounds) {
-			try {
-				System.out.println(area);
-				final BufferedImage img = image.getSubimage(area.x, area.y, area.width, area.height);
-				final List<Word> words = instance.getWords(img, 0);
-
-				final StringBuilder sb = new StringBuilder();
-
+	public String extract(BufferedImage image, Rect area)
+	{
+		BufferedImage subImage = image.getSubimage(area.x, area.y, area.width, area.height);
 				
-				for (final Word word : words) {
+		StringBuilder result = new StringBuilder();
 
-					 System.out.println("" + word.getConfidence() + " -> " + word.getText());
+		try
+		{
+			for (Word word : this.tesseract.getWords(subImage, 0))
+			{
+			//System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
-					if (word.getConfidence() > this.confidenceLevel) {
-						sb.append(" " + word.getText());
-					}
+				if (word.getConfidence() > this.confidenceLevel)
+				{
+					result.append(" " + word.getText());
 				}
-				extractedTexts.add(new ExtractedText(words.toArray(new Word[0]), sb.toString(), area));
-
-			} catch (Exception ex) {
-				logger.log(Level.WARNING,
-						String.format("Unexpected exception while analysing %s", file.getAbsolutePath()), ex);
 			}
 		}
-		return new TextExtractResponse(extractedTexts, this.confidenceLevel);
-
+		catch (Throwable ex)
+		{
+		}
+			
+		return result.toString().trim();
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static class ExtractedText {
 
+//		extractedTexts.add(new ExtractedText(words.toArray(new Word[0]), sb.toString(), area));
+
+		
 		private final Word[] orginalWords;
 
 		public Word[] getOrginalWords() {

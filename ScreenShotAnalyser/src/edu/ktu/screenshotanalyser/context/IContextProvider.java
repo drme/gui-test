@@ -1,5 +1,9 @@
 package edu.ktu.screenshotanalyser.context;
 
-public interface IContextProvider {
-	AppContext getContext(String baseDir);
+import java.io.File;
+import java.io.IOException;
+
+public interface IContextProvider
+{
+	AppContext getContext(File appFolder) throws IOException;
 }

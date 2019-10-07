@@ -87,7 +87,7 @@ public class DroidBitRunner
 
 	private static void runDroidBot(File folder, File apkFile) throws InterruptedException, ExecutionException
 	{
-		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/jolla/");
+		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/s4/");
 
 		if (false == resultsFolder.exists())
 		{

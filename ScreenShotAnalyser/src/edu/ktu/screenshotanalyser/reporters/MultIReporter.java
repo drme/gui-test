@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.reporters;
 
+/*
 import edu.ktu.screenshotanalyser.reporters.FoundTextsOnImagesReporter.AppExtractInfo;
 
 public class MultIReporter implements IReporter {
@@ -18,3 +19,4 @@ public class MultIReporter implements IReporter {
 	}
 
 }
+*/

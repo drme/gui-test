@@ -8,12 +8,11 @@ import org.languagetool.Language;
 import org.languagetool.language.AmericanEnglish;
 import org.languagetool.language.BritishEnglish;
 import org.languagetool.language.Russian;
-
-import edu.ktu.screenshotanalyser.checks.CheckRequest;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
-import edu.ktu.screenshotanalyser.checks.ICheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
+import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
 import net.sf.extjwnl.data.IndexWord;
@@ -22,7 +21,7 @@ import net.sf.extjwnl.data.Synset;
 import net.sf.extjwnl.data.Word;
 import net.sf.extjwnl.dictionary.Dictionary;
 
-public class SD1_SynonymsUsage implements ICheck {
+public class SD1_SynonymsUsage implements IRuleChecker {
 	private final String type = "SD1";
 
 	public static class FoundNoun {

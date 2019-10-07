@@ -1,9 +1,10 @@
 package edu.ktu.screenshotanalyser.contours;
 
-import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursProviderRequest;
-import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursResponse;
+import java.io.File;
+import java.util.List;
+import org.opencv.core.Rect;
 
 public interface IImageContoursProvider
 {
-	ImageContoursResponse getContours(ImageContoursProviderRequest request);
+	List<Rect> getContours(File imageFile);
 }

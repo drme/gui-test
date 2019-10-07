@@ -1,5 +1,7 @@
 package edu.ktu.screenshotanalyser.context;
 
+/*
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,15 +21,15 @@ import brut.androlib.AndrolibException;
 import brut.androlib.ApkDecoder;
 import brut.directory.DirectoryException;
 import edu.ktu.screenshotanalyser.Screen;
-import edu.ktu.screenshotanalyser.checks.CheckRequest;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
-import edu.ktu.screenshotanalyser.checks.MultiChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.TM1_MissingTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.TS2_UnreadableTextCheck;
 import edu.ktu.screenshotanalyser.contours.ImageContoursProvider;
-import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursProviderRequest;
-import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursResponse;
+//import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursProviderRequest;
+//import edu.ktu.screenshotanalyser.contours.ImageContoursProvider.ImageContoursResponse;
 import edu.ktu.screenshotanalyser.reporters.FoundTextsOnImagesReporter2;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
+import edu.ktu.screenshotanalyser.rules.checkers.MultiChecker;
 import edu.ktu.screenshotanalyser.texts.TextExtractor;
 import edu.ktu.screenshotanalyser.texts.TextExtractor.TextExtractRequest;
 import edu.ktu.screenshotanalyser.texts.TextExtractor.TextExtractResponse;
@@ -41,7 +43,7 @@ public class EndToEndTest {
 		String resultsDir = "./results";
 
 		ImageContoursProvider contoursProvider = new ImageContoursProvider();
-		TextExtractor extractor = new TextExtractor(0.65f, "./tessdata", "nor");
+	//	TextExtractor extractor = new TextExtractor(0.65f, "./tessdata", "nor");
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		File main = new File(dir);
@@ -81,20 +83,20 @@ public class EndToEndTest {
 								".txt");
 						try {
 
-							ImageContoursResponse contours = contoursProvider
-									.getContours(new ImageContoursProviderRequest(screen));
-							TextExtractResponse response = extractor
-									.extract(new TextExtractRequest(screen, contours.getBounds()));
+					//		ImageContoursResponse contours = contoursProvider
+					//				.getContours(new ImageContoursProviderRequest(screen));
+//							TextExtractResponse response = extractor
+	//								.extract(new TextExtractRequest(screen, contours.getBounds()));
 							edu.ktu.screenshotanalyser.Screen screenObj = new Screen();
-							screenObj.extractedTexts = response.getExtractedTexts();
+				//			screenObj.extractedTexts = response.getExtractedTexts();
 							screenObj.shortFileName = screen.getName();
 							screenObj.appName = projectApkName;
 							screenObj.config = config;
 							screenObj.device = device;
 							screenObj.originalFile = screen;
-							screenObj.contours = contours.getContours();
-							screenObj.width = contours.getWidth();
-							screenObj.height = contours.getHeight();
+					//		screenObj.contours = contours.getContours();
+					//		screenObj.width = contours.getWidth();
+					//		screenObj.height = contours.getHeight();
 							screenObj.actualTexts = Files.lines(Paths.get(actualTextFile)).collect(Collectors.toList())
 									.toArray(new String[0]);
 							FileUtils.write(analyzedScreen, gson.toJson(screenObj));
@@ -114,9 +116,11 @@ public class EndToEndTest {
 
 			}
 
-			DefaultContextProvider contextProvider = new DefaultContextProvider();
+			DefaultContextProvider contextProvider = new DefaultContextProvider(null);
 			AppContext context = contextProvider.getContext(apkExtractedResources.getAbsolutePath());
-			MultiChecker checker = new MultiChecker(new TS2_UnreadableTextCheck(), new TM1_MissingTextCheck());
+			MultiChecker checker = new MultiChecker(new TS2_UnreadableTextCheck()
+					//, new TM1_MissingTextCheck()
+					);
 
 			for (Screen sc : alLScreens) {
 				CheckRequest request = new CheckRequest(sc.originalFile.getAbsolutePath(), sc.device, sc.width,
@@ -134,3 +138,6 @@ public class EndToEndTest {
 	}
 
 }
+
+
+*/

@@ -1,8 +1,9 @@
 package edu.ktu.screenshotanalyser.texts;
 
-import edu.ktu.screenshotanalyser.texts.TextExtractor.TextExtractRequest;
-import edu.ktu.screenshotanalyser.texts.TextExtractor.TextExtractResponse;
+import java.awt.image.BufferedImage;
+import org.opencv.core.Rect;
 
-public interface ITextExtractor {
-	TextExtractResponse extract(TextExtractRequest request) throws Throwable;
+public interface ITextExtractor
+{
+	public String extract(BufferedImage image, Rect area);
 }

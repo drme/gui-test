@@ -7,6 +7,9 @@ public class DuplicatesFinder
 {
 	public static void main(String args[]) throws IOException
 	{
+		removeDuplicatesFromResults("D:\\_r\\s4\\");
+		
+		/*
 		File tempFolder = new File("E:/_img_/h/");
 		
 		if (tempFolder.exists())
@@ -28,7 +31,7 @@ public class DuplicatesFinder
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	private static File findOriginal(File copyFile, File startFolder) throws IOException
@@ -58,10 +61,8 @@ public class DuplicatesFinder
 		return null;
 	}
 
-	private static void removeDuplicatesFromResults() throws IOException
+	private static void removeDuplicatesFromResults(String root) throws IOException
 	{
-		String root = "d:/_results_/_2.7_QVGA_API_24/";
-
 		for (String folderName : new File(root).list())
 		{
 			File folder = new File(root + "/" + folderName);

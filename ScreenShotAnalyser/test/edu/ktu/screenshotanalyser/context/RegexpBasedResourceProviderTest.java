@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.context;
 
+/*
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -14,3 +15,4 @@ public class RegexpBasedResourceProviderTest {
 	}
 
 }
+*/

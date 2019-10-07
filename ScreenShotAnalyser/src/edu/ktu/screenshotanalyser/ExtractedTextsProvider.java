@@ -1,5 +1,5 @@
 package edu.ktu.screenshotanalyser;
-
+/*
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,3 +29,4 @@ public class ExtractedTextsProvider implements IFilesProvider<AppExtractInfo> {
 	}
 
 }
+*/

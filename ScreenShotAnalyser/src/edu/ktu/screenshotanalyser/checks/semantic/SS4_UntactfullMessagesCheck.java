@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map.Entry;
 import com.ipeirotis.readability.engine.Readability;
 import com.ipeirotis.readability.enums.MetricType;
-import edu.ktu.screenshotanalyser.checks.CheckRequest;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
-import edu.ktu.screenshotanalyser.checks.ICheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
+import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
 
-public class SS4_UntactfullMessagesCheck implements ICheck
+public class SS4_UntactfullMessagesCheck implements IRuleChecker
 {
 	private final String type = "SS4";
 	//private final double threshold;

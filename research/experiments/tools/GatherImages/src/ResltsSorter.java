@@ -7,8 +7,7 @@ public class ResltsSorter
 {
 	public static void main(String[] args) throws IOException
 	{
-		//String root = "D:/jjj/Raccoon/content/apps/";
-		String root = "D:/_r/apps/";
+		String root = "D:\\_r2\\apps\\";
 
 		for (String folderName : new File(root).list())
 		{
@@ -16,7 +15,7 @@ public class ResltsSorter
 
 			if (folder.isDirectory())
 			{
-				moveResults(folder, "nx5-240x320-de", "d:/_1/");
+				moveResults(folder, "s4", "d:/_r/");
 			}
 		}		
 	}
