@@ -1,22 +1,10 @@
 package edu.ktu.screenshotanalyser.context;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import edu.ktu.screenshotanalyser.SystemContext;
-import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 
 public class DefaultContextProvider implements IContextProvider
 {
@@ -37,25 +25,10 @@ public class DefaultContextProvider implements IContextProvider
 			}
 		}
 	}
-	
-
-	
-	
-
 
 	@Override
 	public AppContext getContext(File appFolder) throws IOException
 	{
-		final AppContext context = new AppContext(appFolder, this.dataFolder, this.testDevices, this.systemContext);
-		
-		
-
-		
-		return context;
+		return new AppContext(appFolder, this.dataFolder, this.testDevices, this.systemContext);
 	}
-
-
-
-
-
 }

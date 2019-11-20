@@ -24,7 +24,7 @@ public class CheckResult
 		this.ruleCheck = ruleCheck;
 		this.appContext = appContext;
 		
-		this.ruleCheck.logMessage(this.ruleCheck.getRuleCode() + ": " + this.appContext.getAppName() + " " + this.message);
+		this.ruleCheck.logMessage(this.ruleCheck.getRuleCode() + ": " + this.appContext.getName() + " " + this.message);
 	}	
 	
 

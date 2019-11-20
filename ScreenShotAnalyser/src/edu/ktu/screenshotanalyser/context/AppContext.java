@@ -16,7 +16,9 @@ import net.dongliu.apk.parser.bean.UseFeature;
 public class AppContext
 {
 	private static final String stateFileExtension = "json";
-	private String appName = "";
+	private String name = "";
+	private String version = "";
+	private String packageName = "";
 	private final File dataFolder;	
 	private final List<TestDevice> testDevices;
 	private final List<State> states = new ArrayList<>();
@@ -68,7 +70,7 @@ public class AppContext
 			try (ApkFile apkFile = new ApkFile(this.apkFile))
 			{
 				ApkMeta apkMeta = apkFile.getApkMeta();
-				System.out.println(apkMeta.getLabel() + "; " + apkMeta.getPackageName() + "; " + apkMeta.getVersionCode());
+				//System.out.println(apkMeta.getLabel() + "; " + apkMeta.getPackageName() + "; " + apkMeta.getVersionCode());
 		//		System.out.println(apkMeta.getPackageName());
 		//		System.out.println(apkMeta.getVersionCode());
 				
@@ -77,7 +79,9 @@ public class AppContext
 	   //     System.out.println(feature.getName());
 				}
 				
-				this.appName = apkMeta.getLabel();
+				this.name = apkMeta.getLabel();
+				this.version = apkMeta.getVersionName();
+				this.packageName = apkMeta.getPackageName();
 				
 				for (Locale locale : apkFile.getLocales())
 				{
@@ -85,19 +89,47 @@ public class AppContext
 				}
 				
 	
+				if (this.name.startsWith("@string/"))
+				{
+					Map<String, String> messages = getMessages().getTranslations(this.name.substring("@string/".length()));
+					
+					String nameEnglish = messages.get("en");
+					
+					if (null != nameEnglish)
+					{
+						this.name = nameEnglish;
+					}
+					else
+					{
+						this.name = messages.get(messages.keySet().iterator().next());
+					}
+				}
 			}
 		}
 		}
 		catch (Exception ex) {
-ex.printStackTrace(System.err);
+//ex.printStackTrace(System.err);
 		}
 	}
 	
-
-	
-	public String getAppName()
+	public File getApkFile()
 	{
-		return this.appName;
+		return this.apkFile;
+	}
+	
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public String getVersion()
+	{
+		return this.version;
+	}
+	
+	public String getPackage()
+	{
+		return this.packageName;
 	}
 	
 	public File getDataFolder()

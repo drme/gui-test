@@ -20,7 +20,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		super(ruleCode);
 	}
 
-	private synchronized static List<Language> getLanguageByCode(String languageCode)
+	protected synchronized static List<Language> getLanguageByCode(String languageCode)
 	{
 		List<Language> languages = languagesCache.get(languageCode);
 
@@ -205,7 +205,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		badWord = badWord.toUpperCase();
 		
-		if (appContext.getAppName().toUpperCase().equals(badWord))
+		if (appContext.getName().toUpperCase().equals(badWord))
 		{
 			return true;
 		}

@@ -137,7 +137,7 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 
 	private boolean isTranslateable(String message, AppContext appContext)
 	{
-		if (message.equals(appContext.getAppName()))
+		if (message.equals(appContext.getName()))
 		{
 			return false;
 		}

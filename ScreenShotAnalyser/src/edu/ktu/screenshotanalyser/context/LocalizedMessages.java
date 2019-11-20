@@ -36,7 +36,7 @@ public class LocalizedMessages
 	
 	public String getMessage(String key, String language)
 	{
-		throw new RuntimeException();
+		return getTranslations(key).get(language);
 	}
 
 	public Map<String, String> getTranslations(String key)

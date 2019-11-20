@@ -25,24 +25,32 @@ public class StartUp
 		ResultsCollector failures = new ResultsCollector();
 		RulesSetChecker checker = new RulesSetChecker();
 
-		checker.addRule(new GrammarCheck());
-		checker.addRule(new UnreadableTextCheck());
+//		checker.addRule(new GrammarCheck());
+//		checker.addRule(new UnreadableTextCheck());
 		checker.addRule(new MissingTextCheck());
-		checker.addRule(new MissingTranslationCheck());
+//		checker.addRule(new MissingTranslationCheck());
 		
 		File[] apps = new File("D:\\jjj\\Raccoon\\content\\apps\\").listFiles(p -> p.isDirectory());
 		
+		
+		for (File app : apps)
+		{
 		int threads = Runtime.getRuntime().availableProcessors();
 		
 		ExecutorService exec = Executors.newFixedThreadPool(threads);		
 		
-		for (File app : apps)
-		{
-			runChecks(app, exec, checker, failures);			
+			runChecks(app, exec, checker, failures);
+
+					exec.shutdown();
+		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		
+	//	break;
+		
+		
 		}
 		
-		exec.shutdown();
-		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+
+		
 	}
 	
 	@SuppressWarnings("unused")

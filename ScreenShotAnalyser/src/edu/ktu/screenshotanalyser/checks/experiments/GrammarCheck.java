@@ -1,23 +1,29 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.rules.RuleMatch;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
+import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 import edu.ktu.screenshotanalyser.context.Control;
+import edu.ktu.screenshotanalyser.context.LocalizedMessages;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
 import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
-public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
+public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
 {
 	public GrammarCheck()
 	{
@@ -88,6 +94,61 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 		}
 		
 		return result.trim();
+	}
+
+	@Override
+	public void analyze(AppContext appContext, ResultsCollector failures)
+	{
+		LocalizedMessages messages = appContext.getMessages();
+		
+		if (null != messages)
+		{
+			Set<String> keys = messages.getKeys();
+			String[] languages = messages.getLanguages().stream().sorted((x, y) -> x.length() - y.length()).collect(Collectors.toList()).toArray(new String[0]);
+		
+			for (String key : keys)
+			{
+				for (String language : languages)
+				{
+					String errors = "";
+					String mistypes = "";
+					
+					String message = messages.getMessage(key, language);
+					
+					// remove placeholders
+					message = message.replaceAll("%s", "");
+					
+					List<Language> l = getLanguageByCode(language);
+					
+					mistypes = isSpellingCorrect(appContext, mistypes, l, message);
+					
+					errors += " " + mistypes;
+					errors = errors.trim();		
+					
+					
+					if (errors.length() > 0)
+					{
+						failures.addFailure(new CheckResult(appContext, this, errors));
+					}
+				}
+			}
+		}
+				
+				
+				
+			
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		
+		
 	}
 	
 	

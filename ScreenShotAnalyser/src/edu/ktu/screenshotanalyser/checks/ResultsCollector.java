@@ -11,7 +11,7 @@ public class ResultsCollector
 {
 	public synchronized void addFailure(CheckResult result)
 	{
-		this.failures.add(result);
+		//this.failures.add(result);
 	}
 	
 	private List<CheckResult> failures = new ArrayList<>();	

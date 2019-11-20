@@ -5,5 +5,6 @@ import org.opencv.core.Rect;
 
 public interface ITextExtractor
 {
+	public String extract(BufferedImage image);
 	public String extract(BufferedImage image, Rect area);
 }

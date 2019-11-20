@@ -40,6 +40,7 @@ public class State
 	private final AppContext context;
 	private List<Control> actualControls = null;
 	private List<Control> imageControls = null;
+	private String imageTexts = null;
 	private TestDevice testDevice = null;
 	private Rect imageSize = null;
 	
@@ -212,9 +213,30 @@ public class State
 		return this.imageControls;		
 	}
 	
+	public synchronized String getImageTexts()
+	{
+		if (null == this.imageTexts)
+		{
+			try
+			{
+				ITextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
+				
+				BufferedImage image = ImageIO.read(this.imageFile);
+
+				this.imageTexts = textsExtractor.extract(image);
+			}
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		
+		return this.imageTexts;		
+	}
+	
 	private String predictLanguage()
 	{
-		String message = getActualControls().stream().map(p-> p.getText()).collect(Collectors.joining(". "));
+		String message = getActualControls().stream().filter(x -> x.getText() != null).map(p-> p.getText()).collect(Collectors.joining(". "));
 		
 		return this.context.getSystemContext().predictLanguage(message);		
 	}

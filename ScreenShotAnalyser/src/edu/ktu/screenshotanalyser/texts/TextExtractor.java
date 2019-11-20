@@ -14,6 +14,7 @@ import org.opencv.core.Rect;
 import org.slf4j.LoggerFactory;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.Word;
 import net.sourceforge.tess4j.util.LoggHelper;
 
@@ -25,17 +26,54 @@ public class TextExtractor implements ITextExtractor
 	public TextExtractor(float confidenceLevel, String language)
 	{
 		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Tesseract.class.getName());
-		logger.setLevel(ch.qos.logback.classic.Level.OFF);
+		logger.setLevel(ch.qos.logback.classic.Level.ALL);
 		
 		//logger.getRootLogger().setLevel(Level.OFF);		
 		
 		this.confidenceLevel = confidenceLevel;
 
 		this.tesseract = new Tesseract();
-		this.tesseract.setDatapath(new File("./tessdata").getAbsolutePath()); // TODO: folder in app settings
+		this.tesseract.setDatapath(new File("./tessdata_best").getAbsolutePath()); // TODO: folder in app settings
 		this.tesseract.setLanguage(language);
+	
+		
+		List<String> config = new ArrayList<>();
+		
+		String[] f = new String[] {"load_system_dawg", "load_freq_dawg",
+				"load_punc_dawg",
+				"load_number_dawg",
+				"load_unambig_dawg",
+				"load_bigram_dawg",
+				"load_fixed_length_dawgs", };
+		
+		for (String a : f)
+		{
+			//config.add(a + " F");
+		
+		//	tesseract.setTessVariable(a, "F");
+		}
+		
+	//	tesseract.setTessVariable("user_words_suffix", "user-words");
+		
+	//	config.add("e:/aa.txt");
+		
+	//	this.tesseract.setConfigs(config);
 	}
 
+	public String extract(BufferedImage image)
+	{
+		try
+		{
+			return tesseract.doOCR(image);
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
 	public String extract(BufferedImage image, Rect area)
 	{
 		BufferedImage subImage = image.getSubimage(area.x, area.y, area.width, area.height);
@@ -46,7 +84,7 @@ public class TextExtractor implements ITextExtractor
 		{
 			for (Word word : this.tesseract.getWords(subImage, 0))
 			{
-			//System.out.println("" + word.getConfidence() + " -> " + word.getText());
+			System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
 				if (word.getConfidence() > this.confidenceLevel)
 				{
