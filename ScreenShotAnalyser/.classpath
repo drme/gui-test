@@ -85,5 +85,6 @@
 	<classpathentry kind="lib" path="src/marvin/framework/marvin_1.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/t/tess4j-4.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/lept4j-1.12.3.jar"/>
+	<classpathentry kind="lib" path="lib/t/commons-text-1.8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

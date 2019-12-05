@@ -20,8 +20,8 @@ public class AppChecker
 
 		if (null != context.getApkFile())
 		{
-			SystemUtils.logMessage("e:/files.csv", "" + (a++) + ";" + context.getName().trim() + ";" + context.getPackage()+ ";" + context.getVersion() + ";" + appName.getAbsolutePath());
-			SystemUtils.logMessage("e:/files.txt", "| " + (a) + " | " + context.getName().trim() + " | " + context.getPackage()+ " | " + context.getVersion() + " |");
+//			SystemUtils.logMessage("e:/files.csv", "" + (a++) + ";" + context.getName().trim() + ";" + context.getPackage()+ ";" + context.getVersion() + ";" + appName.getAbsolutePath());
+//			SystemUtils.logMessage("e:/files.txt", "| " + (a) + " | " + context.getName().trim() + " | " + context.getPackage()+ " | " + context.getVersion() + " |");
 		}
 	
 		for (State state : context.getStates())

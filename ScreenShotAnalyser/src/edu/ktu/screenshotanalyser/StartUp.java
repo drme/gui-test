@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.opencv.core.Core;
 import edu.ktu.screenshotanalyser.checks.AppChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
@@ -22,6 +23,9 @@ public class StartUp
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
+		 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+		
+		
 		ResultsCollector failures = new ResultsCollector();
 		RulesSetChecker checker = new RulesSetChecker();
 

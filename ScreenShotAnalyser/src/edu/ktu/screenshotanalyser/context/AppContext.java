@@ -59,56 +59,67 @@ public class AppContext
 			}
 		}
 		
-		try
-		{
 		File[] apkFiles = appFolder.listFiles(p -> p.isFile() && p.getName().endsWith(".apk"));
 		
 		if (apkFiles.length > 0)
 		{
 			this.apkFile = apkFiles[0];
-			
+		}			
+	}
+	
+	private synchronized void loadAppInfo()
+	{
+		if (null == this.name)
+		{
 			try (ApkFile apkFile = new ApkFile(this.apkFile))
 			{
 				ApkMeta apkMeta = apkFile.getApkMeta();
 				//System.out.println(apkMeta.getLabel() + "; " + apkMeta.getPackageName() + "; " + apkMeta.getVersionCode());
-		//		System.out.println(apkMeta.getPackageName());
-		//		System.out.println(apkMeta.getVersionCode());
+				//System.out.println(apkMeta.getPackageName());
+				//System.out.println(apkMeta.getVersionCode());
 				
 				for (UseFeature feature : apkMeta.getUsesFeatures())
 				{
-	   //     System.out.println(feature.getName());
+					//System.out.println(feature.getName());
 				}
-				
-				this.name = apkMeta.getLabel();
-				this.version = apkMeta.getVersionName();
-				this.packageName = apkMeta.getPackageName();
 				
 				for (Locale locale : apkFile.getLocales())
 				{
-			//		System.out.println("Language: " + locale.getCountry());
+					//System.out.println("Language: " + locale.getCountry());
 				}
 				
-	
+				String name = apkMeta.getLabel();
+				String version = apkMeta.getVersionName();
+				String packageName = apkMeta.getPackageName();
+				
 				if (this.name.startsWith("@string/"))
 				{
-					Map<String, String> messages = getMessages().getTranslations(this.name.substring("@string/".length()));
+					Map<String, String> messages = getMessages().getTranslations(name.substring("@string/".length()));
 					
 					String nameEnglish = messages.get("en");
 					
 					if (null != nameEnglish)
 					{
-						this.name = nameEnglish;
+						name = nameEnglish;
 					}
 					else
 					{
-						this.name = messages.get(messages.keySet().iterator().next());
+						name = messages.get(messages.keySet().iterator().next());
 					}
 				}
+				
+				this.packageName = packageName;
+				this.version = version;
+				this.name = name;
 			}
-		}
-		}
-		catch (Exception ex) {
-//ex.printStackTrace(System.err);
+			catch (Exception ex)
+			{
+				ex.printStackTrace(System.err);
+				
+				this.packageName = "";
+				this.version = "";
+				this.name = "";
+			}
 		}
 	}
 	
@@ -119,16 +130,22 @@ public class AppContext
 	
 	public String getName()
 	{
+		loadAppInfo();
+		
 		return this.name;
 	}
 	
 	public String getVersion()
 	{
+		loadAppInfo();
+		
 		return this.version;
 	}
 	
 	public String getPackage()
 	{
+		loadAppInfo();
+		
 		return this.packageName;
 	}
 	

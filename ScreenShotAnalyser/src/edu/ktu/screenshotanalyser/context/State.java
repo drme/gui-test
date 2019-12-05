@@ -2,11 +2,13 @@ package edu.ktu.screenshotanalyser.context;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
@@ -61,6 +63,28 @@ public class State
 	public AppContext getAppContext()
 	{
 		return this.context;
+	}
+	
+	public boolean isLauncherScreen()
+	{
+		try (Scanner scanner = new Scanner(this.stateFile))
+		{
+			while (scanner.hasNextLine())
+			{
+				String line = scanner.nextLine();
+					
+				if (line.contains("foreground_activity") && line.contains("com.google.android.apps.nexuslauncher/.NexusLauncherActivity"))
+				{
+					return true;
+				}
+			}
+		}
+		catch (FileNotFoundException ex)
+		{
+			ex.printStackTrace(System.err);
+		}	  	
+	  	
+		return false;
 	}
 	
 	public synchronized List<Control> getActualControls()
@@ -186,25 +210,16 @@ public class State
 		{
 			List<Control> result = new ArrayList<>();
 			
-			try
-			{
-				ITextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
+			ITextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
 				
-				BufferedImage image = ImageIO.read(this.imageFile);
-
-				for (Rect area : new ImageContoursProvider().getContours(this.imageFile))
-				{
-					String text = textsExtractor.extract(image, area);
-					
-					if (text.length() > 0)
-					{
-						result.add(new Control(text, null, area, null, null));
-					}
-				}
-			}
-			catch (IOException ex)
+			for (Rect area : new ImageContoursProvider().getContours(this.imageFile))
 			{
-				ex.printStackTrace();
+				String text = textsExtractor.extract(this.imageFile, area);
+					
+				if (text.length() > 0)
+				{
+					result.add(new Control(text, null, area, null, null));
+				}
 			}
 			
 			this.imageControls = result;
@@ -217,18 +232,16 @@ public class State
 	{
 		if (null == this.imageTexts)
 		{
-			try
-			{
-				ITextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
+			String language = predictLanguage();
 				
-				BufferedImage image = ImageIO.read(this.imageFile);
-
-				this.imageTexts = textsExtractor.extract(image);
-			}
-			catch (IOException ex)
+			if (!language.equals("deu") && !language.equals("eng"))
 			{
-				ex.printStackTrace();
+				return null;
 			}
+				
+			ITextExtractor textsExtractor = new TextExtractor(0.65f, language);
+				
+			this.imageTexts = textsExtractor.extract(this.imageFile);
 		}
 		
 		return this.imageTexts;		

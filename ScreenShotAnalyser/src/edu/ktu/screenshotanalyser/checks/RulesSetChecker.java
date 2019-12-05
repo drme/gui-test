@@ -21,9 +21,9 @@ public class RulesSetChecker
 			{
 				IStateRuleChecker check = (IStateRuleChecker)ruleCheck;
 
-				//exec.submit(() -> 
-				check.analyze(state, failures);;
-				//);
+				exec.submit(() -> 
+				check.analyze(state, failures)
+				);
 			}
 		}
 	}

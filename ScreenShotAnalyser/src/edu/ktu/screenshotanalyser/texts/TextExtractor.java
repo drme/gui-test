@@ -1,17 +1,32 @@
 package edu.ktu.screenshotanalyser.texts;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.color.ColorSpace;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-
+import javax.swing.GrayFilter;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.slf4j.LoggerFactory;
+import edu.ktu.screenshotanalyser.utils.ImageUtils;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -60,31 +75,320 @@ public class TextExtractor implements ITextExtractor
 	//	this.tesseract.setConfigs(config);
 	}
 
-	public String extract(BufferedImage image)
+	public String extract(File imageFile)
 	{
 		try
 		{
-			return tesseract.doOCR(image);
+			Mat sourceImage = Imgcodecs.imread(imageFile.getAbsolutePath());
+			Mat grayScaleImage = new Mat();
+			
+			Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+
+			Mat gaussianBlurredImage = new Mat();
+			Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+
+			Mat adaptiveThresholdImage = new Mat();
+			Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+			//Imgcodecs.imwrite("e:/4.png", adaptiveThresholdImage);
+
+			String result1 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+
+			Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+			Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+			//Imgcodecs.imwrite("e:/5.png", adaptiveThresholdImage);
+
+			String result2 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+			
+			Size sz = new Size(sourceImage.width() * 2, sourceImage.height() * 2);
+			Imgproc.resize(sourceImage, sourceImage, sz);
+			
+			Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+			Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+			Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+			//Imgcodecs.imwrite("e:/14.png", adaptiveThresholdImage);
+
+			String result3 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+
+			Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+			Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+			//Imgcodecs.imwrite("e:/15.png", adaptiveThresholdImage);
+
+			String result4 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+			
+			return result1 + " " + result2 + " " + result3 + " " + result4;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			
+			return null;
+		}
+	}
+	
+	private String clean(String text)
+	{
+		if (null == text)
+		{
+			text = "";
+		}
+		
+		return text.trim();
+	}
+	
+	public String extract(BufferedImage image)
+	{
+	//	try
+	//	{
+			BufferedImage sourceImage = image;
+			
+			/*
+			
+			
+			ImageFilter filter = new GrayFilter(true, 50);  
+			ImageProducer producer = new java.awt.image.FilteredImageSource(image.getSource(), filter);
+			
+			sun.awt.image.ToolkitImage tt = ((sun.awt.image.ToolkitImage)Toolkit.getDefaultToolkit().createImage(producer));
+			
+			tt.getWidth();
+			
+			image = tt.getBufferedImage(); */  
+			
+
+			
+			ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY);  
+			ColorConvertOp op = new ColorConvertOp(cs, null);  
+			image = op.filter(image, null);
+			
+			BufferedImage image1 = new BufferedImage(image.getWidth(), image.getHeight(),  
+			    BufferedImage.TYPE_INT_RGB);  
+			Graphics g = image1.getGraphics();  
+			g.drawImage(image, 0, 0, null);  
+			g.dispose();  
+
+			image = image1;
+		
+			
+	    BufferedImage dbi = null;
+	    
+	        dbi = new BufferedImage(image.getWidth() * 5, image.getHeight() *5, BufferedImage.TYPE_INT_RGB);
+	        Graphics2D g1 = dbi.createGraphics();
+	        AffineTransform at = AffineTransform.getScaleInstance(5, 5);
+	        g1.drawRenderedImage(image, at);
+	    
+	    image = dbi;			
+			
+			
+			
+			/*
+			
+			Mat original = Imgcodecs.imread(imageFile.getAbsolutePath());
+
+			Mat gray = new Mat();
+			Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
+
+			Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-1.png").getAbsolutePath(), gray);
+			
+			
+			Mat gradient = new Mat();
+			Mat morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
+			Imgproc.morphologyEx(gray, gradient, Imgproc.MORPH_GRADIENT, morphStructure);
+
+		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-2.png").getAbsolutePath(), gradient);
+			
+			Mat binary = new Mat();
+			Imgproc.threshold(gradient, binary, 0.0, 255.0, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+			Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-3.png").getAbsolutePath(), binary);
+			
+			Mat closed = new Mat();
+			morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 1));
+			Imgproc.morphologyEx(binary, closed, Imgproc.MORPH_CLOSE, morphStructure);
+
+			Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-4.png").getAbsolutePath(), closed);
+			
+			Imgcodecs.
+			
+			
+			*/
+			
+	    
+	    /// s3
+	    
+/*	    
+
+	    
+	    
+	    
+			Mat gray = new Mat();
+			Imgproc.cvtColor(img2, gray, Imgproc.COLOR_BGR2GRAY);
+
+			Size sz = new Size(image.getWidth() * 2, image.getHeight() * 2);
+			Imgproc.resize( gray, gray, sz);
+			
+			
+			Mat gradient = new Mat();
+			Mat morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
+			Imgproc.morphologyEx(gray, gradient, Imgproc.MORPH_GRADIENT, morphStructure);
+
+			Mat binary = new Mat();
+			Imgproc.threshold(gradient, binary, 0.0, 255.0, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+	    Imgcodecs.imwrite("e:/5.png", binary);
+			
+			
+			Mat closed = new Mat();
+			morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 1));
+			Imgproc.morphologyEx(binary, closed, Imgproc.MORPH_CLOSE, morphStructure);
+
+	    Imgcodecs.imwrite("e:/6.png", closed);
+	    
+	   String  result2 = tesseract.doOCR(new File("e:/6.png")); 
+//	    System.out.println(result);
+	
+	   if (result == null) result = "";
+	   
+	   if (result2 == null) result2 = "";
+	   
+	    String s3 =    result + " " + result2;
+	    
+	    
+	    
+	    //// s3
+	    
+	    
+	    
+			
+			String s1 =  tesseract.doOCR(image);
+			
+			BufferedImage img = image;
+			
+	    //get image width and height
+	    int width = img.getWidth();
+	    int height = img.getHeight();
+	    //convert to negative
+	    for(int y = 0; y < height; y++){
+	      for(int x = 0; x < width; x++){
+	        int p = img.getRGB(x,y);
+	        int a = (p>>24)&0xff;
+	        int r = (p>>16)&0xff;
+	        int gg = (p>>8)&0xff;
+	        int b = p&0xff;
+	        //subtract RGB from 255
+	        r = 255 - r;
+	        gg = 255 - gg;
+	        b = 255 - b;
+	        //set new RGB value
+	        p = (a<<24) | (r<<16) | (gg<<8) | b;
+	        img.setRGB(x, y, p);
+	      }
+	    }
+	    //write image
+	   // try{
+	    //  File f = new File("D:\\Image\\Output.jpg");
+	     // ImageIO.write(img, "jpg", f);
+	  //  }catch(IOException e){
+	//      System.out.println(e);
+//	    }			
+			
+			String s2 =  tesseract.doOCR(image);
+			
+			
+			///
+			
+			
+			
+			
+			
+			
+			/////
+			
+			
+			
+			
+			
+			if (s1 == null) s1 = "";
+			if (s2 == null) s2 = "";
+			
+			String ss = (s1 + " " + s2 + s3).trim();
+			
+			if (ss.length() > 0)
+			{
+				return ss;
+			}
+			
+			return null;
 		}
 		catch (Throwable e)
 		{
 			e.printStackTrace();
-		}
-		
-		return "";
+			
+			return null;
+		} */
+	    
+	    return null;
 	}
 	
-	public String extract(BufferedImage image, Rect area)
+	public String extract(File imageFile, Rect area)
 	{
+		if ((area.width <= 2) || (area.height <= 2) || (area.x < 0) || (area.y < 0))
+		{
+			return "";
+		}
+		
+    Mat img2 = new Mat();
+    img2 = Imgcodecs.imread(imageFile.getAbsolutePath());
+    //Imgcodecs.imwrite("e:/11.png", img2);
+    
+    Mat imgGray = new Mat();
+    Imgproc.cvtColor(img2, imgGray, Imgproc.COLOR_BGR2GRAY);
+    //Imgcodecs.imwrite("e:/22.png", imgGray);
+    
+    Mat imgGaussianBlur = new Mat(); 
+    Imgproc.GaussianBlur(imgGray,imgGaussianBlur,new Size(3, 3),0);
+    //Imgcodecs.imwrite("e:/33.png", imgGaussianBlur);  
+    
+    Mat imgAdaptiveThreshold = new Mat();
+    Imgproc.adaptiveThreshold(imgGaussianBlur, imgAdaptiveThreshold, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C ,Imgproc.THRESH_BINARY, 99, 4);
+    //Imgcodecs.imwrite("e:/44.png", imgAdaptiveThreshold);
+    
+  //  File imageFile = new File("e:/4.png");
+   // ITesseract instance = new Tesseract();
+  //  instance.setLanguage("eng");
+   // instance.setTessVariable("tessedit_char_whitelist", "acekopxyABCEHKMOPTXY0123456789");
+ //   String result = tesseract.doOCR(imageFile); 
+//    System.out.println(result);		
+		
+    /*
+    
+		try
+		{
+			image = ImageIO.read(imageFile);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} */
+		
+    BufferedImage image = ImageUtils.matToBufferedImage(imgAdaptiveThreshold);
+    
+		
 		BufferedImage subImage = image.getSubimage(area.x, area.y, area.width, area.height);
-				
+
+		if (null == subImage)
+		{
+			return "";
+		}
+		
 		StringBuilder result = new StringBuilder();
 
 		try
 		{
 			for (Word word : this.tesseract.getWords(subImage, 0))
 			{
-			System.out.println("" + word.getConfidence() + " -> " + word.getText());
+			//System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
 				if (word.getConfidence() > this.confidenceLevel)
 				{
@@ -94,6 +398,7 @@ public class TextExtractor implements ITextExtractor
 		}
 		catch (Throwable ex)
 		{
+			ex.printStackTrace();
 		}
 			
 		return result.toString().trim();
