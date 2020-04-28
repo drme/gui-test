@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.TooHardToUnderstandCheck;
 import edu.ktu.screenshotanalyser.checks.semantic.SD1_SynonymsUsage;
 import edu.ktu.screenshotanalyser.checks.semantic.SS4_UntactfullMessagesCheck;
-import edu.ktu.screenshotanalyser.checks.semantic.SU2_TooHardToUnderstandCheck;
 import edu.ktu.screenshotanalyser.context.AppContext;
 
 public class MultiChecker implements IRuleChecker {

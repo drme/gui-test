@@ -79,22 +79,7 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 		}
 	}
 	
-	private String getText(Control control)
-	{
-		String result = "";
-		
-		if (control.getText() != null)
-		{
-			result += control.getText() + ". ";
-		}
 
-		if (control.getContentDescription() != null)
-		{
-			result += control.getContentDescription() + ". ";
-		}
-		
-		return result.trim();
-	}
 
 	@Override
 	public void analyze(AppContext appContext, ResultsCollector failures)

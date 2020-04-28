@@ -12,6 +12,7 @@ import org.languagetool.Languages;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
 import edu.ktu.screenshotanalyser.context.AppContext;
+import edu.ktu.screenshotanalyser.context.Control;
 
 public abstract class BaseTextRuleCheck extends BaseRuleCheck
 {
@@ -137,7 +138,22 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		return mistypes;
 	}
 	
-	
+	protected String getText(Control control)
+	{
+		String result = "";
+		
+		if (control.getText() != null)
+		{
+			result += control.getText() + ". ";
+		}
+
+		if (control.getContentDescription() != null)
+		{
+			result += control.getContentDescription() + ". ";
+		}
+		
+		return result.trim();
+	}	
 	
 	
 	

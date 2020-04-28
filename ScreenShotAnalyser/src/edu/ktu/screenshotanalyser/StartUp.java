@@ -12,6 +12,7 @@ import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.TooHardToUnderstandCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.UnreadableTextCheck;
 
 public class StartUp
@@ -31,8 +32,10 @@ public class StartUp
 
 //		checker.addRule(new GrammarCheck());
 //		checker.addRule(new UnreadableTextCheck());
-		checker.addRule(new MissingTextCheck());
+//		checker.addRule(new MissingTextCheck());
 //		checker.addRule(new MissingTranslationCheck());
+		
+		checker.addRule(new TooHardToUnderstandCheck());
 		
 		File[] apps = new File("D:\\jjj\\Raccoon\\content\\apps\\").listFiles(p -> p.isDirectory());
 		
