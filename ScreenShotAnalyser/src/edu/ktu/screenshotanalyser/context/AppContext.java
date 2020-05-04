@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import edu.ktu.screenshotanalyser.SystemContext;
 import edu.ktu.screenshotanalyser.utils.SystemUtils;
 import net.dongliu.apk.parser.ApkFile;
@@ -25,6 +26,7 @@ public class AppContext
 	private final SystemContext systemContext;
 	private LocalizedMessages messages = null;
 	private File apkFile = null;
+	private Set<Locale> locales = null;
 
 	public AppContext(File appFolder, File dataFolder, List<TestDevice> testDevices, SystemContext systemContext) throws IOException
 	{
@@ -69,8 +71,10 @@ public class AppContext
 	
 	private synchronized void loadAppInfo()
 	{
-		if (null == this.name)
+		if (this.name.equals(""))
 		{
+			if ((null != this.apkFile) && this.apkFile.length() > 0)
+			{
 			try (ApkFile apkFile = new ApkFile(this.apkFile))
 			{
 				ApkMeta apkMeta = apkFile.getApkMeta();
@@ -82,15 +86,17 @@ public class AppContext
 				{
 					//System.out.println(feature.getName());
 				}
-				
-				for (Locale locale : apkFile.getLocales())
-				{
-					//System.out.println("Language: " + locale.getCountry());
-				}
-				
+
 				String name = apkMeta.getLabel();
 				String version = apkMeta.getVersionName();
 				String packageName = apkMeta.getPackageName();
+				
+				this.locales = apkFile.getLocales();
+				
+				for (Locale locale : locales)
+				{
+					System.out.println(name + " Language: " + locale.getCountry() + " " + locale.toString());
+				}
 				
 				if (this.name.startsWith("@string/"))
 				{
@@ -120,6 +126,14 @@ public class AppContext
 				this.version = "";
 				this.name = "";
 			}
+			}
+			else
+			{
+				this.packageName = "";
+				this.version = "";
+				this.name = "";			
+			}
+			
 		}
 	}
 	
@@ -158,6 +172,13 @@ public class AppContext
 	{
 		return this.states;
 	}
+	
+	public Set<Locale> getLocales()
+	{
+		loadAppInfo();
+		
+		return this.locales;
+	}	
 	
 	public synchronized LocalizedMessages getMessages()
 	{

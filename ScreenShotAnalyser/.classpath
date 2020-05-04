@@ -86,5 +86,6 @@
 	<classpathentry kind="lib" path="lib/t/tess4j-4.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/lept4j-1.12.3.jar"/>
 	<classpathentry kind="lib" path="lib/t/commons-text-1.8.jar"/>
+	<classpathentry kind="lib" path="lib/mssql-jdbc-8.2.2.jre8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

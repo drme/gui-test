@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.context.State;
+import edu.ktu.screenshotanalyser.tools.StatisticsManager;
 import edu.ktu.screenshotanalyser.utils.SystemUtils;
 
 public class AppChecker
@@ -23,6 +24,10 @@ public class AppChecker
 //			SystemUtils.logMessage("e:/files.csv", "" + (a++) + ";" + context.getName().trim() + ";" + context.getPackage()+ ";" + context.getVersion() + ";" + appName.getAbsolutePath());
 //			SystemUtils.logMessage("e:/files.txt", "| " + (a) + " | " + context.getName().trim() + " | " + context.getPackage()+ " | " + context.getVersion() + " |");
 		}
+		
+		new StatisticsManager().saveAppInfo(context);
+		
+		
 	
 		for (State state : context.getStates())
 		{

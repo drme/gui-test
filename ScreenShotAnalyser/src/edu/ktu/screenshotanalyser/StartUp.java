@@ -35,7 +35,7 @@ public class StartUp
 //		checker.addRule(new MissingTextCheck());
 //		checker.addRule(new MissingTranslationCheck());
 		
-		checker.addRule(new TooHardToUnderstandCheck());
+	//	checker.addRule(new TooHardToUnderstandCheck());
 		
 		File[] apps = new File("D:\\jjj\\Raccoon\\content\\apps\\").listFiles(p -> p.isDirectory());
 		
