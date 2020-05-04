@@ -10,28 +10,42 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import javax.xml.ws.Holder;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DroidBitRunner
 {
+	private static boolean skipRestart = false;
+
 	public static void main(String[] ar)
 	{
-//		String root = "D:/jjj/Raccoon/content/apps";
-		String root = "/home/me/apps";
+//		String root = "./apps";
+		String root = "/Users/root456/mt/apps";
+//		String device = "n5-480x800";
+		String device = "n5-320x480";
 
-		for (String folderName : new File(root).list())
+
+//		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/nx5-240x320-de/");
+
+		String[] ddd = sa(new File(root).list());
+		
+		int i = 0;
+		
+		for (String folderName : ddd)
 		{
+			System.out.println("----------------- " + (i++) + "/" + ddd.length + " ---------------------");
+			
 			File folder = new File(root + "/" + folderName);
 
 			if (folder.isDirectory())
 			{
-				runTests(folder);
+				runTests(folder, device);
 			}
 		}
 
 	}
 
-	private static void runTests(File folder)
+	private static void runTests(File folder, String device)
 	{
 		FileFilter filter = new FileFilter()
 		{
@@ -46,12 +60,11 @@ public class DroidBitRunner
 		{
 			try
 			{
-				runDroidBot(folder, fileName);
+				runDroidBot(folder, fileName, device);
 			}
-			catch (InterruptedException | ExecutionException e)
+			catch (InterruptedException | ExecutionException ex)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -85,9 +98,20 @@ public class DroidBitRunner
 		}
 	}
 
-	private static void runDroidBot(File folder, File apkFile) throws InterruptedException, ExecutionException
+	private static void runDroidBot(File folder, File apkFile, String device) throws InterruptedException, ExecutionException
 	{
-		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/s4/");
+		File noEmulatorFile = new File(folder.getAbsolutePath() + "/_results_/no_emulator");
+
+		if (noEmulatorFile.exists())
+{
+
+//                              System.out.println("---- no emulator ------------skip: " + apkFile.getName() + "----------- no emulator");
+  
+return;
+}
+
+
+		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/" + device + "/");
 
 		if (false == resultsFolder.exists())
 		{
@@ -97,7 +121,6 @@ public class DroidBitRunner
 		{
 			if (new File(resultsFolder.getAbsolutePath() + "/states/").list(new FilenameFilter()
 			{
-				
 				@Override
 				public boolean accept(File dir, String name)
 				{
@@ -105,21 +128,69 @@ public class DroidBitRunner
 				}
 			}).length > 0)
 			{
-				System.out.println("skip: " + apkFile.getName());
+//				System.out.println("----- has data ---------------skip: " + apkFile.getName());
 				
 				return;
 			}
-		}
+
+
+
+			
+			}
+
+System.out.println("===== running " + apkFile.getName());
 
 		try
-{
+		{
+
+
+			if (false == skipRestart)
+			{
+				runCommand("adb reboot bootloader");
+/*
+
+
+
+//				runCommand("adb reboot bootloader");
+//				Thread.sleep(60000);
 			
-			String command = "droidbot -a " + apkFile.getAbsolutePath() + " -o " + resultsFolder.getAbsolutePath() + " -keep_env -ignore_ad -timeout 300";
+//				runCommand("adb kill-server");
+//				Thread.sleep(2000);
+
+//				runCommand("adb start-server");
+//				Thread.sleep(3000);
+
+				runCommand("killall qemu-system-x86_64");
+//				runCommand("cp ~/.android/avd/Pixel_C_API_28.avd/back-up/userdata-qemu.img ~/.android/avd/Pixel_C_API_28.avd/userdata-qemu.img");
+
+				new Thread(new Runnable()
+				{
+					public void run()
+					{
+						//runCommand("emulator @Pixel_C_API_28 -no-snapshot");
+						runCommand("emulator @10 -no-snapshot");
+					}
+				}).start();
+
+
+
+*/
+				Thread.sleep(60000);
 			
-			 Process p = Runtime.getRuntime().exec(command);
+				runCommand("adb kill-server");
+				Thread.sleep(2000);
+
+				runCommand("adb start-server");
+				Thread.sleep(3000);
+			}
+			
+			skipRestart = false;
+			
+			String command = "droidbot -a " + apkFile.getAbsolutePath().replaceAll("[ ]", "\\ ") + " -o " + resultsFolder.getAbsolutePath().replaceAll("[ ]", "\\ ") + " -keep_env -ignore_ad -timeout 300 -is_emulator";
+			
+			Process p = Runtime.getRuntime().exec(command);
 
 			System.out.println(command);
-			
 			
 			try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream())))
 			{
@@ -128,6 +199,36 @@ public class DroidBitRunner
 				while ((line = input.readLine()) != null)
 				{
 					System.out.println(line);
+
+					if (line.contains("INSTALL_FAILED_NO_MATCHING_ABIS") || line.contains("DroidBot Stopped") || line.contains("Failed to disconnect DroidBotIME!"))
+					{
+						if (line.contains("INSTALL_FAILED_NO_MATCHING_ABIS"))
+						{
+							skipRestart = true;
+	
+							noEmulatorFile.createNewFile();
+						}
+
+						System.out.println("------ terminate ------");
+
+						new Thread(new Runnable()
+						{
+							public void run()
+							{
+								try
+								{
+									Thread.sleep(10000);
+
+									p.destroy();
+								}
+								catch (Throwable ex)
+								{
+									ex.printStackTrace();
+								}
+							}
+						}
+						).start();
+					}
 				}
 			}
 			catch (IOException ex)
@@ -143,9 +244,6 @@ public class DroidBitRunner
 			e1.printStackTrace();
 		}
 		 
-			
-
-			// enter code here
 			
 			
 
@@ -182,5 +280,52 @@ public class DroidBitRunner
 		}
 		
 		*/
+	}
+
+
+  // Implementing Fisher–Yates shuffle
+  static <T> T[] sa(T[] ar)
+  {
+    // If running on Java 6 or older, use `new Random()` on RHS here
+    Random rnd = ThreadLocalRandom.current();
+    for (int i = ar.length - 1; i > 0; i--)
+    {
+      int index = rnd.nextInt(i + 1);
+      // Simple swap
+      T a = ar[index];
+      ar[index] = ar[i];
+      ar[i] = a;
+    }
+
+return ar;
+  }
+  
+  
+	private static void runCommand(String command)
+	{
+		try
+{
+		Process p = Runtime.getRuntime().exec(command);
+
+		System.out.println(command);
+
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream())))
+		{
+			String line;
+
+			while ((line = input.readLine()) != null)
+			{
+				System.out.println(line);
+			}
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+		}
+}
+catch (IOException ex)
+{
+ex.printStackTrace();
+}
 	}
 }
