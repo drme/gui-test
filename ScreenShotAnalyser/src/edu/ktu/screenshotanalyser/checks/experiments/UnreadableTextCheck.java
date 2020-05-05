@@ -16,7 +16,7 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 	
 	public UnreadableTextCheck()
 	{
-		super("TS2");
+		super(19, "TS2");
 	}
 
 	@Override

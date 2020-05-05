@@ -9,14 +9,17 @@ import org.opencv.core.Core;
 import edu.ktu.screenshotanalyser.checks.AppChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
-import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.TooHardToUnderstandCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.UnreadableTextCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
 
 public class StartUp
 {
+	static
+	{
+		//nu.pattern.OpenCV.loadShared();
+		
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);				
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
 		runExperiments();
@@ -24,40 +27,32 @@ public class StartUp
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
-		 System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		
-		
 		ResultsCollector failures = new ResultsCollector();
 		RulesSetChecker checker = new RulesSetChecker();
 
-//		checker.addRule(new GrammarCheck());
-//		checker.addRule(new UnreadableTextCheck());
-//		checker.addRule(new MissingTextCheck());
-//		checker.addRule(new MissingTranslationCheck());
+		//checker.addRule(new GrammarCheck());
+		//checker.addRule(new UnreadableTextCheck());
+		//checker.addRule(new MissingTextCheck());
+		//checker.addRule(new MissingTranslationCheck());
+		//checker.addRule(new TooHardToUnderstandCheck());
 		
-	//	checker.addRule(new TooHardToUnderstandCheck());
+		checker.addRule(new ClippedTextCheck());
 		
-		File[] apps = new File("D:\\jjj\\Raccoon\\content\\apps\\").listFiles(p -> p.isDirectory());
-		
+		File[] apps = new File(Config.appsFolder).listFiles(p -> p.isDirectory());
 		
 		for (File app : apps)
 		{
-		int threads = Runtime.getRuntime().availableProcessors();
+			int threads = Runtime.getRuntime().availableProcessors();
 		
-		ExecutorService exec = Executors.newFixedThreadPool(threads);		
+			ExecutorService exec = Executors.newFixedThreadPool(threads);		
 		
 			runChecks(app, exec, checker, failures);
 
-					exec.shutdown();
-		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+			exec.shutdown();
+			exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
 		
-	//	break;
-		
-		
+			//break;
 		}
-		
-
-		
 	}
 	
 	@SuppressWarnings("unused")
@@ -78,5 +73,5 @@ public class StartUp
 		AppChecker appChecker = new AppChecker();
 		
 		appChecker.runChecks(appName, rules, exec, failures);
-	}	
+	}
 }

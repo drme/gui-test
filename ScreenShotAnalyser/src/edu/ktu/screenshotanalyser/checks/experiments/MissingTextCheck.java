@@ -25,7 +25,7 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 {
 	public MissingTextCheck()
 	{
-		super("TM1");
+		super(26, "TM1");
 
 		if (null == pass2Files)
 		{

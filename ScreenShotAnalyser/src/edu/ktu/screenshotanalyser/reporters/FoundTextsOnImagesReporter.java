@@ -59,7 +59,7 @@ public class FoundTextsOnImagesReporter implements IReporter {
 
 			if (text.length() > 0) {
 
-				Imgproc.putText(original, text, bounds.tl(), Core.FONT_ITALIC, 1.0, new Scalar(255));
+				Imgproc.putText(original, text, bounds.tl(), Imgproc.FONT_ITALIC, 1.0, new Scalar(255));
 			}
 		}
 		File outFile = new File(outDir, request.getOutFile() + ".png");

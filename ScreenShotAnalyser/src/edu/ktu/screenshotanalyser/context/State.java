@@ -247,7 +247,7 @@ public class State
 		return this.imageTexts;		
 	}
 	
-	private String predictLanguage()
+	public String predictLanguage()
 	{
 		String message = getActualControls().stream().filter(x -> x.getText() != null).map(p-> p.getText()).collect(Collectors.joining(". "));
 		
@@ -266,7 +266,7 @@ public class State
 			
 			if (text.getText().length() > 0)
 			{
-				Imgproc.putText(original, text.getText(), rectangle.tl(), Core.FONT_HERSHEY_PLAIN, 0.6, new Scalar(255));
+				Imgproc.putText(original, text.getText(), rectangle.tl(), Imgproc.FONT_HERSHEY_PLAIN, 0.6, new Scalar(255));
 			}			
 		}
 

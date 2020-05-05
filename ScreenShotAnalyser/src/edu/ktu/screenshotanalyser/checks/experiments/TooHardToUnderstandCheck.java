@@ -38,7 +38,7 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 
 	public TooHardToUnderstandCheck()
 	{
-		super("SU2");
+		super(-1, "SU2");
 		
 		//this(13d, 10);
 	}

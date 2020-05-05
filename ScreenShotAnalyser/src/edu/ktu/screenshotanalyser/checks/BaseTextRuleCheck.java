@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.tika.language.LanguageIdentifier;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
@@ -16,9 +17,9 @@ import edu.ktu.screenshotanalyser.context.Control;
 
 public abstract class BaseTextRuleCheck extends BaseRuleCheck
 {
-	protected BaseTextRuleCheck(String ruleCode)
+	protected BaseTextRuleCheck(long id, String ruleCode)
 	{
-		super(ruleCode);
+		super(id, ruleCode);
 	}
 
 	protected synchronized static List<Language> getLanguageByCode(String languageCode)
@@ -246,6 +247,26 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		}
 		
 		return string;
+	}
+	
+	protected boolean isSimillar(String left, String right)
+	{
+		int d = LevenshteinDistance.getDefaultInstance().apply(left, right);
+
+		int m_len = Math.max(left.length(), right.length());
+
+		float d1 = 0;
+
+		if (m_len == 0)
+		{
+			d1 = 0;
+		}
+		else
+		{
+			d1 = (float) d / (float) m_len;
+		}
+		
+		return d1 < 0.1;
 	}
 	
 	private static String[] ignoredWords = new String[] {"dd-mm-yy", "apk", "facebook", "sdcard", "bluetooth", "png", "gif", "microsoft", "youtube", "paypal", "ru", "iCloud", "AppleId", "nl", "yyyy", "javascript", "js", "wikipedia", "uk", "edu", "wifi", "iTouch", "url", "tv", "github", "linkedin", "google", "twitter", "email", "wizzair", "wi-fi", "csv", "mBar", "mmHg", "latin", "hPa", "reCAPTCHA", "app", "mAh", "kg", "ft.", "Google Drive", "lb", "lbs", "Kcal", "Apple Watch", "MB", "dd/mm", "mm", "min", "km/h", "mph", "kph", "cm", "mi/h", "lat/long", "hh:mm", "mmmm yyyy", "sec", "Pinterest", "Creative Cloud", "rgb", "Adobe ID", "Adobe", "Adobe Photoshop Express", "Instagram", "Tumblr", "Dropbox", "mbps", "Alipay", "WeChat", "Android", "Mastercard", "iban", "sms", "Weibo", "Maestro", "Visa", "AMEX", "min", "max", "sin", "tan", "cos", "det", "asin", "atan", "USB", "jpeg", "mjpeg", "cpu", "led" };

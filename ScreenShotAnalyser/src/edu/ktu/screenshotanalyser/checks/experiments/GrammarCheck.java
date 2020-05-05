@@ -27,7 +27,7 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
 	public GrammarCheck()
 	{
-		super("SS1");
+		super(2, "BadSpelling");
 	}
 	
 	@Override

@@ -21,7 +21,7 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 {
 	public MissingTranslationCheck()
 	{
-		super("SL1");
+		super(-1, "SL1");
 	}
 	
 	@Override

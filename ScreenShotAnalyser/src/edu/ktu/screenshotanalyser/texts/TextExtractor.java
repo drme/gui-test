@@ -137,11 +137,93 @@ public class TextExtractor implements ITextExtractor
 		return text.trim();
 	}
 	
-	public String extract(BufferedImage image)
+	public String extract(BufferedImage image, Rect bounds)
 	{
+		try
+		{
+			
+		if (null != bounds)
+		{
+			try
+			{
+			image = image.getSubimage(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
+			catch (java.awt.image.RasterFormatException e) {
+e.printStackTrace();;
+			}
+		}
+		
+		
+		Mat sourceImage = ImageUtils.bufferedImageToMat(image);
+		Mat grayScaleImage = new Mat();
+		
+		Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+
+		Mat gaussianBlurredImage = new Mat();
+		Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+
+		Mat adaptiveThresholdImage = new Mat();
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+//		Imgcodecs.imwrite("d:/4.png", adaptiveThresholdImage);
+
+		String result1 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+
+		Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/5.png", adaptiveThresholdImage);
+
+		String result2 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+		
+		Size sz = new Size(sourceImage.width() * 2, sourceImage.height() * 2);
+		Imgproc.resize(sourceImage, sourceImage, sz);
+		
+		Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/14.png", adaptiveThresholdImage);
+
+		String result3 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+
+		Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/15.png", adaptiveThresholdImage);
+
+		String result4 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+		
+		return result1;// + " " + result2 + " " + result3 + " " + result4;		
+		
+		
+		
+		}
+		catch (Throwable e) {
+e.printStackTrace();;
+
+return "";
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	//	try
 	//	{
-			BufferedImage sourceImage = image;
+		//	BufferedImage sourceImage = image;
 			
 			/*
 			
@@ -156,6 +238,7 @@ public class TextExtractor implements ITextExtractor
 			image = tt.getBufferedImage(); */  
 			
 
+			/* working??
 			
 			ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY);  
 			ColorConvertOp op = new ColorConvertOp(cs, null);  
@@ -179,7 +262,9 @@ public class TextExtractor implements ITextExtractor
 	    
 	    image = dbi;			
 			
-			
+			*/
+	    
+	    
 			
 			/*
 			
@@ -327,7 +412,7 @@ public class TextExtractor implements ITextExtractor
 			return null;
 		} */
 	    
-	    return null;
+//	    return null;
 	}
 	
 	public String extract(File imageFile, Rect area)

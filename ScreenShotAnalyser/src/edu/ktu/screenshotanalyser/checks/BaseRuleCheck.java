@@ -9,8 +9,9 @@ import java.nio.file.StandardOpenOption;
 
 public abstract class BaseRuleCheck
 {
-	protected BaseRuleCheck(String ruleCode)
+	protected BaseRuleCheck(long id, String ruleCode)
 	{
+		this.id = id;
 		this.ruleCode = ruleCode;
 	}
 	
@@ -36,4 +37,5 @@ public abstract class BaseRuleCheck
 	}
 	
 	private final String ruleCode;
+	private final long id;
 }
