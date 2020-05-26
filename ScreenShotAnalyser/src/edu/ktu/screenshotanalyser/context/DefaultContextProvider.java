@@ -12,9 +12,9 @@ public class DefaultContextProvider implements IContextProvider
 	private final List<TestDevice> testDevices = new ArrayList<>();
 	private final SystemContext systemContext;
 	
-	public DefaultContextProvider(String dataFolder) throws IOException
+	public DefaultContextProvider(File dataFolder) throws IOException
 	{
-		this.dataFolder = new File(dataFolder);
+		this.dataFolder = dataFolder;
 		this.systemContext = new SystemContext();
 		
 		for (File testDeviceFolder : this.dataFolder.listFiles((pathname) -> pathname.isDirectory()))

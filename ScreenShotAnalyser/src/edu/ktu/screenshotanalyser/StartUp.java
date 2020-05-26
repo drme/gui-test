@@ -6,10 +6,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.opencv.core.Core;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import edu.ktu.screenshotanalyser.checks.AppChecker;
+import edu.ktu.screenshotanalyser.checks.DataBaseResultsCollector;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
+import net.sourceforge.tess4j.TessAPI1;
 
 public class StartUp
 {
@@ -22,12 +27,14 @@ public class StartUp
 	
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
+		enableLogs();
+		
 		runExperiments();
 	}
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
-		ResultsCollector failures = new ResultsCollector();
+		ResultsCollector failures = new DataBaseResultsCollector();
 		RulesSetChecker checker = new RulesSetChecker();
 
 		//checker.addRule(new GrammarCheck());
@@ -38,7 +45,7 @@ public class StartUp
 		
 		checker.addRule(new ClippedTextCheck());
 		
-		File[] apps = new File(Config.appsFolder).listFiles(p -> p.isDirectory());
+		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 		
 		for (File app : apps)
 		{
@@ -73,5 +80,14 @@ public class StartUp
 		AppChecker appChecker = new AppChecker();
 		
 		appChecker.runChecks(appName, rules, exec, failures);
+	}
+	
+	private static void enableLogs()
+	{
+		LoggerContext logContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		ch.qos.logback.classic.Logger log = logContext.getLogger("com.jayway.jsonpath.internal.path.CompiledPath");
+		log.setLevel(Level.ERROR);
+		
+	
 	}
 }

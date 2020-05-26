@@ -13,14 +13,18 @@ public class Control
 	protected String text;
 	protected Integer parentId;
 	protected Integer id;
+	protected String type;
+	protected boolean visible;
 
-	public Control(String text, String contentDescription, Rect bounds, Integer parentId, Integer id)
+	public Control(String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible)
 	{
 		this.text = text;
 		this.contentDescription = contentDescription;
 		this.bounds = bounds;
 		this.parentId = parentId;
 		this.id = id;
+		this.type = type;
+		this.visible = visible;
 	}
 	
 	public String getContentDescription()
@@ -56,5 +60,15 @@ public class Control
 	public String getText()
 	{
 		return this.text;
+	}
+	
+	public String getType()
+	{
+		return this.type;
+	}
+	
+	public boolean isVisible()
+	{
+		return this.visible;
 	}
 }

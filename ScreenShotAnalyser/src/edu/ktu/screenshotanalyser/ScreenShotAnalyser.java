@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 //import org.tensorflow.TensorFlow;
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
-import com.sampullara.cli.Args;
+//import com.sampullara.cli.Args;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.reporters.FoundTextsOnImagesReporter.AppExtractInfo;

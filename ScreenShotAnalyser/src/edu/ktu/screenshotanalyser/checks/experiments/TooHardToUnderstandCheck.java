@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.languagetool.Language;
 import com.ipeirotis.readability.engine.Readability;
 import com.ipeirotis.readability.enums.MetricType;
-import de.tudarmstadt.ukp.dkpro.core.readability.measure.ReadabilityMeasures;
+//import de.tudarmstadt.ukp.dkpro.core.readability.measure.ReadabilityMeasures;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
@@ -20,7 +20,7 @@ import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
 import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
-import edu.stanford.nlp.io.EncodingPrintWriter.err;
+//import edu.stanford.nlp.io.EncodingPrintWriter.err;
 
 /**
  * https://ipeirotis-hrd.appspot.com/
@@ -108,7 +108,8 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 		
 		if (errors.length() > 0)
 		{
-			failures.addFailure(new CheckResult(state, this, "hard 2 understand " + errors));			
+			// ???
+			failures.addFailure(new CheckResult(state, this, "hard 2 understand " + errors, errors.length()));			
 		}
 	}
 

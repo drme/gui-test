@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +29,9 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.slf4j.LoggerFactory;
 import edu.ktu.screenshotanalyser.utils.ImageUtils;
+import edu.ktu.screenshotanalyser.utils.SystemUtils;
 import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.TessAPI1;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.Word;
@@ -73,8 +77,221 @@ public class TextExtractor implements ITextExtractor
 	//	config.add("e:/aa.txt");
 		
 	//	this.tesseract.setConfigs(config);
+		
+	/*	
+		 TessAPI1.TessBaseAPISetImage2(this.tesseract, pix);
+	    //To remove the warning message "Warning. Invalid resolution 1 dpi. Using 70 instead." Setting the resolution
+	    int  res = TessAPI1.TessBaseAPIGetSourceYResolution(this.tesseract);
+	    if (res < 70) 
+	        TessAPI1.TessBaseAPISetSourceResolution(this.tesseract., 70);				
+		*/
+		
+		tesseract.setTessVariable("debug_file", "e:\\1\\tesseract.log");		
 	}
 
+	public String extract(BufferedImage image, Rect bounds, Predicate<String> accept)
+	{
+		if (null == image)
+		{
+			return "";
+		}
+
+		Mat sourceImage = null;
+		
+		try
+		{
+			String result = clean(this.tesseract.doOCR(image, SystemUtils.toRectangle(bounds)));
+			
+			if (accept.test(result))
+			{
+				return result;
+			}
+			
+			if (null != bounds)
+			{
+				try
+				{
+					image = image.getSubimage(bounds.x, bounds.y, bounds.width, bounds.height);
+				}
+				catch (java.awt.image.RasterFormatException ex)
+				{
+					ex.printStackTrace();;
+					
+					return "";
+				}
+			}
+			
+			sourceImage = ImageUtils.bufferedImageToMat(image);
+			
+			if (isTooSmall(sourceImage))
+			{
+				//Imgcodecs.imwrite("d:/s1.png", sourceImage);
+				
+			  Mat scaledImage = new Mat();
+			   
+			  double scale = 50.0 / (double)sourceImage.rows(); 
+			   
+			  Imgproc.resize(sourceImage, scaledImage, new Size(), scale, scale, Imgproc.INTER_CUBIC);			
+
+				//Imgcodecs.imwrite("d:/s2.png", scaledImage);
+					
+				sourceImage = scaledImage;
+			}
+			
+			Mat grayScaleImage = convertToGrayScale(sourceImage);
+			
+			grayScaleImage = convertToDarkLettersOnWhite(grayScaleImage);
+			
+			Mat gaussianBlurredImage = new Mat();
+			Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+		//	Imgcodecs.imwrite("d:/3.png", gaussianBlurredImage);
+
+//			Mat adaptiveThresholdImage = new Mat();
+	//		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+		//	Imgcodecs.imwrite("d:/4.png", adaptiveThresholdImage);
+
+			result = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(gaussianBlurredImage)));
+			
+			if (accept.test(result))
+			{
+				return result;
+			}			
+			
+		Mat adaptiveThresholdImage = new Mat();
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+//	Imgcodecs.imwrite("d:/4.png", adaptiveThresholdImage);			
+			
+	result = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+	
+	if (accept.test(result))
+	{
+		return result;
+	}			
+			
+			
+			
+			
+			
+			
+		}
+		catch (TesseractException ex)
+		{
+			ex.printStackTrace();
+			
+			//Imgcodecs.imwrite("d:/311.png", sourceImage);
+			
+
+try
+{
+	ImageIO.write(image, "jpg", new File("d:\\image.jpg"));
+}
+catch (IOException e)
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+
+
+			
+		}
+		catch (Throwable ex)
+		{
+			ex.printStackTrace();
+			
+			return "";
+		}
+		
+		/*
+		
+		Mat sourceImage = getImage(imageFile);
+
+		if (null == sourceImage)
+		{
+		}
+		
+		String result1 = 
+		*/
+				
+		return "";
+		
+		/*
+	
+		
+		
+		
+		if (null == imageFile)
+		{
+			return "";
+		}
+		*/
+		
+		/*
+		
+	
+		
+
+		*/
+		
+		/*
+		
+		
+
+
+		
+		
+
+
+
+		
+		/*
+		
+		Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/5.png", adaptiveThresholdImage);
+
+		String result2 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+		
+		Size sz = new Size(sourceImage.width() * 2, sourceImage.height() * 2);
+		Imgproc.resize(sourceImage, sourceImage, sz);
+		
+		Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/14.png", adaptiveThresholdImage);
+
+		String result3 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+
+		Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
+
+		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
+	//	Imgcodecs.imwrite("d:/15.png", adaptiveThresholdImage);
+
+		String result4 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
+		*/
+	//	return result1;// + " " + result2 + " " + result3 + " " + result4;		
+		
+		
+		/*
+		
+		}
+		catch (Throwable e) {
+e.printStackTrace();;
+
+return "";
+		}		
+		
+		*/
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 	public String extract(File imageFile)
 	{
 		try
@@ -139,6 +356,11 @@ public class TextExtractor implements ITextExtractor
 	
 	public String extract(BufferedImage image, Rect bounds)
 	{
+		if (null == image)
+		{
+			return "";
+		}
+		
 		try
 		{
 			
@@ -153,11 +375,28 @@ e.printStackTrace();;
 			}
 		}
 		
-		
 		Mat sourceImage = ImageUtils.bufferedImageToMat(image);
-		Mat grayScaleImage = new Mat();
 		
-		Imgproc.cvtColor(sourceImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY);
+		if (isTooSmall(sourceImage))
+		{
+			//Imgcodecs.imwrite("d:/s1.png", sourceImage);
+			
+		   Mat scaledImage = new Mat();
+		   
+		   double scale = 50.0 / (double)sourceImage.rows(); 
+		   
+		   Imgproc.resize(sourceImage, scaledImage, new Size(), scale, scale, Imgproc.INTER_CUBIC);			
+
+				//Imgcodecs.imwrite("d:/s2.png", scaledImage);
+				
+				sourceImage = scaledImage;
+		}
+
+		Mat grayScaleImage = convertToGrayScale(sourceImage);
+		
+			grayScaleImage = convertToDarkLettersOnWhite(sourceImage);
+		
+		
 
 		Mat gaussianBlurredImage = new Mat();
 		Imgproc.GaussianBlur(grayScaleImage, gaussianBlurredImage, new Size(3, 3), 0);
@@ -168,6 +407,9 @@ e.printStackTrace();;
 
 		String result1 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
 
+		
+		/*
+		
 		Core.bitwise_not(gaussianBlurredImage, gaussianBlurredImage);
 
 		Imgproc.adaptiveThreshold(gaussianBlurredImage, adaptiveThresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 99, 4);
@@ -191,7 +433,7 @@ e.printStackTrace();;
 	//	Imgcodecs.imwrite("d:/15.png", adaptiveThresholdImage);
 
 		String result4 = clean(this.tesseract.doOCR(ImageUtils.matToBufferedImage(adaptiveThresholdImage)));
-		
+		*/
 		return result1;// + " " + result2 + " " + result3 + " " + result4;		
 		
 		
@@ -415,6 +657,8 @@ return "";
 //	    return null;
 	}
 	
+
+
 	public String extract(File imageFile, Rect area)
 	{
 		if ((area.width <= 2) || (area.height <= 2) || (area.x < 0) || (area.y < 0))
@@ -578,6 +822,83 @@ return "";
 
 		public File getFile() {
 			return file;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	private static boolean isTooSmall(Mat image)
+	{
+		if (image.rows() <= 50)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static Mat convertToDarkLettersOnWhite(Mat sourceImage)
+	{
+		if (hasDarkMode(sourceImage))
+		{
+			Mat image = new Mat();
+		
+			Core.bitwise_not(sourceImage, image);
+
+//			Imgcodecs.imwrite("d:/s5.png", image);
+			
+			return image;
+		}
+		else
+		{
+			return sourceImage;
+		}
+	}
+	
+	private static Mat convertToGrayScale(Mat sourceImage)
+	{
+		Mat image = new Mat();
+		
+		Imgproc.cvtColor(sourceImage, image, Imgproc.COLOR_BGR2GRAY);
+		
+		return image;
+	}
+	
+	private static boolean hasDarkMode(Mat sourceImage)
+	{
+		Mat image = new Mat();
+		
+		Imgproc.blur(sourceImage, image, new Size(5, 5));
+		
+		if (Core.mean(image).val[0] < 127)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static Mat getImage(File imageFile)
+	{
+		if (null == imageFile)
+		{
+			return null;
+		}
+		
+		try
+		{
+			BufferedImage image = ImageIO.read(imageFile);
+			
+			return ImageUtils.bufferedImageToMat(image);		
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+			
+			return null;
 		}
 	}
 }

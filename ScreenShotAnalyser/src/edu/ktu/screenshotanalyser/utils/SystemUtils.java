@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.utils;
 
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import org.opencv.core.Rect;
 
 public class SystemUtils
 {
@@ -91,5 +93,28 @@ public class SystemUtils
 		{
 			ex.printStackTrace(System.err);
 		}
-	}	
+	}
+
+	public static Rectangle toRectangle(Rect bounds)
+	{
+		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+	
+	public static boolean isUpperCase(String string)
+	{
+		char[] chars = string.toCharArray();
+
+		for (int i = 0; i < chars.length; i++)
+		{
+			if (Character.isLetter(chars[i]))
+			{
+				if (!Character.isUpperCase(chars[i]))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
 }

@@ -36,6 +36,11 @@ public abstract class BaseRuleCheck
 		return this.ruleCode;
 	}
 	
+	public long getId()
+	{
+		return this.id;
+	}
+	
 	private final String ruleCode;
 	private final long id;
 }

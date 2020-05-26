@@ -20,31 +20,19 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/ghost4j-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/itext-2.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/jai-imageio-core-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jboss-vfs-3.2.12.Final.jar"/>
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/jna-4.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jul-to-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-over-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/logback-classic-1.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/logback-core-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/lingpipe-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/tika/tika-langdetect-1.20.jar"/>
 	<classpathentry kind="lib" path="lib/tika/tika-core-1.20.jar"/>
-	<classpathentry kind="lib" path="lib/guava-22.0.jar"/>
 	<classpathentry kind="lib" path="lib/jortho.jar"/>
 	<classpathentry kind="lib" path="src/marvin/framework/marvin_1.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/lept4j-1.12.3.jar"/>
 	<classpathentry kind="lib" path="lib/t/commons-text-1.8.jar"/>
-	<classpathentry kind="lib" path="lib/mssql-jdbc-8.2.2.jre8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

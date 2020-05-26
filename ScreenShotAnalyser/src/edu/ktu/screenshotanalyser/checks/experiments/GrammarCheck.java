@@ -75,7 +75,8 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 		
 		if (errors.length() > 0)
 		{
-			failures.addFailure(new CheckResult(state, this, errors));
+			//????
+			failures.addFailure(new CheckResult(state, this, errors, errors.length()));
 		}
 	}
 	

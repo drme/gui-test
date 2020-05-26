@@ -1,38 +1,9 @@
 package edu.ktu.screenshotanalyser.context;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import org.junit.Test;
-import org.languagetool.JLanguageTool;
-import org.languagetool.language.BritishEnglish;
-import org.languagetool.rules.RuleMatch;
-
-import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
-import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.simple.Document;
-import edu.stanford.nlp.simple.Sentence;
-import edu.stanford.nlp.util.CoreMap;
-import net.sf.extjwnl.JWNLException;
-import net.sf.extjwnl.data.IndexWord;
-import net.sf.extjwnl.data.POS;
-import net.sf.extjwnl.data.PointerType;
-import net.sf.extjwnl.data.Synset;
-import net.sf.extjwnl.data.Word;
-import net.sf.extjwnl.data.relationship.Relationship;
-import net.sf.extjwnl.data.relationship.RelationshipFinder;
-import net.sf.extjwnl.data.relationship.RelationshipList;
-import net.sf.extjwnl.dictionary.Dictionary;
-
 public class TextRecognitionTests {
 
+	/*
+	
 	@Test
 	public void testCheckGrammar() throws IOException {
 		JLanguageTool langTool = new JLanguageTool(new BritishEnglish());
@@ -125,4 +96,6 @@ public class TextRecognitionTests {
 
 	}
 
+
+*/
 }

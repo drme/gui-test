@@ -45,6 +45,8 @@ public class State
 	private String imageTexts = null;
 	private TestDevice testDevice = null;
 	private Rect imageSize = null;
+	private BufferedImage image = null;
+	private boolean imageLoaded = false;
 	
 	public State(String name, AppContext context, File imageFile, File stateFile, TestDevice testDevice) throws IOException
 	{
@@ -158,7 +160,7 @@ public class State
 		{
 			HashMap<String, Object> m = (HashMap<String, Object>)viewObject;
 			
-			Control view = new Control(getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"));
+			Control view = new Control(getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"));
 			
 			views.put(view.getId(), view);
 		}
@@ -218,7 +220,7 @@ public class State
 					
 				if (text.length() > 0)
 				{
-					result.add(new Control(text, null, area, null, null));
+					result.add(new Control(text, null, area, null, null, null, true));
 				}
 			}
 			
@@ -297,6 +299,27 @@ public class State
 		}
 		
 		return this.imageSize;
+	}
+	
+	public synchronized BufferedImage getImage()
+	{
+		if (false == this.imageLoaded)
+		{
+			try
+			{
+				this.image = ImageIO.read(getImageFile());
+			}
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+				
+				this.image = null;
+			}
+			
+			this.imageLoaded = true;
+		}
+		
+		return this.image;
 	}
 	
 	public String getName()

@@ -3,7 +3,7 @@ package edu.ktu.screenshotanalyser.checks;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import edu.ktu.screenshotanalyser.Config;
+import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.context.State;
@@ -15,7 +15,7 @@ public class AppChecker
 	
 	public void runChecks(File appName, RulesSetChecker checker, ExecutorService exec, ResultsCollector failures) throws IOException, InterruptedException
 	{
-		DefaultContextProvider contextProvider = new DefaultContextProvider(Config.appImagesFolder);
+		DefaultContextProvider contextProvider = new DefaultContextProvider(Settings.appImagesFolder);
 		AppContext context = contextProvider.getContext(appName);
 
 		if (null != context.getApkFile())

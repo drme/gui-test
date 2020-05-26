@@ -170,7 +170,8 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 
 			if (faulty.length() > 0)
 			{
-				failures.addFailure(new CheckResult(state, this, faulty));
+				// ????
+				failures.addFailure(new CheckResult(state, this, faulty, faulty.length()));
 			}
 			else
 			{

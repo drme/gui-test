@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
+import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.context.AppContext;
+import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
 public class StatisticsManager
 {
@@ -90,5 +92,41 @@ public class StatisticsManager
 		  	return resultSet.getLong(1);
 		  }
 		}
-	}	
+	}
+
+	
+	public long startTestsRun(String description)
+	{
+		try (Connection connection = DriverManager.getConnection(connectionUrl))
+		{
+			return insert(connection, "INSERT TestRun ([Description]) VALUES (?)", description);
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+
+			return -1;
+		}
+	}
+	
+	public void logDetectedDefect(long testRunId, CheckResult result)
+	{
+		try (Connection connection = DriverManager.getConnection(connectionUrl))
+		{
+			String fileName = result.getState().getImageFile().getAbsolutePath();
+			
+			if (fileName.startsWith(Settings.appImagesFolder.getAbsolutePath()))
+			{
+				fileName = fileName.substring(Settings.appImagesFolder.getAbsolutePath().length() + 1);
+			}
+			
+			long screenshotId = getId(connection, "SELECT Id FROM ScreenShot WHERE FileName = ?", fileName);
+			
+			insert(connection, "INSERT TestRunDefect (DefectTypeId, ScreenshotId, TestRunId, DefectsCount) VALUES (?, ?, ?, ?)", result.getRule().getId(), screenshotId, testRunId, result.getDefectsCount());
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}		
+	}
 }

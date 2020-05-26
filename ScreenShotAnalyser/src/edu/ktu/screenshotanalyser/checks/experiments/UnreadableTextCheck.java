@@ -38,7 +38,8 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 		
 		if (tooSmall.length() > 0)
 		{
-			failures.addFailure(new CheckResult(state, this, tooSmall.replace('\n', ' ')));
+			// ???
+			failures.addFailure(new CheckResult(state, this, tooSmall.replace('\n', ' '), tooSmall.length()));
 		}
 	}	
 	

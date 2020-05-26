@@ -51,11 +51,17 @@
   
    <dependencies>
    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>commons-io</groupId>
     <artifactId>commons-io</artifactId>
     <version>2.6</version>
 </dependency>
+
+
+-->
    
    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 
@@ -69,67 +75,102 @@
         -->
 
    <!-- https://mvnrepository.com/artifact/com.github.spullara.cli-parser/cli-parser -->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>com.github.spullara.cli-parser</groupId>
     <artifactId>cli-parser</artifactId>
     <version>1.1.2</version>
 </dependency>
+
+-->
+
    <!--  Images -->
 <!--
 
   -->
 <!--  Others -->
 <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-lang3</artifactId>
     <version>3.7</version>
 </dependency>
-  	
-  	<dependency>
-  <groupId>com.fasterxml.jackson.dataformat</groupId>
-  <artifactId>jackson-dataformat-xml</artifactId>
-  <version>2.9.6</version>
-</dependency>
+
+
+-->
+
+
 	<!-- Texts -->
 <!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>edu.stanford.nlp</groupId>
     <artifactId>stanford-corenlp</artifactId>
     <version>3.9.1</version>
 </dependency>
+
+-->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>edu.stanford.nlp</groupId>
     <artifactId>stanford-corenlp</artifactId>
     <version>3.9.1</version>
     <classifier>models</classifier>
 </dependency>
+
+-->
+
 <!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-parser -->
+
+
+<!--  	 aaa
+
 <dependency>
     <groupId>edu.stanford.nlp</groupId>
     <artifactId>stanford-parser</artifactId>
     <version>3.9.1</version>
 </dependency>
 
+
+-->
+
+<!--  	 aaa
+
 <dependency>
   <groupId>net.sf.extjwnl</groupId>
   <artifactId>extjwnl</artifactId>
   <version>1.9.4</version>
 </dependency>
+-->
+
+
+<!--  	 aaa
+
 <dependency>
   <groupId>net.sf.extjwnl</groupId>
   <artifactId>extjwnl-data-wn31</artifactId>
   <version>1.2</version>
 </dependency>
 
+-->
+
+
 <!-- grammar checks -->
 <!-- https://mvnrepository.com/artifact/org.languagetool/languagetool-core -->
-<dependency>
-    <groupId>org.languagetool</groupId>
-    <artifactId>languagetool-core</artifactId>
-    <version>4.1</version>
-</dependency>
+
+
 <!-- https://mvnrepository.com/artifact/org.languagetool/language-all -->
+
+<!--  	 aaa
 
 	<dependency>
 		<groupId>org.languagetool</groupId>
@@ -137,25 +178,33 @@
 		<version>4.1</version>
 	</dependency>
 
+-->
+
   	<!-- Readability -->
   	<!-- https://mvnrepository.com/artifact/de.tudarmstadt.ukp.dkpro.core/de.tudarmstadt.ukp.dkpro.core.readability-asl -->
+
+<!--  	 aaa
+
 <dependency>
     <groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
     <artifactId>de.tudarmstadt.ukp.dkpro.core.readability-asl</artifactId>
     <version>1.9.2</version>
 </dependency>
+
+            -->
+
 <!-- https://mvnrepository.com/artifact/net.dongliu/apk-parser -->
-<dependency>
-    <groupId>net.dongliu</groupId>
-    <artifactId>apk-parser</artifactId>
-    <version>2.6.4</version>
-</dependency>
+
+
+
+<!--  	 aaa
+
 <dependency>
   <groupId>org.boofcv</groupId>
   <artifactId>boofcv-core</artifactId>
   <version>0.30</version>
 </dependency>
-
+            -->
 
 
 <!--
@@ -201,20 +250,6 @@ bloody broken maven....
 </dependency>
   	
   	             -->
-  	
-
-<dependency>
-    <groupId>net.dongliu</groupId>
-    <artifactId>apk-parser</artifactId>
-    <version>2.6.9</version>
-</dependency>
-
-
-
-
-
-
-
 
 
 
@@ -249,6 +284,30 @@ bloody broken maven....
 			<groupId>org.apache.opennlp</groupId>
 			<artifactId>opennlp-tools</artifactId>
 			<version>1.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>8.2.2.jre13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.dongliu</groupId>
+			<artifactId>apk-parser</artifactId>
+			<version>2.6.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.languagetool</groupId>
+			<artifactId>languagetool-core</artifactId>
+			<version>4.9</version>
 		</dependency>
 
 	</dependencies>

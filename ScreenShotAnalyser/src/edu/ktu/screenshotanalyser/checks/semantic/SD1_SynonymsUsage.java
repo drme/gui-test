@@ -1,3 +1,5 @@
+/*
+
 package edu.ktu.screenshotanalyser.checks.semantic;
 
 import java.util.ArrayList;
@@ -136,3 +138,5 @@ public class SD1_SynonymsUsage implements IRuleChecker {
 
 	}
 }
+
+*/

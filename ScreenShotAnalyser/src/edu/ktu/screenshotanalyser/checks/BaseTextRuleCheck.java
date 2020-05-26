@@ -266,7 +266,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 			d1 = (float) d / (float) m_len;
 		}
 		
-		return d1 < 0.1;
+		return d1 < 0.15;
 	}
 	
 	private static String[] ignoredWords = new String[] {"dd-mm-yy", "apk", "facebook", "sdcard", "bluetooth", "png", "gif", "microsoft", "youtube", "paypal", "ru", "iCloud", "AppleId", "nl", "yyyy", "javascript", "js", "wikipedia", "uk", "edu", "wifi", "iTouch", "url", "tv", "github", "linkedin", "google", "twitter", "email", "wizzair", "wi-fi", "csv", "mBar", "mmHg", "latin", "hPa", "reCAPTCHA", "app", "mAh", "kg", "ft.", "Google Drive", "lb", "lbs", "Kcal", "Apple Watch", "MB", "dd/mm", "mm", "min", "km/h", "mph", "kph", "cm", "mi/h", "lat/long", "hh:mm", "mmmm yyyy", "sec", "Pinterest", "Creative Cloud", "rgb", "Adobe ID", "Adobe", "Adobe Photoshop Express", "Instagram", "Tumblr", "Dropbox", "mbps", "Alipay", "WeChat", "Android", "Mastercard", "iban", "sms", "Weibo", "Maestro", "Visa", "AMEX", "min", "max", "sin", "tan", "cos", "det", "asin", "atan", "USB", "jpeg", "mjpeg", "cpu", "led" };
