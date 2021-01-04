@@ -14,6 +14,7 @@ import edu.ktu.screenshotanalyser.checks.DataBaseResultsCollector;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
 import net.sourceforge.tess4j.TessAPI1;
 
 public class StartUp
@@ -39,11 +40,11 @@ public class StartUp
 
 		//checker.addRule(new GrammarCheck());
 		//checker.addRule(new UnreadableTextCheck());
-		//checker.addRule(new MissingTextCheck());
+		checker.addRule(new MissingTextCheck());
 		//checker.addRule(new MissingTranslationCheck());
 		//checker.addRule(new TooHardToUnderstandCheck());
 		
-		checker.addRule(new ClippedTextCheck());
+		//checker.addRule(new ClippedTextCheck());
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 		

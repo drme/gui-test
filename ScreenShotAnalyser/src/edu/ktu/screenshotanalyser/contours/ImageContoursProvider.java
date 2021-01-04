@@ -26,7 +26,7 @@ public class ImageContoursProvider implements IImageContoursProvider
 	static
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    MarvinDefinitions.setImagePluginPath("E:\\_analyzer_\\gui-test\\ScreenShotAnalyser\\src\\marvin\\plugins\\image\\");
+    MarvinDefinitions.setImagePluginPath("E:\\Projects\\eclipse\\prj346\\gui-test\\ScreenShotAnalyser\\src\\marvin\\plugins\\image\\");
 	}
 
 	

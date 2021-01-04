@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.context.AppContext;
@@ -13,7 +15,7 @@ import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
 public class StatisticsManager
 {
-  private String connectionUrl = "jdbc:sqlserver://localhost;database=defects-db;integratedSecurity=true;";
+  protected String connectionUrl = "jdbc:sqlserver://localhost;database=defects-db;integratedSecurity=true;";
 
 	public void saveAppInfo(AppContext appContext)
 	{
@@ -22,7 +24,7 @@ public class StatisticsManager
 			return;
 		}
 		
-    try (Connection connection = DriverManager.getConnection(connectionUrl)) 
+    try (Connection connection = DriverManager.getConnection(this.connectionUrl)) 
     {
     	Long applicationId = getId(connection, "SELECT Id FROM Application WHERE Package = ?", appContext.getPackage());
     	
@@ -49,7 +51,7 @@ public class StatisticsManager
     }
 	}
 	
-	private Long getId(Connection connection, String query, Object... arguments) throws SQLException
+	protected Long getId(Connection connection, String query, Object... arguments) throws SQLException
 	{
 		try (PreparedStatement statement = connection.prepareStatement(query))
 		{
@@ -72,7 +74,7 @@ public class StatisticsManager
 		return null;
 	}
 	
-	private long insert(Connection connection, String query, Object... arguments) throws SQLException
+	protected long insert(Connection connection, String query, Object... arguments) throws SQLException
 	{
 		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
 		{
@@ -93,6 +95,31 @@ public class StatisticsManager
 		  }
 		}
 	}
+	
+	protected List<String> getList(Connection connection, String query, Object... arguments) throws SQLException
+	{
+		ArrayList<String> result = new ArrayList<>();
+		
+		try (PreparedStatement statement = connection.prepareStatement(query))
+		{
+			int id = 1;
+			
+			for (Object argument : arguments)
+			{
+				statement.setObject(id++, argument);
+			}
+			
+		  try (ResultSet resultSet = statement.executeQuery())
+		  {
+		  	while (resultSet.next())
+		  	{
+		  		result.add(resultSet.getString(1));
+		  	}
+		  }
+		}
+		
+		return result;
+	}	
 
 	
 	public long startTestsRun(String description)
