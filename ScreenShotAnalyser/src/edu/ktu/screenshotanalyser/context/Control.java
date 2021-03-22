@@ -15,9 +15,11 @@ public class Control
 	protected Integer id;
 	protected String type;
 	protected boolean visible;
+	protected State state;
 
-	public Control(String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible)
+	public Control(State state, String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible)
 	{
+		this.state = state;
 		this.text = text;
 		this.contentDescription = contentDescription;
 		this.bounds = bounds;

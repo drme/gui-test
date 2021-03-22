@@ -17,7 +17,7 @@ import edu.ktu.screenshotanalyser.texts.ITextExtractor;
 import edu.ktu.screenshotanalyser.texts.TextExtractor;
 import edu.ktu.screenshotanalyser.utils.ResultImage;
 import edu.ktu.screenshotanalyser.utils.SystemUtils;
-import jdk.nashorn.internal.runtime.ECMAErrors;
+//import jdk.nashorn.internal.runtime.ECMAErrors;
 
 public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
 {

@@ -15,6 +15,7 @@ import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.UnalignedControlsCheck;
 import net.sourceforge.tess4j.TessAPI1;
 
 public class StartUp
@@ -40,11 +41,12 @@ public class StartUp
 
 		//checker.addRule(new GrammarCheck());
 		//checker.addRule(new UnreadableTextCheck());
-		checker.addRule(new MissingTextCheck());
+		//checker.addRule(new MissingTextCheck());
 		//checker.addRule(new MissingTranslationCheck());
 		//checker.addRule(new TooHardToUnderstandCheck());
-		
 		//checker.addRule(new ClippedTextCheck());
+		
+		checker.addRule(new UnalignedControlsCheck());
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 		
@@ -88,7 +90,5 @@ public class StartUp
 		LoggerContext logContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 		ch.qos.logback.classic.Logger log = logContext.getLogger("com.jayway.jsonpath.internal.path.CompiledPath");
 		log.setLevel(Level.ERROR);
-		
-	
 	}
 }
