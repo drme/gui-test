@@ -12,6 +12,7 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.rules.RuleMatch;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
@@ -20,8 +21,6 @@ import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.LocalizedMessages;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
 public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
 {

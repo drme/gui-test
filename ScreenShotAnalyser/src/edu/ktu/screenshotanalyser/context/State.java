@@ -12,7 +12,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -27,9 +26,8 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
-import edu.ktu.screenshotanalyser.contours.ImageContoursProvider;
-import edu.ktu.screenshotanalyser.texts.ITextExtractor;
-import edu.ktu.screenshotanalyser.texts.TextExtractor;
+import edu.ktu.screenshotanalyser.tools.ImageContoursProvider;
+import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
 /**
  * Application's screenshot window state.
@@ -217,7 +215,7 @@ public class State
 		{
 			List<Control> result = new ArrayList<>();
 			
-			ITextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
+			TextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
 				
 			for (Rect area : new ImageContoursProvider().getContours(this.imageFile))
 			{
@@ -246,7 +244,7 @@ public class State
 				return null;
 			}
 				
-			ITextExtractor textsExtractor = new TextExtractor(0.65f, language);
+			TextExtractor textsExtractor = new TextExtractor(0.65f, language);
 				
 			this.imageTexts = textsExtractor.extract(this.imageFile);
 		}

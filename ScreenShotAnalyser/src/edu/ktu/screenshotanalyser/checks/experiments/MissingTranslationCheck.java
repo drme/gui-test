@@ -8,16 +8,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.LocalizedMessages;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
-import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
-import edu.ktu.screenshotanalyser.texts.TextExtractor.ExtractedText;
+import edu.ktu.screenshotanalyser.tools.TextExtractor.ExtractedText;
 
-public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRuleChecker,    IRuleChecker 
+public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRuleChecker 
 {
 	public MissingTranslationCheck()
 	{
@@ -190,7 +188,7 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 	
 	
 	
-	
+	/*
 	
 	
 	
@@ -209,5 +207,5 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 		return results.toArray(new CheckResult[0]);
 	}
 
-
+*/
 }

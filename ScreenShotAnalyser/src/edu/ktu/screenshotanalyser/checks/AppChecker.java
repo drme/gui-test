@@ -3,10 +3,10 @@ package edu.ktu.screenshotanalyser.checks;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.context.State;
+import edu.ktu.screenshotanalyser.tools.Settings;
 import edu.ktu.screenshotanalyser.tools.StatisticsManager;
 
 public class AppChecker

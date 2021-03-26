@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import edu.ktu.screenshotanalyser.SystemContext;
+import edu.ktu.screenshotanalyser.checks.SystemContext;
 
-public class DefaultContextProvider implements IContextProvider
+public class DefaultContextProvider
 {
 	private final File dataFolder;
 	private final List<TestDevice> testDevices = new ArrayList<>();
@@ -26,7 +26,6 @@ public class DefaultContextProvider implements IContextProvider
 		}
 	}
 
-	@Override
 	public AppContext getContext(File appFolder) throws IOException
 	{
 		return new AppContext(appFolder, this.dataFolder, this.testDevices, this.systemContext);

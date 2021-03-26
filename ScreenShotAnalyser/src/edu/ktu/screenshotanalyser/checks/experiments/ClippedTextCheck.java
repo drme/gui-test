@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.opencv.core.Rect;
-import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
+import edu.ktu.screenshotanalyser.checks.ResultImage;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
-import edu.ktu.screenshotanalyser.texts.ITextExtractor;
-import edu.ktu.screenshotanalyser.texts.TextExtractor;
-import edu.ktu.screenshotanalyser.utils.ResultImage;
-import edu.ktu.screenshotanalyser.utils.SystemUtils;
-//import jdk.nashorn.internal.runtime.ECMAErrors;
+import edu.ktu.screenshotanalyser.tools.Settings;
+import edu.ktu.screenshotanalyser.tools.SystemUtils;
+//import edu.ktu.screenshotanalyser.texts.ITextExtractor;
+import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
 public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
 {
@@ -31,7 +30,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	{
 		List<DefectResult> results = new ArrayList<>();
 		
-		ResultImage resultImage = new ResultImage(state.getImageFile());
+		ResultImage resultImage = null;// = new ResultImage(state.getImageFile());
 		
 		long invalidControls = 0;
 		String errors = "";
@@ -129,9 +128,9 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			
 			if (false == textFound.found)
 			{
-				resultImage.drawBounds(bounds);
+		//		resultImage.drawBounds(bounds);
 	
-				resultImage.drawText(textFound.recognizedTexts + " | " + control.getText(), bounds);
+		//		resultImage.drawText(textFound.recognizedTexts + " | " + control.getText(), bounds);
 				
 				invalidControls++;
 				
@@ -237,9 +236,6 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		{
 			return true;
 		}
-
-		
-		
 		
 		if ((control.getBounds().width <= 0) || (control.getBounds().height <= 0))
 		{
@@ -269,7 +265,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	{
 		if (invalidControls > 0)
 		{
-			resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+//			resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
 		}
 		
 		failures.addFailure(new CheckResult(state, this, errors, invalidControls));

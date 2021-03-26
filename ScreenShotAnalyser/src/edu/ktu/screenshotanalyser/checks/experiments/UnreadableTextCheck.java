@@ -1,11 +1,11 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
 public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChecker
 {

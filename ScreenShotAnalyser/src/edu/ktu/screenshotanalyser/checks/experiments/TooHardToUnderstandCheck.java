@@ -10,6 +10,7 @@ import com.ipeirotis.readability.enums.MetricType;
 //import de.tudarmstadt.ukp.dkpro.core.readability.measure.ReadabilityMeasures;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
@@ -17,10 +18,6 @@ import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckRequest;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
-import edu.ktu.screenshotanalyser.rules.checkers.IRuleChecker;
-//import edu.stanford.nlp.io.EncodingPrintWriter.err;
 
 /**
  * https://ipeirotis-hrd.appspot.com/
@@ -47,7 +44,7 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 	//TODO run on texts extracted from screenshots also, skip garbage from resource files like $1 place-holders
 	
 	//@Override
-	public CheckResult[] analyze(CheckRequest request, AppContext context)
+	public CheckResult[] analyze(Object request, AppContext context)
 	{
 		List<CheckResult> results = new ArrayList<>();
 /*

@@ -14,16 +14,16 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.opencv.core.Rect;
-import edu.ktu.screenshotanalyser.Settings;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
+import edu.ktu.screenshotanalyser.checks.ResultImage;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
-import edu.ktu.screenshotanalyser.texts.TextExtractor;
-import edu.ktu.screenshotanalyser.utils.ResultImage;
-import edu.ktu.screenshotanalyser.utils.SystemUtils;
+import edu.ktu.screenshotanalyser.tools.Settings;
+import edu.ktu.screenshotanalyser.tools.SystemUtils;
+import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
 public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 {
@@ -269,8 +269,7 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 		
 		List<DefectResult> results = new ArrayList<>();
 		
-		ResultImage resultImage = new ResultImage(state.getImageFile());
-		
+	
 		long invalidControls = 0;
 		String errors = "";
 		
@@ -367,9 +366,9 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 			
 			if (false == textFound.found)
 			{
-				resultImage.drawBounds(bounds);
+//				resultImage.drawBounds(bounds);
 	
-				resultImage.drawText(textFound.recognizedTexts + " | " + control.getText(), bounds);
+	//			resultImage.drawText(textFound.recognizedTexts + " | " + control.getText(), bounds);
 				
 				invalidControls++;
 				
@@ -382,7 +381,7 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 		if (errors.length() > 0)
 		{
 		
-		logDefects(state, failures, resultImage, invalidControls, errors);		
+		logDefects(state, failures, null /*resultImage*/, invalidControls, errors);		
 		
 		}
 		

@@ -1,6 +1,5 @@
 package edu.ktu.screenshotanalyser.checks;
 
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 import edu.ktu.screenshotanalyser.tools.StatisticsManager;
 
 public class DataBaseResultsCollector extends ResultsCollector

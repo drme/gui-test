@@ -9,9 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import edu.ktu.screenshotanalyser.Settings;
+import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.context.AppContext;
-import edu.ktu.screenshotanalyser.rules.checkers.CheckResult;
 
 public class StatisticsManager
 {

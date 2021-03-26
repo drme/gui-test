@@ -16,6 +16,7 @@ import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.UnalignedControlsCheck;
+import edu.ktu.screenshotanalyser.tools.Settings;
 import net.sourceforge.tess4j.TessAPI1;
 
 public class StartUp
@@ -44,9 +45,9 @@ public class StartUp
 		//checker.addRule(new MissingTextCheck());
 		//checker.addRule(new MissingTranslationCheck());
 		//checker.addRule(new TooHardToUnderstandCheck());
-		//checker.addRule(new ClippedTextCheck());
+		checker.addRule(new ClippedTextCheck());
 		
-		checker.addRule(new UnalignedControlsCheck());
+		//checker.addRule(new UnalignedControlsCheck());
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 		
