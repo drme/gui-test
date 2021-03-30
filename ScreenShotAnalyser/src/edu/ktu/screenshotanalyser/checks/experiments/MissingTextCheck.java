@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
+import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
@@ -25,7 +26,7 @@ import edu.ktu.screenshotanalyser.tools.Settings;
 import edu.ktu.screenshotanalyser.tools.SystemUtils;
 import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
-public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
+public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
 	private Set<String> lastRun = null;
 	
@@ -312,12 +313,12 @@ public class MissingTextCheck extends BaseRuleCheck implements IStateRuleChecker
 						found = checkForPartialText(results, bounds, expectedText, x.replace('0', 'O'));
 					}
 				
-					if ((found == false) && (true == SystemUtils.isUpperCase(x)))
+					if ((found == false) && (true == isUpperCase(x)))
 					{
 						found = checkForPartialText(results, bounds, expectedText.toUpperCase(), x);
 					}
 					
-					if ((found == false) && (true == SystemUtils.isUpperCase(expectedText)))
+					if ((found == false) && (true == isUpperCase(expectedText)))
 					{
 						found = checkForPartialText(results, bounds, expectedText, x.toUpperCase());
 					}					

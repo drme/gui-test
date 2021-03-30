@@ -16,8 +16,9 @@ public class Control
 	protected String type;
 	protected boolean visible;
 	protected State state;
+	protected String signature;
 
-	public Control(State state, String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible)
+	public Control(State state, String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible, String signature)
 	{
 		this.state = state;
 		this.text = text;
@@ -27,6 +28,7 @@ public class Control
 		this.id = id;
 		this.type = type;
 		this.visible = visible;
+		this.signature = signature;
 	}
 	
 	public String getContentDescription()
@@ -72,5 +74,10 @@ public class Control
 	public boolean isVisible()
 	{
 		return this.visible;
+	}
+	
+	public String getSignature()
+	{
+		return this.signature;
 	}
 }

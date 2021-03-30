@@ -12,6 +12,8 @@ public class DataBaseResultsCollector extends ResultsCollector
 	@Override
 	public synchronized void addFailure(CheckResult result)
 	{
+		super.addFailure(result);
+		
 		this.statisticsManager.logDetectedDefect(this.testsRunId, result);
 	}
 	

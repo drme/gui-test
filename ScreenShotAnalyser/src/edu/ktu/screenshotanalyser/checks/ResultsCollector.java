@@ -11,7 +11,9 @@ public class ResultsCollector
 	public synchronized void addFailure(CheckResult result)
 	{
 		//this.failures.add(result);
+		
+		System.out.println(result.getMessage());
 	}
 	
-	private List<CheckResult> failures = new ArrayList<>();	
+//	private List<CheckResult> failures = new ArrayList<>();	
 }

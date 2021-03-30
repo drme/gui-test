@@ -44,7 +44,7 @@ public class CheckResult
 	
 	public synchronized ResultImage getResultImage()
 	{
-		if (null != this.resultImage)
+		if (null == this.resultImage)
 		{
 			this.resultImage = new ResultImage(this.state.getImageFile());
 		}

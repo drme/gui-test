@@ -163,7 +163,7 @@ public class State
 		{
 			HashMap<String, Object> m = (HashMap<String, Object>)viewObject;
 			
-			Control view = new Control(this, getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"));
+			Control view = new Control(this, getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"), getText(m, "signature"));
 			
 			views.put(view.getId(), view);
 		}
@@ -223,7 +223,7 @@ public class State
 					
 				if (text.length() > 0)
 				{
-					result.add(new Control(this, text, null, area, null, null, null, true));
+					result.add(new Control(this, text, null, area, null, null, null, true, null));
 				}
 			}
 			

@@ -99,22 +99,4 @@ public class SystemUtils
 	{
 		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
-	
-	public static boolean isUpperCase(String string)
-	{
-		char[] chars = string.toCharArray();
-
-		for (int i = 0; i < chars.length; i++)
-		{
-			if (Character.isLetter(chars[i]))
-			{
-				if (!Character.isUpperCase(chars[i]))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
 }
