@@ -1,2 +1,0 @@
-WebView Browser Tester 55.0.2883.91
-https://github.com/jroal/a2dpvolume/wiki

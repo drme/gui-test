@@ -1,3 +1,0 @@
-Allow A2DP Volume to make and manage phone calls?
-DENY
-ALLOW

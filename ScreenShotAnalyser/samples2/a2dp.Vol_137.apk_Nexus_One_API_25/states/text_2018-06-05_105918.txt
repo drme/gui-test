@@ -1,3 +1,0 @@
-Allow A2DP Volume to access this device's location?
-DENY
-ALLOW

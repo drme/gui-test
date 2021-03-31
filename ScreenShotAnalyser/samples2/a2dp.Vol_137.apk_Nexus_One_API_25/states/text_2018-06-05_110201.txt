@@ -1,6 +1,0 @@
-Apps for Notifications
-Preferences
-Delete All Data
-Manage Data
-Exit
-Help
