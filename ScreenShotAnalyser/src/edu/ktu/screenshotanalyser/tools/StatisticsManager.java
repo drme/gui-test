@@ -137,20 +137,29 @@ public class StatisticsManager
 	
 	public void logDetectedDefect(long testRunId, CheckResult result)
 	{
-		try (Connection connection = DriverManager.getConnection(connectionUrl))
+		try (var connection = DriverManager.getConnection(connectionUrl))
 		{
-			String fileName = result.getState().getImageFile().getAbsolutePath();
-			
-			if (fileName.startsWith(Settings.appImagesFolder.getAbsolutePath()))
+			if (null != result.getState())
 			{
-				fileName = fileName.substring(Settings.appImagesFolder.getAbsolutePath().length() + 1);
+				var fileName = result.getState().getImageFile().getAbsolutePath();
+			
+				if (fileName.startsWith(Settings.appImagesFolder.getAbsolutePath()))
+				{
+					fileName = fileName.substring(Settings.appImagesFolder.getAbsolutePath().length() + 1);
+				}
+			
+				var screenshotId = getId(connection, "SELECT Id FROM ScreenShot WHERE FileName = ?", fileName);
+			
+				insert(connection, "INSERT TestRunDefect (DefectTypeId, ScreenshotId, TestRunId, DefectsCount, Message) VALUES (?, ?, ?, ?, ?)", result.getRule().getId(), screenshotId, testRunId, result.getDefectsCount(), result.getMessage());
 			}
-			
-			long screenshotId = getId(connection, "SELECT Id FROM ScreenShot WHERE FileName = ?", fileName);
-			
-			insert(connection, "INSERT TestRunDefect (DefectTypeId, ScreenshotId, TestRunId, DefectsCount) VALUES (?, ?, ?, ?)", result.getRule().getId(), screenshotId, testRunId, result.getDefectsCount());
+			else
+			{
+				var applicationId = getId(connection, "SELECT Id FROM Application WHERE Package = ?", result.getAppContext().getPackage());
+				
+				insert(connection, "INSERT TestRunDefect (DefectTypeId, ApplicationId, TestRunId, DefectsCount, Message) VALUES (?, ?, ?, ?, ?)", result.getRule().getId(), applicationId, testRunId, result.getDefectsCount(), result.getMessage());
+			}
 		}
-		catch (SQLException ex)
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}		

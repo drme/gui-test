@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DefectsViewer
 {
@@ -18,9 +16,7 @@ namespace DefectsViewer
 		public const string ClippedText = "TC2";
 		public const string WrongEncoding = "TE1";
 		public const string MissingText = "TM1";
-
 		public const string NotEnoughSpace = "NS1";
-
 		public const String UntranslatedText = "SL2";
 		public const String WastedSpace = "WS1";
 		public const String BadColors = "BC1";
@@ -43,11 +39,8 @@ namespace DefectsViewer
 		public const String ObscuredText = "ObscuredText";
 		public const String UnlabeledEntry = "UnlabeledEntryField";
 		public const String TooLargeControl = "TooLargeControl";
-
-
 		//Misaligned controls
 		public const String Unknown = "???";
-
 	}
 
 	class ImagesSorter : ImagesManager
@@ -119,7 +112,7 @@ namespace DefectsViewer
 
 			foreach (var file in folder.GetFiles())
 			{
-				if ((file.Extension == ".jpg") || (file.Extension == ".png"))
+				if (((file.Extension == ".jpg") || (file.Extension == ".png")) && (file.FullName.Contains("states")))
 				{
 					if (this.sortedImages.Contains(file.FullName))
 					{
@@ -143,7 +136,7 @@ namespace DefectsViewer
 
 			File.AppendAllText(okFile, fileName + "\n");
 
-			System.Diagnostics.Debug.WriteLine("Marked ok " + fileName);
+			Debug.WriteLine("Marked ok " + fileName);
 
 			this.images.Remove(this.ActiveImage);
 		}
@@ -153,7 +146,7 @@ namespace DefectsViewer
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 
-			System.Diagnostics.Debug.WriteLine("Marked later " + fileName);
+			Debug.WriteLine("Marked later " + fileName);
 
 			File.AppendAllText(laterFile, fileName + "\n");
 
@@ -165,7 +158,7 @@ namespace DefectsViewer
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 
-			System.Diagnostics.Debug.WriteLine("Marked bad " + fileName);
+			Debug.WriteLine("Marked bad " + fileName);
 
 			File.AppendAllText(badFile, fileName + "|" + String.Join("|", type) + "\n");
 
@@ -177,7 +170,7 @@ namespace DefectsViewer
 			var fileName = this.ActiveImage.FullName;
 			fileName = fileName.Substring(this.root.FullName.Length);
 
-			System.Diagnostics.Debug.WriteLine("Marked invalid " + fileName);
+			Debug.WriteLine("Marked invalid " + fileName);
 
 			File.AppendAllText(invalidFile, fileName + "\n");
 

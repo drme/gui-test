@@ -20,9 +20,11 @@ public class DroidBitRunner
 	public static void main(String[] ar)
 	{
 //		String root = "./apps";
-		String root = "/Users/root456/mt/apps";
+		String root = "/media/me/ddsdg/mt/apps";
 //		String device = "n5-480x800";
-		String device = "n5-320x480";
+		String device = "nokia31";
+boolean emulator = false;
+
 
 
 //		File resultsFolder = new File(folder.getAbsolutePath() + "/_results_/nx5-240x320-de/");
@@ -39,13 +41,13 @@ public class DroidBitRunner
 
 			if (folder.isDirectory())
 			{
-				runTests(folder, device);
+				runTests(folder, device, emulator);
 			}
 		}
 
 	}
 
-	private static void runTests(File folder, String device)
+	private static void runTests(File folder, String device, boolean emulator)
 	{
 		FileFilter filter = new FileFilter()
 		{
@@ -60,7 +62,7 @@ public class DroidBitRunner
 		{
 			try
 			{
-				runDroidBot(folder, fileName, device);
+				runDroidBot(folder, fileName, device, emulator);
 			}
 			catch (InterruptedException | ExecutionException ex)
 			{
@@ -98,7 +100,7 @@ public class DroidBitRunner
 		}
 	}
 
-	private static void runDroidBot(File folder, File apkFile, String device) throws InterruptedException, ExecutionException
+	private static void runDroidBot(File folder, File apkFile, String device, boolean emulator) throws InterruptedException, ExecutionException
 	{
 		File noEmulatorFile = new File(folder.getAbsolutePath() + "/_results_/no_emulator");
 
@@ -107,7 +109,10 @@ public class DroidBitRunner
 
 //                              System.out.println("---- no emulator ------------skip: " + apkFile.getName() + "----------- no emulator");
   
+if (emulator)
+{
 return;
+}
 }
 
 
@@ -154,21 +159,10 @@ System.out.println("===== running " + apkFile.getName());
 //				runCommand("adb reboot bootloader");
 //				Thread.sleep(60000);
 			
-//				runCommand("adb kill-server");
-//				Thread.sleep(2000);
-
-//				runCommand("adb start-server");
-//				Thread.sleep(3000);
-
-				runCommand("killall qemu-system-x86_64");
-//				runCommand("cp ~/.android/avd/Pixel_C_API_28.avd/back-up/userdata-qemu.img ~/.android/avd/Pixel_C_API_28.avd/userdata-qemu.img");
-
-				new Thread(new Runnable()
+if (emulator)
 				{
-					public void run()
-					{
-						//runCommand("emulator @Pixel_C_API_28 -no-snapshot");
-						runCommand("emulator @10 -no-snapshot");
+				runCommand("adb reboot bootloader");
+				Thread.sleep(60000);
 					}
 				}).start();
 

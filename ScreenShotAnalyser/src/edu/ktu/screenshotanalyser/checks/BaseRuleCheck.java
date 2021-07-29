@@ -25,7 +25,7 @@ public abstract class BaseRuleCheck
 		
 		try
 		{
-			Path logFile = Paths.get("e:/log" + this.ruleCode + ".txt");
+			Path logFile = Paths.get("e:/log/" + this.ruleCode + ".txt");
 			
 			Files.write(logFile, message.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 		}

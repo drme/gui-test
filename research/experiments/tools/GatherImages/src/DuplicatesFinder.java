@@ -7,33 +7,15 @@ public class DuplicatesFinder
 {
 	public static void main(String args[]) throws IOException
 	{
-		removeDuplicatesFromResults("D:\\_r\\s4\\");
-		
+		String s = "E:\\gui\\_MB_HP\\ex\\mt\\apps\\";
+
+		removeDuplicatesFromResults(s);// "D:\\_r\\s4\\");
+
 		/*
-		File tempFolder = new File("E:/_img_/h/");
-		
-		if (tempFolder.exists())
-		{
-			for (String sourceFileName : tempFolder.list())
-			{
-				File sourceFile = new File(tempFolder.getAbsolutePath() + "/" + sourceFileName);
-				
-				if (sourceFile.exists())
-				{
-					File original = findOriginal(sourceFile, new File("d:/_results_/"));
-					
-					if (null != original)
-					{
-						System.out.println(sourceFile.getAbsolutePath() + " = " + original.getAbsolutePath());
-						
-//						targetFile.delete();
-	
-					}
-				}
-			}
-		}*/
+		 * File tempFolder = new File("E:/_img_/h/"); if (tempFolder.exists()) { for (String sourceFileName : tempFolder.list()) { File sourceFile = new File(tempFolder.getAbsolutePath() + "/" + sourceFileName); if (sourceFile.exists()) { File original = findOriginal(sourceFile, new File("d:/_results_/")); if (null != original) { System.out.println(sourceFile.getAbsolutePath() + " = " + original.getAbsolutePath()); // targetFile.delete(); } } } }
+		 */
 	}
-	
+
 	private static File findOriginal(File copyFile, File startFolder) throws IOException
 	{
 		for (String originalFileName : startFolder.list())
@@ -43,7 +25,7 @@ public class DuplicatesFinder
 			if (originalFile.isDirectory())
 			{
 				File result = findOriginal(copyFile, originalFile);
-				
+
 				if (null != result)
 				{
 					return result;
@@ -53,11 +35,11 @@ public class DuplicatesFinder
 			{
 				if (true == areTheSame(copyFile, originalFile))
 				{
-					return originalFile; 
+					return originalFile;
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -71,99 +53,86 @@ public class DuplicatesFinder
 			{
 				removeDuplicates(folder);
 			}
-		}			
+		}
 	}
-	
+
 	private static void removeDuplicates(File folder) throws IOException
 	{
 		File tempFolder = new File(folder.getAbsolutePath() + "/temp/");
-		
+
 		if (tempFolder.exists())
 		{
 			for (String sourceFileName : tempFolder.list())
 			{
 				File sourceFile = new File(tempFolder.getAbsolutePath() + "/" + sourceFileName);
-				
+
 				if (sourceFile.exists())
 				{
 					for (String targetFileName : tempFolder.list())
 					{
 						File targetFile = new File(tempFolder.getAbsolutePath() + "/" + targetFileName);
-						
+
 						if (targetFile.exists())
 						{
 							if (true == areTheSame(sourceFile, targetFile))
 							{
 								System.out.println(sourceFile.getAbsolutePath() + " = " + targetFile.getAbsolutePath());
-								
-								targetFile.delete();
+
+								// targetFile.delete();
 							}
 						}
 					}
 				}
 			}
-			
 
-
-			
-			
 			File statesFolder = new File(folder.getAbsolutePath() + "/states/");
-			
-			
+
 			if (statesFolder.exists())
 			{
 				for (String sourceFileName : statesFolder.list())
 				{
 					File sourceFile = new File(statesFolder.getAbsolutePath() + "/" + sourceFileName);
-					
+
 					if (sourceFile.exists())
 					{
 						for (String targetFileName : tempFolder.list())
 						{
 							File targetFile = new File(tempFolder.getAbsolutePath() + "/" + targetFileName);
-							
+
 							if (targetFile.exists())
 							{
 								if (true == areTheSame(sourceFile, targetFile))
 								{
 									System.out.println(sourceFile.getAbsolutePath() + " = " + targetFile.getAbsolutePath());
-									
-									targetFile.delete();
+
+									// targetFile.delete();
 								}
 							}
 						}
 					}
-				}				
-			}		
-			
-			
-			
-			
-			
-			
-		}
-		
+				}
+			}
 
-		
+		}
 	}
-	
+
 	private static boolean areTheSame(File source, File target) throws IOException
 	{
-		//System.out.println("Compare " + source.getName() + " -> " + target.getName());
-		
+		// System.out.println("Compare " + source.getName() + " -> " + target.getName());
+
 		if (false == source.equals(target))
 		{
 			if (source.length() != target.length())
 			{
 				return false;
 			}
-			
+
 			byte[] f1 = Files.readAllBytes(source.toPath());
 			byte[] f2 = Files.readAllBytes(target.toPath());
 
 			return Arrays.equals(f1, f2);
 		}
-		
+
 		return false;
 	}
 }

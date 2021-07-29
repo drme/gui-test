@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Test device that app was executed on. 
+ * Test device that application was executed on. 
  */
 public class TestDevice
 {

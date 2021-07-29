@@ -42,6 +42,16 @@ public class CheckResult
 		return this.state;
 	}
 	
+	public AppContext getAppContext()
+	{
+		return this.appContext;
+	}
+	
+	public String getMessage()
+	{
+		return this.message;
+	}
+	
 	public synchronized ResultImage getResultImage()
 	{
 		if (null == this.resultImage)
@@ -51,61 +61,6 @@ public class CheckResult
 		
 		return this.resultImage;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-
-
-
-
-
-	public String getMessage() {
-		return message;
-	}
-
-	@Override
-	public String toString() {
-		return "CheckResult [type=" + ", message=" + message + ", file=" + ", isOK=" + isOK + "]";
-	}
-
-
-
-	public boolean isOK() {
-		return isOK;
-	}
-
-	private  boolean isOK;
-	private  String lang;
-
-	public CheckResult(String message, String file, boolean isOK, String lang) {
-
-		this.appContext = null;
-		this.ruleCheck = null;
-		this.state = null;
-		this.message = message;
-		this.isOK = isOK;
-		this.lang = lang;
-
-		this.defectsCount = -1;
-	}
-
-	public static CheckResult Ok(String type, String file) {
-		return new CheckResult("", file, true, null);
-	}
-	public static CheckResult Nok(String type, String message, String file, String lang) {
-		return new CheckResult(message, file, false, lang);
-	}
-	
-	
 	
 	private final String message;
 	private final State state;

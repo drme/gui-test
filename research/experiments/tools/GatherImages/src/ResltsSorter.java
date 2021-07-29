@@ -1,13 +1,12 @@
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 public class ResltsSorter
 {
 	public static void main(String[] args) throws IOException
 	{
-		String root = "D:\\_r2\\apps\\";
+		String root = "E:\\gui\\_hp\\mt\\apps\\";
 
 		for (String folderName : new File(root).list())
 		{
@@ -15,7 +14,7 @@ public class ResltsSorter
 
 			if (folder.isDirectory())
 			{
-				moveResults(folder, "s4", "d:/_r/");
+				moveResults(folder, "nokia31", "e:/_r/");
 			}
 		}		
 	}

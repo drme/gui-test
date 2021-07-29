@@ -14,7 +14,12 @@ import edu.ktu.screenshotanalyser.checks.DataBaseResultsCollector;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesAppCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesStateCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.OffensiveMessagesCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.UnalignedControlsCheck;
 import edu.ktu.screenshotanalyser.tools.Settings;
 import net.sourceforge.tess4j.TessAPI1;
@@ -43,29 +48,33 @@ public class StartUp
 		//checker.addRule(new GrammarCheck());
 		//checker.addRule(new UnreadableTextCheck());
 		//checker.addRule(new MissingTextCheck());
-		//checker.addRule(new MissingTranslationCheck());
 		//checker.addRule(new TooHardToUnderstandCheck());
-		checker.addRule(new ClippedTextCheck());
+		//checker.addRule(new ClippedTextCheck());
 		
 		//checker.addRule(new UnalignedControlsCheck());
+
+		//checker.addRule(new MissingTranslationCheck());   +
+		//checker.addRule(new MixedLanguagesStateCheck());  +
+		//checker.addRule(new MixedLanguagesAppCheck());    +
+
+		checker.addRule(new OffensiveMessagesCheck()); 
+		
+		
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
-		
+
+		ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());		
+
 		for (File app : apps)
 		{
-			int threads = Runtime.getRuntime().availableProcessors();
-		
-			ExecutorService exec = Executors.newFixedThreadPool(threads);		
-		
 			runChecks(app, exec, checker, failures);
-
-			exec.shutdown();
-			exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
-		
-			//break;
 		}
+		
+		exec.shutdown();
+		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
 	}
 	
+	/*
 	@SuppressWarnings("unused")
 	private static void runChecks(File appName) throws IOException, InterruptedException
 	{
@@ -77,7 +86,7 @@ public class StartUp
 		
 		exec.shutdown();
 		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);		
-	}
+	}*/
 	
 	private static void runChecks(File appName, ExecutorService exec, RulesSetChecker rules, ResultsCollector failures) throws IOException, InterruptedException
 	{

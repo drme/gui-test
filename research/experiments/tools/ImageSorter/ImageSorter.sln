@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatusService", "StatusService\StatusService.csproj", "{029A6328-7358-4D49-8CEB-D43CE7CEAFB9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefectsViewer", "DefectsViewer\DefectsViewer.csproj", "{238E513F-0053-4DEA-8E96-C54C0E2E2EF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatsGenerator", "StatsGenerator\StatsGenerator.csproj", "{848055D1-B746-4B60-BBF5-82EA6612BB61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatsGenerator", "StatsGenerator\StatsGenerator.csproj", "{848055D1-B746-4B60-BBF5-82EA6612BB61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{029A6328-7358-4D49-8CEB-D43CE7CEAFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{029A6328-7358-4D49-8CEB-D43CE7CEAFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{029A6328-7358-4D49-8CEB-D43CE7CEAFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{029A6328-7358-4D49-8CEB-D43CE7CEAFB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{238E513F-0053-4DEA-8E96-C54C0E2E2EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{238E513F-0053-4DEA-8E96-C54C0E2E2EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{238E513F-0053-4DEA-8E96-C54C0E2E2EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU

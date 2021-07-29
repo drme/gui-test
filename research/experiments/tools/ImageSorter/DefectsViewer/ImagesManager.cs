@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DefectsViewer
 {
@@ -65,12 +62,11 @@ namespace DefectsViewer
 		public virtual void MarkBad(params string[] type)
 		{
 		}
-        public virtual void MarkInvalid()
-        {
+		public virtual void MarkInvalid()
+		{
+		}
 
-        }
-
-        public void NextImage()
+		public void NextImage()
 		{
 			this.activeImage++;
 			this.activeImage %= this.images.Count;
