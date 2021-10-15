@@ -216,36 +216,7 @@ return allTexts;
 */
 	
 	
-	private static Map<Language, Double> determineLanguageShort(String message)
-	{
-		if (message.toUpperCase().equals("OK"))
-		{
-			var v = new HashMap<Language, Double>();
-			
-			v.put(Language.ENGLISH, 1.0);
-			v.put(Language.GERMAN, 1.0);
-			v.put(Language.FRENCH, 1.0);
-			
-			return v;
-		}
-		
-		//final LanguageIdentifier langIdentifier = new LanguageIdentifier(
-		//		message);
-	//	return langIdentifier
-//				.getLanguage();
-		
-		
-  //  LanguageDetector detector = new OptimaizeLangDetector().loadModels();
-    //     LanguageResult result = detector.detect(message);
-     ///    return result.getLanguage();		
 
-// remove app name...		
-		
-
-		
-		return languageDetector.computeLanguageConfidenceValues(message);
-	}	
 	
 	
-	private static final LanguageDetector languageDetector = LanguageDetectorBuilder.fromAllLanguages().build();
 }

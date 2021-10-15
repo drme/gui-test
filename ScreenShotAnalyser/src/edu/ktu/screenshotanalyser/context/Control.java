@@ -80,4 +80,21 @@ public class Control
 	{
 		return this.signature;
 	}
+	
+	public boolean isOverlapping(Control other)
+	{
+		int d = 2;
+		
+    if (this.bounds.y + d >= other.bounds.y + other.bounds.height || this.bounds.y + this.bounds.height - d - d <= other.bounds.y)
+    {
+    	return false;
+    }
+    
+    if (this.bounds.x + this.bounds.width - d -d <= other.bounds.x || this.bounds.x + d >= other.bounds.x + other.bounds.width)
+    {
+    	return false;
+    }
+     
+    return true;		
+	}
 }

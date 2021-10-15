@@ -1,4 +1,4 @@
-package edu.ktu.screenshotanalyser.checks.experiments;
+package edu.ktu.screenshotanalyser.checks.experiments.tbd;
 
 import java.util.ArrayList;
 import java.util.List;

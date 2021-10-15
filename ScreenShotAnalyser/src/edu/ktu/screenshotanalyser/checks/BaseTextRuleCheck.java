@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.tika.langdetect.OptimaizeLangDetector;
-import org.apache.tika.language.LanguageIdentifier;
-import org.apache.tika.language.detect.LanguageDetector;
-import org.apache.tika.language.detect.LanguageResult;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
-import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
+import org.slf4j.LoggerFactory;
+import com.github.pemistahl.lingua.api.LanguageDetectorBuilder;
+import com.optimaize.langdetect.LanguageDetectorImpl;
+import ch.qos.logback.classic.LoggerContext;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.Control;
 
@@ -24,7 +25,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 	{
 		super(id, ruleCode);
 	}
-
+	
 	protected synchronized static List<Language> getLanguageByCode(String languageCode)
 	{
 		languageCode = languageCode.toUpperCase();
@@ -63,12 +64,12 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 			return true;
 		}
 		
-		String mistypes = isSpellingCorrect(appContext, null, languages, message);
+		String mistypes = isSpellingCorrect(appContext, null, languages, message, false);
 		
 		return mistypes.trim().length() == 0;
 	}
 
-	protected String isSpellingCorrect(AppContext appContext, String mistypes, List<Language> languages, String message)
+	protected String isSpellingCorrect(AppContext appContext, String mistypes, List<Language> languages, String message, boolean last)
 	{
 		HashMap<Language, HashSet<String>> errors = new HashMap<>();
 
@@ -76,18 +77,10 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		{
 			errors.put(lang, new HashSet<String>());
 
-			JLanguageTool langTool = new JLanguageTool(lang);
-
-			for (Rule rule : langTool.getAllRules())
-			{
-				if (!rule.isDictionaryBasedSpellingRule())
-				{
-					langTool.disableRule(rule.getId());
-				}
-			}
-
 			try
 			{
+				var langTool = getSpellChecker(lang);
+				
 				List<RuleMatch> matches = langTool.check(message);
 
 				for (RuleMatch match : matches)
@@ -121,7 +114,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 			{
 				if (sentenceLanguages.size() > 0)
 				{
-					String sentenceMistypes = isSpellingCorrect(appContext, null, sentenceLanguages, message);
+					String sentenceMistypes = isSpellingCorrect(appContext, null, sentenceLanguages, message, false);
 
 					if (sentenceMistypes.length() == 0)
 					{
@@ -138,10 +131,72 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 
 		for (String badWord : bad)
 		{
-			mistypes += " " + badWord + "[" + languages.get(0).getShortCode() + "]";
+			if (last || (false == isSpellingCorrectAnyLanguage(appContext, badWord)))
+			{
+				mistypes += " " + badWord + "[" + languages.get(0).getShortCode() + "]";
+			}
 		}
 
 		return mistypes;
+	}
+	
+	private boolean isSpellingCorrectAnyLanguage(AppContext appContext, String message)
+	{
+		var strange = new String[] { "ą", "č", "ę", "ė", "į", "š", "ų", "ū", "ž" };
+		
+		var m = message.toLowerCase();
+		
+		for (var s : strange)
+		{
+			if (m.contains(s))
+			{
+				System.out.println("==== OK: " + message + " --> " +  "//");
+				
+				return true;
+			}
+		}
+		
+		
+		var languages = new Language[] { Languages.getLanguageForShortCode("en-US"), Languages.getLanguageForShortCode("en-GB"), Languages.getLanguageForShortCode("es")  };
+
+		int fail = 0;
+		
+		for (var lang : languages)
+		{
+		try
+		{
+			var langTool = getSpellChecker(lang);
+			
+			List<RuleMatch> matches;
+
+			matches = langTool.check(message);
+		
+
+			if (matches.size() == 0)
+			{
+				System.out.println("==== OK: " + message + " --> " +  lang.getName());
+			}
+			
+		
+		for (RuleMatch match : matches)
+		{
+			String bad = message.substring(match.getFromPos(), match.getToPos());
+
+			if (false == ignoreSpellingError(bad, appContext))
+			{
+				fail++;
+			}
+		}		
+		
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		}
+		
+		return fail != languages.length;
 	}
 	
 	protected String getText(Control control)
@@ -175,13 +230,96 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 	//	return langIdentifier
 //				.getLanguage();
 		
+		synchronized (languagesCache)
+		{
+			if (languageDetector == null)
+			{
+				languageDetector = (OptimaizeLangDetector)new OptimaizeLangDetector().loadModels();
+
+					LoggerContext logContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+			ch.qos.logback.classic.Logger log = logContext.getLogger("com.optimaize.langdetect.LanguageDetectorImpl");
+			log.setLevel(ch.qos.logback.classic.Level.OFF);				
+				
+				
+				var logger = LoggerFactory.getLogger(LanguageDetectorImpl.class);
+				
+				logger.debug("nnnn");
+				
+				
+			}
+		}
 		
-    LanguageDetector detector = new OptimaizeLangDetector().loadModels();
-         LanguageResult result = detector.detect(message);
-         return result.getLanguage();		
 		
+		return languageDetector.detect(message).getLanguage();
 	}
 	
+	public static List<String> determineLanguageAll(String message)
+	{
+		return determineLanguageAll(message, 0.95f);
+	}
+	
+	public static List<String> determineLanguageAll(String message, float level)
+	{
+		synchronized (languagesCache)
+		{
+			if (languageDetector == null)
+			{
+				languageDetector = (OptimaizeLangDetector)new OptimaizeLangDetector().loadModels();
+
+				var logContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+				var log = logContext.getLogger("com.optimaize.langdetect.LanguageDetectorImpl");
+				log.setLevel(ch.qos.logback.classic.Level.OFF);				
+			}
+		}
+		
+		var lang = new ArrayList<String>();
+		
+		var result = languageDetector.detectAll(message);
+
+		for (var r : result)
+		{
+			if (r.getRawScore() > level)
+			{
+				lang.add(r.getLanguage());
+			}
+		}
+		
+		return lang;
+	}
+	
+	protected static Map<com.github.pemistahl.lingua.api.Language, Double> determineLanguageShort(String message)
+	{
+		if (message.toUpperCase().equals("OK"))
+		{
+			var result = new HashMap<com.github.pemistahl.lingua.api.Language, Double>();
+			
+			result.put(com.github.pemistahl.lingua.api.Language.ENGLISH, 1.0);
+			result.put(com.github.pemistahl.lingua.api.Language.GERMAN, 1.0);
+			result.put(com.github.pemistahl.lingua.api.Language.FRENCH, 1.0);
+			
+			return result;
+		}
+
+		return languageDetectorShort.computeLanguageConfidenceValues(message);
+	}	
+	
+	protected static List<String> determineLanguageShort(String message, float level)
+	{
+		var result = new ArrayList<String>();
+		var languages = determineLanguageShort(message);
+		
+		for (var language : languages.keySet())
+		{
+			if (languages.get(language) > level)
+			{
+				result.add(language.getIsoCode639_1().name().toLowerCase());
+			}
+		}
+		
+		return result;
+	}		
+	
+
 	protected synchronized static List<Language> getLanguage(String message)
 	{
 		String code = determineLanguage(message);
@@ -231,6 +369,14 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 			return true;
 		}
 		
+		for (int i = 0; i < badWord.length(); i++)
+		{
+			if (!Character.isAlphabetic(badWord.charAt(i)))
+			{
+				return true;
+			}
+		}
+		
 		return isIgnoredWord(badWord, appContext);
 	}
 	
@@ -245,7 +391,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		for (String ignoredWord : ignoredWords)
 		{
-			if (badWord.equals(ignoredWord.toUpperCase()))
+			if (badWord.equalsIgnoreCase(ignoredWord))
 			{
 				return true;
 			}
@@ -375,7 +521,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		if ((wordsCount == 0) || (isIgnoredWord(message, appContext)))
 		{
-			System.out.println("ignoring: " + message);
+			//System.out.println("ignoring: " + message);
 			
 			return false;
 		}
@@ -383,7 +529,36 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		return true;
 	}	
 	
-	private static String[] ignoredWords = new String[] {"dd-mm-yy", "apk", "facebook", "sdcard", "bluetooth", "png", "gif", "microsoft", "youtube", "paypal", "ru", "iCloud", "AppleId", "nl", "yyyy", "javascript", "js", "wikipedia", "uk", "edu", "wifi", "iTouch", "url", "tv", "github", "linkedin", "google", "twitter", "email", "wizzair", "wi-fi", "csv", "mBar", "mmHg", "latin", "hPa", "reCAPTCHA", "app", "mAh", "kg", "ft.", "Google Drive", "lb", "lbs", "Kcal", "Apple Watch", "MB", "dd/mm", "mm", "min", "km/h", "mph", "kph", "cm", "mi/h", "lat/long", "hh:mm", "mmmm yyyy", "sec", "Pinterest", "Creative Cloud", "rgb", "Adobe ID", "Adobe", "Adobe Photoshop Express", "Instagram", "Tumblr", "Dropbox", "mbps", "Alipay", "WeChat", "Android", "Mastercard", "iban", "sms", "Weibo", "Maestro", "Visa", "AMEX", "min", "max", "sin", "tan", "cos", "det", "asin", "atan", "USB", "jpeg", "mjpeg", "cpu", "led", "km" };
-	private static String[] ignoredFragments = new String[] { "�", "�", "?", "$", "@", "�", "�", "_", "http://", "https://" };	
+	private static synchronized JLanguageTool getSpellChecker(Language language)
+	{
+		var checker = spellCheckers.get(language);
+		
+		if (null == checker)
+		{
+			checker = new JLanguageTool(language);
+			
+			for (var rule : checker.getAllRules())
+			{
+				if (!rule.isDictionaryBasedSpellingRule())
+				{
+					checker.disableRule(rule.getId());
+				}
+			}			
+			
+			spellCheckers.put(language, checker);
+		}
+		else
+		{
+			//System.out.println("cached: " + language.getName());
+		}
+		
+		return checker;
+	}
+	
+	private static HashMap<Language, JLanguageTool> spellCheckers = new HashMap<>();
+	private static String[] ignoredWords = new String[] {"dd-mm-yy", "apk", "facebook", "sdcard", "bluetooth", "png", "gif", "microsoft", "youtube", "paypal", "ru", "iCloud", "AppleId", "nl", "yyyy", "javascript", "js", "wikipedia", "uk", "edu", "wifi", "iTouch", "url", "tv", "github", "linkedin", "google", "twitter", "email", "wizzair", "wi-fi", "csv", "mBar", "mmHg", "latin", "hPa", "reCAPTCHA", "app", "mAh", "kg", "ft.", "Google Drive", "lb", "lbs", "Kcal", "Apple Watch", "MB", "dd/mm", "mm", "min", "km/h", "mph", "kph", "cm", "mi/h", "lat/long", "hh:mm", "mmmm yyyy", "sec", "Pinterest", "Creative Cloud", "rgb", "Adobe ID", "Adobe", "Adobe Photoshop Express", "Instagram", "Tumblr", "Dropbox", "mbps", "Alipay", "WeChat", "Android", "Mastercard", "iban", "sms", "Weibo", "Maestro", "Visa", "AMEX", "min", "max", "sin", "tan", "cos", "det", "asin", "atan", "USB", "jpeg", "mjpeg", "cpu", "led", "km", "google play", "google" };
+	private static String[] ignoredFragments = new String[] { "�", "�", "?", "$", "@", "�", "�", "_", "http://", "https://" };	
 	private static HashMap<String, List<Language>> languagesCache = new HashMap<>();
+	private static OptimaizeLangDetector languageDetector = null;
+	private static final com.github.pemistahl.lingua.api.LanguageDetector languageDetectorShort = LanguageDetectorBuilder.fromAllLanguages().build();
 }

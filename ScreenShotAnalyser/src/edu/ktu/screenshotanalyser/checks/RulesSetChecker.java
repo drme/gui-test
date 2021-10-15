@@ -3,6 +3,7 @@ package edu.ktu.screenshotanalyser.checks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -15,14 +16,58 @@ public class RulesSetChecker
 
 	public void runStateChecks(State state, ExecutorService exec, ResultsCollector failures)
 	{
-		for (BaseRuleCheck ruleCheck : this.rulesCheckers)
+		if (failures.wasChecked(state))
 		{
-			if (ruleCheck instanceof IStateRuleChecker)
+			//System.out.println("Skip: " + state.getImageFile().getAbsolutePath());
+			
+			return;
+		}
+		
+		var checksFinished = new ArrayList<IStateRuleChecker>();
+		var checksAvailable = this.rulesCheckers.stream().filter(p -> p instanceof IStateRuleChecker).map(p -> (IStateRuleChecker)p).collect(Collectors.toList());
+		
+		exec.submit(() ->
+		{
+			while (true)
 			{
-				IStateRuleChecker check = (IStateRuleChecker)ruleCheck;
-
-				exec.submit(() -> check.analyze(state, failures));
+				synchronized(checksFinished)
+				{
+					if (checksAvailable.size() == checksFinished.size())
+					{
+						break;
+					}
+				}
+				
+				var finsihedRule = new BaseRuleCheck(34, "Finished") {};
+				var result = new CheckResult(state, finsihedRule, "", 0);
+		
+				failures.addFailure(result);
 			}
+		});
+		
+		for (var check : checksAvailable)
+		{
+			exec.submit(() ->
+			{ 
+				try
+				{
+					if (false == failures.wasChecked(state))
+					{
+						check.analyze(state, failures);
+					}
+				}
+				catch (Throwable ex)
+				{
+					ex.printStackTrace();
+				}
+				finally
+				{
+					synchronized (checksFinished)
+					{
+						checksFinished.add(check);
+					}
+				}
+			});
 		}
 	}
 

@@ -1,19 +1,21 @@
 package edu.ktu.screenshotanalyser.checks;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.ktu.screenshotanalyser.context.State;
 
 /**
  * Collects all analysis results in a thread safe manner.
  */
-public class ResultsCollector
+public abstract class ResultsCollector
 {
 	public synchronized void addFailure(CheckResult result)
 	{
-		//this.failures.add(result);
-		
-		System.out.println(result.getMessage());
+		if ((result.getMessage() != null) && (result.getMessage().length() > 0))
+		{
+			System.out.println(result.getMessage());
+		}
 	}
-	
-//	private List<CheckResult> failures = new ArrayList<>();	
+
+	public abstract boolean wasChecked(State state);
+
+	public abstract void finishRun();
 }

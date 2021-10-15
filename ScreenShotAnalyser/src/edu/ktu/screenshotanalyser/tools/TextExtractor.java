@@ -10,8 +10,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -87,6 +92,60 @@ public class TextExtractor
 		tesseract.setTessVariable("debug_file", "e:\\1\\tesseract.log");		
 	}
 
+	public String extract(BufferedImage image)
+	{
+//		 
+		
+		
+		
+		
+		var result = "";
+
+		try
+		{
+
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(image, "png", os);
+			
+			
+			
+			var process = Runtime.getRuntime().exec("gocr049.exe", new String[] { "PYTHONIOENCODING=utf8" }, null);
+
+			process.getOutputStream().write(os.toByteArray());
+			
+			try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream())))
+			{
+				String line = null;
+
+				while ((line = reader.readLine()) != null)
+				{
+					result += line;
+				}
+			}
+			
+			try (var reader = new BufferedReader(new InputStreamReader(process.getErrorStream())))
+			{
+				String line = null;
+
+				while ((line = reader.readLine()) != null)
+				{
+					result += line;
+				}
+			}			
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+//		System.out.println("[" + result + "]");
+		
+		return result;		
+		
+		
+		
+	}
+	
 	public String extract(BufferedImage image, Rect bounds, Predicate<String> accept)
 	{
 		if (null == image)
@@ -715,7 +774,7 @@ return "";
 		{
 			for (Word word : this.tesseract.getWords(subImage, 0))
 			{
-			//System.out.println("" + word.getConfidence() + " -> " + word.getText());
+//			System.out.println("" + word.getConfidence() + " -> " + word.getText());
 
 				if (word.getConfidence() > this.confidenceLevel)
 				{

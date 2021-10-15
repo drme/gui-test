@@ -1,6 +1,8 @@
 package edu.ktu.screenshotanalyser.checks;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -9,15 +11,29 @@ import org.opencv.imgproc.Imgproc;
 
 public class ResultImage
 {
-	ResultImage(File sourceImageFile)
+	public ResultImage(File sourceImageFile)
 	{
 		this.image = Imgcodecs.imread(sourceImageFile.getAbsolutePath());
 	}
 
+	public ResultImage(BufferedImage source)
+	{
+    byte[] data = ((java.awt.image.DataBufferByte) source.getRaster().getDataBuffer()).getData();
+    Mat mat = new Mat(source.getHeight(), source.getWidth(), CvType.CV_8UC3);
+    mat.put(0, 0, data);
+
+    this.image = mat;
+	}
+	
 	public void drawBounds(Rect bounds)
 	{
 		Imgproc.rectangle(this.image, bounds.br(), bounds.tl(), new Scalar(0, 255, 0), 2);
 	}
+	
+	public void drawBounds(Rect bounds, int r, int g, int b)
+	{
+		Imgproc.rectangle(this.image, bounds.br(), bounds.tl(), new Scalar(r, g, b), 2);
+	}	
 	
 	public void drawText(String text, Rect bounds)
 	{

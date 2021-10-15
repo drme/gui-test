@@ -26,7 +26,7 @@ public class BaseTextRuleCheckTests extends BaseTextRuleCheck
 	{
 		List<Arguments> testCases = new ArrayList<>();
 
-		//testCases.add(Arguments.of("a", "b", false));
+		testCases.add(Arguments.of("a", "b", false));
 		testCases.add(Arguments.of("Signin", "Sign in", true));
 
 		return testCases.stream();

@@ -1,4 +1,4 @@
-package edu.ktu.screenshotanalyser.checks.experiments;
+package edu.ktu.screenshotanalyser.checks.experiments.tbd;
 /*
 
 package edu.ktu.screenshotanalyser.checks.semantic;

@@ -19,7 +19,7 @@ public class MicsTools extends StatisticsManager
 	{
 		//new MicsTools().importTooSmallResultsFromLogFile();
 		//new MicsTools().importBadSpellingResultsFromLogFile();
-		new MicsTools().importMisingTextsResultsFromLogFile();
+//		new MicsTools().importMisingTextsResultsFromLogFile();
 	}
 
 	private void importTooSmallResultsFromLogFile() throws SQLException, IOException

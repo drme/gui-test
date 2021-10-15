@@ -13,14 +13,20 @@ import edu.ktu.screenshotanalyser.checks.AppChecker;
 import edu.ktu.screenshotanalyser.checks.DataBaseResultsCollector;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
+import edu.ktu.screenshotanalyser.checks.experiments.ClippedControlCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesAppCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesStateCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.ObscuredControlCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.ObscuredTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.OffensiveMessagesCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.UnalignedControlsCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.UnlocalizedIconsCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.WrongEncodingCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.WrongLanguageCheck;
 import edu.ktu.screenshotanalyser.tools.Settings;
 import net.sourceforge.tess4j.TessAPI1;
 
@@ -42,24 +48,34 @@ public class StartUp
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
-		ResultsCollector failures = new DataBaseResultsCollector();
+		ResultsCollector failures = new DataBaseResultsCollector("misaligned control check", true);
 		RulesSetChecker checker = new RulesSetChecker();
 
-		//checker.addRule(new GrammarCheck());
-		//checker.addRule(new UnreadableTextCheck());
-		//checker.addRule(new MissingTextCheck());
-		//checker.addRule(new TooHardToUnderstandCheck());
-		//checker.addRule(new ClippedTextCheck());
 		
-		//checker.addRule(new UnalignedControlsCheck());
+		
 
+		
+
+
+		
+	
+		
+		//checker.addRule(new UnalignedControlsCheck());    +
+		//checker.addRule(new ClippedControlCheck());       +
+		//checker.addRule(new ObscuredControlCheck());      +
+		//checker.addRule(new WrongLanguageCheck());        +
+		//checker.addRule(new ObscuredTextCheck());         +
+		//checker.addRule(new GrammarCheck());              +
+		//checker.addRule(new WrongEncodingCheck());        +
+		//checker.addRule(new ClippedTextCheck());          +
+		//checker.addRule(new UnlocalizedIconsCheck());     +
 		//checker.addRule(new MissingTranslationCheck());   +
 		//checker.addRule(new MixedLanguagesStateCheck());  +
 		//checker.addRule(new MixedLanguagesAppCheck());    +
-
-		checker.addRule(new OffensiveMessagesCheck()); 
-		
-		
+		//checker.addRule(new OffensiveMessagesCheck());    + 
+		//checker.addRule(new UnreadableTextCheck());       +
+		//checker.addRule(new TooHardToUnderstandCheck());  +
+		//checker.addRule(new MissingTextCheck());          +
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 
@@ -72,6 +88,8 @@ public class StartUp
 		
 		exec.shutdown();
 		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		
+		failures.finishRun();
 	}
 	
 	/*

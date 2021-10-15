@@ -6,7 +6,7 @@ public class Settings
 {
 	public static final String appsFolder = "E:\\gui\\_analyzer_\\apps\\Raccoon\\content\\apps\\";
 	public static final File appImagesFolder = new File("e:/gui/_r/");
-	public static final String debugFolder = "Y:/1/";//"e:/1/";
+	public static final String debugFolder = "e:/1/";//"e:/1/";
 }
 
 

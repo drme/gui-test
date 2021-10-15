@@ -1,11 +1,16 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.swing.text.html.HTMLDocument.HTMLReader.CharacterAction;
 import org.opencv.core.Rect;
+import com.lowagie.text.pdf.PatternColor;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
@@ -17,28 +22,40 @@ import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
 import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
-public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
+public class WrongEncodingCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
-	public ClippedTextCheck()
+	public WrongEncodingCheck()
 	{
-		super(5, "TC2");
+		super(27, "WrongEncodingCheck");
+	}
+	
+	
+	public static void main(String[] args)
+	{
+		System.out.println(ee("L\\'foo"));
 	}
 	
 	@Override
 	public void analyze(State state, ResultsCollector failures)
 	{
-		var language = state.predictLanguage();
+		try
+		{
+			var s1 = state;//new State("", state.getAppContext(), new File("E:\\gui\\_r\\s4\\lt.sisp.itero.ticket.client\\states\\screen_2019-02-01_161209.jpg"), new File("E:\\gui\\_r\\s4\\lt.sisp.itero.ticket.client\\states\\state_2019-02-01_161209.json"), null);
+
+		
+		
+//		var language = state.predictLanguage();
 		
 //		if (false == language.equals("eng"))
 		//{
 	//		return;
 //		}
 				
-		var textsExtractor = new TextExtractor(0.65f, language);
-		var defects = new ArrayList<DefectResult>();
-		var textControls = state.getActualControls().stream().filter(p -> !shouldSkipControl(p, state));
+	//	var textsExtractor = new TextExtractor(0.65f, language);
+//		var defects = new ArrayList<DefectResult>();
+		var textControls = s1.getActualControls().stream().filter(p -> !shouldSkipControl(p, s1)).collect(Collectors.toList());
 		
-		textControls.forEach(control -> 
+		for (var control : textControls)
 		{
 			if ((isAd(control)) || ("Test Ad".equals(control.getText())))
 			{
@@ -47,15 +64,133 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			}
 			else
 			{
-				var bounds = control.getBounds();
-				var expectedText = normalize(control.getText());
+	//			var bounds = control.getBounds();
+		//		var expectedText = normalize(control.getText());
 			
-				textsExtractor.extract(state.getImage(), bounds, (x) -> findText(x, bounds, expectedText, control, defects));
-			}
-		});
+			//	textsExtractor.extract(state.getImage(), bounds, (x) -> findText(x, bounds, expectedText, control, defects));
 				
-		logDefects(state, failures, defects);
+				
+				//\nn non lating? + latin 
+				
+				var t = control.getText();
+				
+				if (null == t)
+				{
+					t = control.getContentDescription();
+				}
+				
+				
+				
+				var text = t.trim(); // \'
+
+		//		if (!text.contains("Saviva"))
+			//	{
+				//	return;
+//				}
+				
+				var symbols = new String[] { "\\'", "\\u", "\\\"", "\\n", "\\r" };
+				
+				for (var s : symbols)
+				{
+					if (text.contains(s))
+					{
+						System.out.println(text + state.getName());
+						
+						failures.addFailure(new CheckResult(state, this, text, 1));
+						
+						return;
+						
+					}
+				}
+				/*
+				if (((text.contains("?") && !text.endsWith("?") && !text.contains(" ?") && !text.contains("? ") && !text.contains("http"))) || text.contains("\\'"))
+				{
+					System.out.println(text + state.getName());
+				}
+				*/
+				var words = text.split("[ \n\r\u00a0]");
+				
+				for (var w : words)
+				{
+					w = w.replaceAll("[:,.?!0-9��'/@�{}()’%“&…=<>´״”`：！°►，™—‘׳;®]|[-()�\"]|[+]|[_]|[–]|[*¡#]|[|]|[—]|[™]|[―]", "");
+					
+					if (w.length() > 2 && w.length() < 20 && !w.contains("http") && !w.contains("―"))
+					{
+						int latin = 0;
+						for (int j = 0; j < w.length(); j++)
+						{
+							char cc = w.charAt(j);
+							
+							if ((cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z'))
+							{
+								latin++;
+							}							
+						}
+						
+						if (latin == 0)
+						{
+							continue;
+						}
+						
+						
+						if (Character.isAlphabetic(w.charAt(0)) && Character.isAlphabetic(w.charAt(w.length() - 1)))
+						{
+							for (int i = 1; i < w.length() - 1; i++)
+							{
+								char c = w.charAt(i);
+								
+								if (!Character.isAlphabetic(c))
+								{
+									System.out.println("---- [" + w + "] "   + state.getName());
+									
+									failures.addFailure(new CheckResult(state, this, "[" + w + "] "+ text, 1));
+									
+									return;
+								}
+							}
+						}
+						
+						
+					}
+					
+					/*
+					int c = 0;
+					
+					for (int i = 0; i < w.length(); i++)
+					{
+						var cc = w.charAt(i);
+						
+						if (Character.isAlphabetic(cc))
+						//if ((cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z'))
+						{
+							c++;
+						}
+					}
+					
+					if (c > 1 && c != w.length() && (w.length() - c) % 2 == 0)
+					{
+						System.out.println("---- [" + w + "] "   + state.getName());
+						
+						return;
+					}*/
+				}
+				
+			}
+		}
+				
+//		logDefects(state, failures, defects);
+		
+		
+		}
+		catch (Throwable e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	/*
+	
 	
 	private boolean findText(String actualText, Rect bounds, String expectedText, Control control, List<DefectResult> defects)
 	{
@@ -101,6 +236,8 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		return done;		
 	}
 
+	
+	
 	private boolean checkForPartialText(List<DefectResult> results, Rect bounds, String expectedText, String actualText)
 	{
 		boolean fullTextFound = hasFullText(expectedText, actualText);
@@ -153,6 +290,16 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	{
 	}
 	
+	
+	*/
+	
+	private static boolean ee(String e)
+	{
+		System.out.println(e);
+		
+		return e.contains("\\'");
+	}
+	
 	private boolean shouldSkipControl(Control control, State state)
 	{
 		if (false == control.isVisible())
@@ -160,7 +307,14 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			return true;
 		}
 		
-		if ((control.getText() == null) || (control.getText().length() <= 0))
+		var t = control.getText();
+		
+		if (null == t)
+		{
+			t = control.getContentDescription();
+		}
+		
+		if ((t == null) || (t.length() <= 0))
 		{
 			return true;
 		}
@@ -170,13 +324,18 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			
 			for (var c = control; c != null; c = c.getParent())
 			{
-				System.out.println(c.getSignature() + " " + c.getBounds().toString());
+	//			System.out.println(c.getSignature() + " " + c.getBounds().toString());
 			}
 			
-			System.out.println("-----------------------------------------------------");
+		//	System.out.println("-----------------------------------------------------");
 			
 			return false;
 				}
+		
+		if (control.getType() == null)
+		{
+			return false;
+		}
 		
 		if (control.getType().equals("android.widget.Switch"))
 		{
@@ -207,14 +366,16 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		{
 			return true;
 		}
-		
+		/*
 		if (hasMultiLine(control.getText()))
 		{
 			return true;
 		}
-		
+		*/
 		return false;
 	}
+	
+	/*
 	
 	private boolean hasMultiLine(String message)
 	{
@@ -259,7 +420,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	
 	private String normalize(String source)
 	{
-		return source.replace('�', '\'').replace('\u00a0', ' ');
+		return source.replace('�', '\'').replace('\u00a0', ' ');
 	}
 	
 	private static class DefectResult
@@ -280,5 +441,5 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		public String expectedMessage;
 		public Rect bounds;
 		public String actualMessage;
-	}	
+	}	*/
 }

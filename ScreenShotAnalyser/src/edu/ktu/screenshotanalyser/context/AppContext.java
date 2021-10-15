@@ -95,7 +95,7 @@ public class AppContext
 				
 				for (Locale locale : locales)
 				{
-					System.out.println(name + " Language: " + locale.getCountry() + " " + locale.toString());
+//					System.out.println(name + " Language: " + locale.getCountry() + " " + locale.toString());
 				}
 				
 				if (this.name.startsWith("@string/"))

@@ -2,10 +2,12 @@ package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.SortedMap;
+import java.util.MissingResourceException;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import com.aliasi.util.Pair;
 import com.github.pemistahl.lingua.api.Language;
@@ -17,29 +19,42 @@ import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
+import opennlp.tools.util.featuregen.WordClusterFeatureGenerator;
 
-public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStateRuleChecker
+public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
-	public MixedLanguagesStateCheck()
+	public WrongLanguageCheck()
 	{
-		super(7, "SL2");
+		super(37, "WrongLanguageCheck");
 	}
 
 	@Override
 	public void analyze(State state, ResultsCollector failures)
 	{
-		HashMap<Language, List<String>> uniqueLanguages = new HashMap<>();
+//		HashMap<Language, List<String>> uniqueLanguages = new HashMap<>();
 		
 		var messages = state.getActualControls().stream().map(this::getText).filter(p -> isTranslateable(p, state.getAppContext())).map(message -> new Pair<>(message, determineLanguageShort(message))).collect(Collectors.toList());
+		var locales = state.getAppContext().getLocales();
 		
 		for (var message : messages)
 		{
+			var languageFound = false;
+			
 			for (var language : message.b().keySet())
 			{
 				var prob = message.b().get(language);
 
-				if (prob > 0.7)
+				if (prob > 0.8)
 				{
+					if (isAppLanguage(locales, language))
+					{
+						languageFound = true;
+						break;
+					}					
+					
+					
+					
+					/*
 				if (uniqueLanguages.containsKey(language))
 				{
 					var m = uniqueLanguages.get(language);
@@ -55,21 +70,46 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 					m.add(message.a());
 					
 					uniqueLanguages.put(language, m);
-				}				
+				}		*/		
 				}
+			}
+			
+			if (false == languageFound)
+			{
+				failures.addFailure(new CheckResult(state, this, "missing language " + message.a() + " " + message.b().toString(), 1));
+				
+				return;
 			}
 		}
 
 		
+		/*
+		
 		for (var language : uniqueLanguages.keySet())
 		{
-			var languageMessages = uniqueLanguages.get(language);
-			
-			if (languageMessages.size() == messages.size())
+			if (false == isAppLanguage(locales, language))
 			{
+				failures.addFailure(new CheckResult(state, this, "missing language " + language.name(), 1));			
+				
 				return;
 			}
+			
+			
+//			var languageMessages = uniqueLanguages.get(language);
+	//		
+		//	if (languageMessages.size() == messages.size())
+			//{
+//				return;
+	//		}
+			
+			
+			
+			
 		}
+		
+		*/
+		
+		/*
 		
 		
 		var maxMessages = -1;
@@ -109,7 +149,7 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 		}
 		
 		
-		/*
+		/=*
 		//forEach(message -> mergeLanguages(message, uniqueLanguages));
 		
 		if (uniqueLanguages.keySet().size() > 1)
@@ -122,7 +162,7 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 			}
 			
 			failures.addFailure(new CheckResult(state, this, message, 1));			
-		} */
+		} *=/
 		
 		var error = "";
 		
@@ -145,8 +185,41 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 			error += message.a().replace("\n", " ").replace("\r", " ") + "[" + language.getIsoCode639_1() + " " + maxScore + "] ";
 		}
 		
-		failures.addFailure(new CheckResult(state, this, error, 1));			
+//		failures.addFailure(new CheckResult(state, this, error, 1));			
+		
+		
+		*/
 	}
+	
+	
+	
+	private boolean isAppLanguage(Set<Locale> appLanguages, Language language)
+	{
+		if ("eng".equalsIgnoreCase(language.getIsoCode639_3().name()))
+		{
+			return true;
+		}
+		
+		for (var appLanguage : appLanguages)
+		{
+			try
+			{
+				if (appLanguage.getISO3Language().equalsIgnoreCase(language.getIsoCode639_3().name()))
+				{
+					return true;
+				}
+			}
+			catch (MissingResourceException ex)
+			{
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
 	
 	@Override
 	protected String getText(Control control)
@@ -159,6 +232,49 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 		{
 			message = message.substring(0, message.length() - 1); 
 		}		
+		
+		if (message.length() == 0)
+		{
+			return null;
+		}		
+		
+		String[] words = message.split("[ \t]");
+		
+		for (String word : words)
+		{
+			if (word.length() == 0)
+			{
+				continue;
+			}
+			
+			int letters = 0;
+			int caps = 0;
+			
+			for (int i = 0; i < word.length(); i++)
+			{
+				char c = word.charAt(i);
+				
+				if (Character.isAlphabetic(c))
+				{
+					letters++;
+				}
+				
+				if (Character.isUpperCase(c))
+				{
+					caps++;
+				}
+			}
+			
+			if (letters == 0)
+			{
+				message = message.replace(word, " ");
+			}
+			
+			if (caps == word.length())
+			{
+				message = message.replace(word, " ");
+			}
+		}
 		
 		return message.trim();
 	}
@@ -204,6 +320,4 @@ public class MixedLanguagesStateCheck extends BaseTextRuleCheck implements IStat
 		
 		return getLanguageByCode(code);
 	}*/
-	
-	
 }

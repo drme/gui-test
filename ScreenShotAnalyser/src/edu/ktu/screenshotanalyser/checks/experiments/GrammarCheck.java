@@ -2,6 +2,7 @@ package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import org.languagetool.Language;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
@@ -21,43 +22,88 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 	public void analyze(State state, ResultsCollector failures)
 	{
 		var allTexts = state.getActualControls().stream().map(this::getText).collect(Collectors.joining(". "));
-		var languages = getLanguage(allTexts);
+		var ll = determineLanguageAll(allTexts);
 	
-		if (0 == languages.size())
+		if (0 == ll.size())
+		{
+			return;
+		}
+		
+		for (var language : ll)
+		{
+			if (language.equals("lt"))
+			{
+				return;				
+			}
+		}
+		
+		var languages = new ArrayList<Language>();
+		
+		for (var q : ll)
+		{
+			languages.addAll(getLanguageByCode(q));
+		}
+		
+		
+		if (languages.size() == 0)
 		{
 			return;
 		}
 	
-		var messages = new ArrayList<String>();
-	
+//		var messages = new ArrayList<String>();
+
+		var mistypes = "";
+		var errors = "";		
+		
+		
 		for (var control : state.getActualControls())
 		{
-			if (null != control.getText())
+			if (null != control.getText() && control.getText().trim().length() > 0)
 			{
-				messages.add(control.getText());
+	//			messages.add(control.getText());
+				
+				mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, control.getText().trim(), false);
+				
+				if ((mistypes != null) && (mistypes.length() > 0))
+				{
+					failures.addFailure(new CheckResult(state, this, mistypes, 1));
+					
+					return;
+				}
 			}
 			
 			if (null != control.getContentDescription())
 			{
-				messages.add(control.getContentDescription());
+				//messages.add(control.getContentDescription());
+				
+				if (null != control.getContentDescription() && control.getContentDescription().trim().length() > 0)
+				{
+					mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, control.getContentDescription().trim(), false);
+
+					if ((mistypes != null) && (mistypes.length() > 0))
+					{
+						failures.addFailure(new CheckResult(state, this, mistypes, 1));
+
+						return;
+					}
+				}
 			}
 		}
 
-		var mistypes = "";
-		var errors = "";
+
 		
-		for (var expected : messages)
-		{
-			mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, expected);
-			
-			errors += " " + mistypes;
-			errors = errors.trim();
-		}
-		
-		if (errors.length() > 0)
-		{
-			failures.addFailure(new CheckResult(state, this, errors, errors.length()));
-		}
+//		for (var expected : messages)
+//		{
+//			mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, expected);
+//			
+//			errors += " " + mistypes;
+//			errors = errors.trim();
+//		}
+//		
+//		if (errors.length() > 0)
+//		{
+//			failures.addFailure(new CheckResult(state, this, errors, errors.length()));
+//		}
 	}
 
 	@Override
@@ -75,7 +121,7 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 				{
 					var errors = "";
 					var message = messages.getMessage(key, language).replaceAll("%s", "");
-					var mistypes = isSpellingCorrect(appContext, "", getLanguageByCode(language), message);
+					var mistypes = isSpellingCorrect(appContext, "", getLanguageByCode(language), message, false);
 					
 					errors += " " + mistypes;
 					errors = errors.trim();		

@@ -3,13 +3,19 @@ package edu.ktu.screenshotanalyser.checks;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import edu.ktu.screenshotanalyser.context.Control;
+import edu.ktu.screenshotanalyser.context.State;
+import edu.ktu.screenshotanalyser.tools.Settings;
 
 public abstract class BaseRuleCheck
 {
@@ -82,6 +88,73 @@ public abstract class BaseRuleCheck
 		{
 			return null;
 		}
+	}
+	
+	protected static String executeShellCommand(String... command)
+	{
+		var result = "";
+
+		try
+		{
+			var process = Runtime.getRuntime().exec(command, new String[] { "PYTHONIOENCODING=utf8" }, null);
+
+			try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream())))
+			{
+				String line = null;
+
+				while ((line = reader.readLine()) != null)
+				{
+					result += line;
+				}
+			}
+			
+			try (var reader = new BufferedReader(new InputStreamReader(process.getErrorStream())))
+			{
+				String line = null;
+
+				while ((line = reader.readLine()) != null)
+				{
+					result += line;
+				}
+			}			
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+//		System.out.println("[" + result + "]");
+		
+		return result;
+	}
+	
+	protected static boolean isAd(Control control)
+	{
+		if (null == control)
+		{
+			return false;
+		}
+		
+		if (control.getSignature().contains("addview"))
+		{
+			return true;
+		}
+		else
+		{
+			return isAd(control.getParent());
+		}
+	}
+	
+	protected static void annotateDefectImage(State state, List<Control> controls)
+	{
+		var resultImage = new ResultImage(state.getImageFile());								
+		
+		for (var control : controls)
+		{
+			resultImage.drawBounds(control.getBounds());
+		}
+		
+		resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
 	}
 	
 	private final String ruleCode;
