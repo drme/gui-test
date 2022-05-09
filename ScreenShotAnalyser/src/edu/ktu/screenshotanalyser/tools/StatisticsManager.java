@@ -15,7 +15,7 @@ import edu.ktu.screenshotanalyser.context.State;
 
 public class StatisticsManager
 {
-  protected String connectionUrl = "jdbc:sqlserver://localhost;database=defects-db;integratedSecurity=true;";
+  protected String connectionUrl = "jdbc:sqlserver://ME;database=defects-db;integratedSecurity=true;";
 
 	public void saveAppInfo(AppContext appContext)
 	{
@@ -93,6 +93,14 @@ public class StatisticsManager
 		  	
 		  	return resultSet.getLong(1);
 		  }
+		}
+	}
+	
+	public List<String> getList(String query, Object... arguments) throws SQLException
+	{
+		try (var connection = DriverManager.getConnection(connectionUrl))
+		{
+			return getList(connection, query, arguments);
 		}
 	}
 	

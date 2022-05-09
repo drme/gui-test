@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -48,6 +49,15 @@ public class ResultImage
 		File resultFile = new File(fileName);
 
 		Imgcodecs.imwrite(resultFile.getAbsolutePath(), this.image);
+	}
+	
+	public byte[] encodeToPng()
+	{
+		var buffer = new MatOfByte();
+
+		Imgcodecs.imencode(".png", this.image, buffer);
+		
+		return buffer.toArray();		
 	}
 
 	private Mat image;

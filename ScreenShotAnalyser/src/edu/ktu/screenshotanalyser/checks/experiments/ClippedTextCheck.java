@@ -155,7 +155,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	
 	private boolean shouldSkipControl(Control control, State state)
 	{
-		if (false == control.isVisible())
+		if (!control.isVisible())
 		{
 			return true;
 		}
@@ -234,17 +234,23 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		}
 		
 		var result = new CheckResult(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
-		var debugImage = result.getResultImage();
-				
-		defects.forEach(defect -> 
-		{
-			debugImage.drawBounds(defect.bounds);
-			debugImage.drawText(defect.toString(), defect.bounds);
-		});
-		
-		failures.addFailure(result);
 
-		debugImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+		failures.addFailure(result);
+		
+		if (failures.acceptsResultImages)
+		{
+			var debugImage = result.getResultImage();
+				
+			defects.forEach(defect -> 
+			{
+				debugImage.drawBounds(defect.bounds);
+				debugImage.drawText(defect.toString(), defect.bounds);
+			});
+		
+//			debugImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+			
+			failures.addFailureImage(debugImage);
+		}
 	}
 	
 	private String fixWhiteSpaces(String string)
@@ -259,7 +265,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	
 	private String normalize(String source)
 	{
-		return source.replace('’', '\'').replace('\u00a0', ' ');
+		return source.replace('ï¿½', '\'').replace('\u00a0', ' ');
 	}
 	
 	private static class DefectResult

@@ -101,7 +101,17 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 
 						
 						
-						failures.addFailure(new CheckResult(state, this, msg + " != " + lang, 1));									
+						var result = new CheckResult(state, this, msg + " != " + lang, 1);
+						failures.addFailure(result);									
+						
+						if (failures.acceptsResultImages)
+						{
+							var debugImage = result.getResultImage();
+							
+							debugImage.drawBounds(bounds);
+
+							failures.addFailureImage(debugImage);									
+						}
 						
 						return; 
 							} 

@@ -48,7 +48,7 @@ public class StartUp
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
-		ResultsCollector failures = new DataBaseResultsCollector("misaligned control check", true);
+		ResultsCollector failures = new DataBaseResultsCollector("sdssss", false);
 		RulesSetChecker checker = new RulesSetChecker();
 
 		

@@ -9,6 +9,8 @@ public class DataBaseResultsCollector extends ResultsCollector
 {
 	public DataBaseResultsCollector(String name, boolean resume)
 	{
+		super(false);
+		
 		this.testsRunId = this.statisticsManager.startTestsRun(name, resume);
 	}
 	
@@ -48,6 +50,11 @@ public class DataBaseResultsCollector extends ResultsCollector
 	public void finishRun()
 	{
 		this.statisticsManager.finishRun(this.testsRunId);
+	}
+	
+	@Override
+	public void addFailureImage(ResultImage image)
+	{
 	}
 	
 	private long testsRunId;

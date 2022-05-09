@@ -53,7 +53,7 @@ public abstract class BaseRuleCheck
 	
 	protected Set<String> loadLastRun(String fileName, String prefix)
 	{
-		HashSet<String> lastFunFiles = new HashSet<String>();
+		HashSet<String> lastFunFiles = new HashSet<>();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(fileName)))
 		{
@@ -80,7 +80,7 @@ public abstract class BaseRuleCheck
 			return null;
 		}
 
-		if (lastFunFiles.size() > 0)
+		if (!lastFunFiles.isEmpty())
 		{
 			return lastFunFiles;
 		}
@@ -92,7 +92,7 @@ public abstract class BaseRuleCheck
 	
 	protected static String executeShellCommand(String... command)
 	{
-		var result = "";
+		StringBuilder result = new StringBuilder("");
 
 		try
 		{
@@ -104,7 +104,7 @@ public abstract class BaseRuleCheck
 
 				while ((line = reader.readLine()) != null)
 				{
-					result += line;
+					result.append(line);
 				}
 			}
 			
@@ -114,7 +114,7 @@ public abstract class BaseRuleCheck
 
 				while ((line = reader.readLine()) != null)
 				{
-					result += line;
+					result.append(line);
 				}
 			}			
 		}
@@ -125,7 +125,7 @@ public abstract class BaseRuleCheck
 
 //		System.out.println("[" + result + "]");
 		
-		return result;
+		return result.toString();
 	}
 	
 	protected static boolean isAd(Control control)

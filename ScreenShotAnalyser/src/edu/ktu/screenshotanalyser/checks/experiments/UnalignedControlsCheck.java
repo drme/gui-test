@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.OperatingSystemMXBean;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
+import edu.ktu.screenshotanalyser.tools.StatisticsManager;
 
 public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
@@ -33,13 +35,27 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		super(21, "Unaligned Controls");
 	}
 
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) throws IOException, SQLException
 	{
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		var s = new State("AA", null, new File("E:\\gui\\_r\\c-2560x1080-fr\\lt.nordea.android\\states\\screen_2019-01-05_115204.png"), new File("E:\\gui\\_r\\c-2560x1080-fr\\lt.nordea.android\\states\\state_2019-01-05_115204.json"), null);
+//		var s = new State("AA", null, new File("E:\\gui\\_r\\c-2560x1080-fr\\lt.nordea.android\\states\\screen_2019-01-05_115204.png"), new File("E:\\gui\\_r\\c-2560x1080-fr\\lt.nordea.android\\states\\state_2019-01-05_115204.json"), null);
 		
-		new UnalignedControlsCheck().analyze(s, null);
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);						
+		
+		var db = new StatisticsManager();
+		var rule = new UnalignedControlsCheck();
+		var images = db.getList("select s.FileName from ScreenShot s LEFT join TestRunDefect d on d.ScreenShotId = s.Id WHERE d.TestRunId = 10316 and d.DefectTypeId <> 34");
+		
+		for (var image : images)
+		{
+			var file = "E:\\gui\\_r\\" + image;
+			var stateFile = "E:\\gui\\_r\\" + image.replace("\\screen_", "\\state_").replace(".png", ".json").replace(".jpg", ".json"); 
+			
+			var state = new State("AA", null, new File(file), new File(stateFile), null);
+
+			rule.analyze(state, null);
+		}
 	}
 	
 	
@@ -281,7 +297,10 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 					defectiveControls.add(sourceControl);
 					defectiveControls.add(nearest);
 
-					failures.addFailure(new CheckResult(state, this, "unaligned vertically", 1));
+					if (null != failures)
+					{
+						failures.addFailure(new CheckResult(state, this, "unaligned vertically", 1));
+					}
 					
 					annotateDefectImage(state, defectiveControls.stream().collect(Collectors.toList()));
 				

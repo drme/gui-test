@@ -7,6 +7,11 @@ import edu.ktu.screenshotanalyser.context.State;
  */
 public abstract class ResultsCollector
 {
+	protected ResultsCollector(boolean acceptsResultImages)
+	{
+		this.acceptsResultImages = acceptsResultImages;
+	}
+	
 	public synchronized void addFailure(CheckResult result)
 	{
 		if ((result.getMessage() != null) && (result.getMessage().length() > 0))
@@ -14,8 +19,13 @@ public abstract class ResultsCollector
 			System.out.println(result.getMessage());
 		}
 	}
+	
+	
+	public abstract void addFailureImage(ResultImage image);
 
 	public abstract boolean wasChecked(State state);
 
 	public abstract void finishRun();
+	
+	public final boolean acceptsResultImages;
 }
