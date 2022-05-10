@@ -51,15 +51,6 @@ public class StartUp
 		ResultsCollector failures = new DataBaseResultsCollector("sdssss", false);
 		RulesSetChecker checker = new RulesSetChecker();
 
-		
-		
-
-		
-
-
-		
-	
-		
 		//checker.addRule(new UnalignedControlsCheck());    +
 		//checker.addRule(new ClippedControlCheck());       +
 		//checker.addRule(new ObscuredControlCheck());      +
@@ -75,7 +66,7 @@ public class StartUp
 		//checker.addRule(new OffensiveMessagesCheck());    + 
 		//checker.addRule(new UnreadableTextCheck());       +
 		//checker.addRule(new TooHardToUnderstandCheck());  +
-		//checker.addRule(new MissingTextCheck());          +
+		checker.addRule(new MissingTextCheck());          //+
 		
 		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
 

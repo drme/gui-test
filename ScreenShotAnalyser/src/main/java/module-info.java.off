@@ -1,0 +1,7 @@
+module edu.ktu.screenshotanalyser
+{
+	requires java.desktop;
+	requires org.slf4j;
+	requires ch.qos.logback.classic;
+	requires net.sourceforge.tess4j;
+}

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.swing.text.html.HTMLDocument.HTMLReader.CharacterAction;
 import org.opencv.core.Rect;
-import com.lowagie.text.pdf.PatternColor;
+//import com.lowagie.text.pdf.PatternColor;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
