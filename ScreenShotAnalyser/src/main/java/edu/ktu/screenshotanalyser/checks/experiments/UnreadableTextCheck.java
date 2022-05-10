@@ -13,7 +13,7 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 	 * Minimum readable text size in millimeters.
 	 */
 	private final double minHeight = 2.0;
-	
+
 	public UnreadableTextCheck()
 	{
 		super(19, "TS2");
@@ -22,27 +22,27 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 	@Override
 	public void analyze(State state, ResultsCollector failures)
 	{
-		String tooSmall = "";
-		
-		for (Control message : state.getActualControls())
+		var tooSmall = new StringBuilder("");
+
+		for (var message : state.getActualControls())
 		{
 			String result = isTextTooSmall(message, state);
-			
+
 			if (null != result)
 			{
-				tooSmall += " " + result;
+				tooSmall.append(" " + result);
 			}
 		}
-		
-		tooSmall = tooSmall.trim();
-		
-		if (tooSmall.length() > 0)
+
+		var tooSmallText = tooSmall.toString().trim();
+
+		if (tooSmallText.length() > 0)
 		{
 			// ???
-			failures.addFailure(new CheckResult(state, this, tooSmall.replace('\n', ' '), tooSmall.length()));
+			failures.addFailure(new CheckResult(state, this, tooSmallText.replace('\n', ' '), tooSmallText.length()));
 		}
-	}	
-	
+	}
+
 	private String isTextTooSmall(Control message, State state)
 	{
 		if (message.getText() != null)
@@ -51,7 +51,7 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 			{
 				if ((message.getBounds().height > 3) && (message.getBounds().width > 3))
 				{
-					double actualHeight = state.getTestDevice().getPhysicalSize(message.getBounds().height);
+					var actualHeight = state.getTestDevice().getPhysicalSize(message.getBounds().height);
 
 					if (actualHeight < this.minHeight)
 					{

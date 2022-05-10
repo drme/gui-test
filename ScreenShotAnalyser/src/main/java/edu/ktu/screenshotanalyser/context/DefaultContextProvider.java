@@ -8,16 +8,12 @@ import edu.ktu.screenshotanalyser.checks.SystemContext;
 
 public class DefaultContextProvider
 {
-	private final File dataFolder;
-	private final List<TestDevice> testDevices = new ArrayList<>();
-	private final SystemContext systemContext;
-	
 	public DefaultContextProvider(File dataFolder) throws IOException
 	{
 		this.dataFolder = dataFolder;
 		this.systemContext = new SystemContext();
 		
-		for (File testDeviceFolder : this.dataFolder.listFiles((pathname) -> pathname.isDirectory()))
+		for (var testDeviceFolder : this.dataFolder.listFiles(File::isDirectory))
 		{
 			if (new File(testDeviceFolder.getAbsoluteFile() + "/dev.txt").exists())
 			{
@@ -30,6 +26,10 @@ public class DefaultContextProvider
 	{
 		return new AppContext(appFolder, this.dataFolder, this.testDevices, this.systemContext);
 	}
+
+	private final File dataFolder;
+	private final List<TestDevice> testDevices = new ArrayList<>();
+	private final SystemContext systemContext;
 }
 
 

@@ -235,51 +235,49 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		{
 			return false;
 		}
-		
+
 		if (control.getSignature().contains("Layout"))
 		{
 			return false;
 		}
-		
+
 		var type = control.getType() != null ? control.getType() : "";
-		
+
 		if (type.contains("TextView"))
 		{
 			return control.getText() != null && control.getText().trim().length() > 0;
 		}
-		
+
 		return true;
 	}
 	
 	private boolean checkVerticalAlingment(State state, ResultsCollector failures)
 	{
-		float pixelScale = state.getImageSize().height / 1080.0f; 
-		
+		float pixelScale = state.getImageSize().height / 1080.0f;
 		var centerYdelta = 50.0f * pixelScale;
 		var controls = state.getActualControls().stream().filter(p -> isUseable(p)).collect(Collectors.toList());
-		
 		var defectiveControls = new HashSet<Control>();
-		
+
 		for (var sourceControl : controls)
 		{
 			if (isEmpty(sourceControl, state.getImage()))
 			{
 				continue;
 			}
-			
+
 			var nearbyControls = controls.stream().filter(p -> p.getParent() == sourceControl.getParent()).filter(p -> sourceControl != p && (isOnLeft(sourceControl, p, centerYdelta) || isOnRight(sourceControl, p, centerYdelta))).collect(Collectors.toList());
-			
+
 			nearbyControls = nearbyControls.stream().filter(p -> Math.abs(p.getBounds().height - sourceControl.getBounds().height) < 10 * pixelScale).collect(Collectors.toList());
-			
+
 			var sourceControlCenterY = getCenterY(sourceControl);
 
 			Control nearest = null;
 			float minDeltaY = Integer.MAX_VALUE;
-			
+
 			for (var nc : nearbyControls)
 			{
 				var deltaY = Math.abs(getCenterY(nc) - sourceControlCenterY);
-				
+
 				if (deltaY < minDeltaY)
 				{
 					if (false == isEmpty(nc, state.getImage()))
@@ -289,7 +287,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 					}
 				}
 			}
-			
+
 			if (null != nearest)
 			{
 				if (minDeltaY > 3 * pixelScale)
@@ -301,9 +299,9 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 					{
 						failures.addFailure(new CheckResult(state, this, "unaligned vertically", 1));
 					}
-					
+
 					annotateDefectImage(state, defectiveControls.stream().collect(Collectors.toList()));
-				
+
 					return true;
 				}
 			}
@@ -405,20 +403,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	private int getLeftMargin(BufferedImage image)
 	{
 		int c = image.getRGB(0, 0);
@@ -616,5 +601,5 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		rtlLanguages = Pattern.compile("^(ar|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)");
 	}
 	
-	private final static Pattern rtlLanguages;
+	private static final Pattern rtlLanguages;
 }

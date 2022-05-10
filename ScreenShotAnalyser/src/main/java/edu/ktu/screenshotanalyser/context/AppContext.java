@@ -11,38 +11,24 @@ import java.util.Set;
 import edu.ktu.screenshotanalyser.checks.SystemContext;
 import edu.ktu.screenshotanalyser.tools.SystemUtils;
 import net.dongliu.apk.parser.ApkFile;
-import net.dongliu.apk.parser.bean.ApkMeta;
-import net.dongliu.apk.parser.bean.UseFeature;
 
 public class AppContext
 {
-	private static final String stateFileExtension = "json";
-	private String name = "";
-	private String version = "";
-	private String packageName = "";
-	private final File dataFolder;	
-	private final List<TestDevice> testDevices;
-	private final List<State> states = new ArrayList<>();
-	private final SystemContext systemContext;
-	private LocalizedMessages messages = null;
-	private File apkFile = null;
-	private Set<Locale> locales = null;
-
 	public AppContext(File appFolder, File dataFolder, List<TestDevice> testDevices, SystemContext systemContext) throws IOException
 	{
 		this.dataFolder = dataFolder;
 		this.testDevices = testDevices;
 		this.systemContext = systemContext;
 		
-		for (TestDevice testDevice : testDevices)
+		for (var testDevice : testDevices)
 		{
-			File[] stateFiles = new File(testDevice.getFolder().getAbsolutePath() + "/" + appFolder.getName() + "/states/").listFiles(pathelement -> pathelement.getAbsolutePath().endsWith("." + stateFileExtension));
+			var stateFiles = new File(testDevice.getFolder().getAbsolutePath() + "/" + appFolder.getName() + "/states/").listFiles(pathelement -> pathelement.getAbsolutePath().endsWith("." + stateFileExtension));
 			
 			if (null != stateFiles)
 			{
-				for (File stateFile : stateFiles)
+				for (var stateFile : stateFiles)
 				{
-					File stateImage = new File(stateFile.getAbsolutePath().replaceAll(stateFileExtension + "$", "png").replace("state_", "screen_"));
+					var stateImage = new File(stateFile.getAbsolutePath().replaceAll(stateFileExtension + "$", "png").replace("state_", "screen_"));
 				
 					if ((stateImage.exists()) && (stateImage.isFile()) && (stateImage.length() > 0))
 					{
@@ -61,7 +47,7 @@ public class AppContext
 			}
 		}
 		
-		File[] apkFiles = appFolder.listFiles(p -> p.isFile() && p.getName().endsWith(".apk"));
+		var apkFiles = appFolder.listFiles(p -> p.isFile() && p.getName().endsWith(".apk"));
 		
 		if (apkFiles.length > 0)
 		{
@@ -75,65 +61,64 @@ public class AppContext
 		{
 			if ((null != this.apkFile) && this.apkFile.length() > 0)
 			{
-			try (ApkFile apkFile = new ApkFile(this.apkFile))
-			{
-				ApkMeta apkMeta = apkFile.getApkMeta();
-				//System.out.println(apkMeta.getLabel() + "; " + apkMeta.getPackageName() + "; " + apkMeta.getVersionCode());
-				//System.out.println(apkMeta.getPackageName());
-				//System.out.println(apkMeta.getVersionCode());
-				
-				for (UseFeature feature : apkMeta.getUsesFeatures())
+				try (var apkFile = new ApkFile(this.apkFile))
 				{
-					//System.out.println(feature.getName());
-				}
+					var apkMeta = apkFile.getApkMeta();
+					// System.out.println(apkMeta.getLabel() + "; " + apkMeta.getPackageName() + "; " + apkMeta.getVersionCode());
+					// System.out.println(apkMeta.getPackageName());
+					// System.out.println(apkMeta.getVersionCode());
 
-				String name = apkMeta.getLabel();
-				String version = apkMeta.getVersionName();
-				String packageName = apkMeta.getPackageName();
-				
-				this.locales = apkFile.getLocales();
-				
-				for (Locale locale : locales)
-				{
-//					System.out.println(name + " Language: " + locale.getCountry() + " " + locale.toString());
-				}
-				
-				if (this.name.startsWith("@string/"))
-				{
-					Map<String, String> messages = getMessages().getTranslations(name.substring("@string/".length()));
-					
-					String nameEnglish = messages.get("en");
-					
-					if (null != nameEnglish)
+					for (var feature : apkMeta.getUsesFeatures())
 					{
-						name = nameEnglish;
+						// System.out.println(feature.getName());
 					}
-					else
+
+					var name = apkMeta.getLabel();
+					var version = apkMeta.getVersionName();
+					var packageName = apkMeta.getPackageName();
+
+					this.locales = apkFile.getLocales();
+
+					for (var locale : locales)
 					{
-						name = messages.get(messages.keySet().iterator().next());
+						// System.out.println(name + " Language: " + locale.getCountry() + " " + locale.toString());
 					}
+
+					if (this.name.startsWith("@string/"))
+					{
+						var messages = getMessages().getTranslations(name.substring("@string/".length()));
+						var nameEnglish = messages.get("en");
+
+						if (null != nameEnglish)
+						{
+							name = nameEnglish;
+						}
+						else
+						{
+							name = messages.get(messages.keySet().iterator().next());
+						}
+					}
+
+					this.packageName = packageName;
+					this.version = version;
+					this.name = name;
 				}
-				
-				this.packageName = packageName;
-				this.version = version;
-				this.name = name;
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace(System.err);
-				
-				this.packageName = "";
-				this.version = "";
-				this.name = "";
-			}
+				catch (Exception ex)
+				{
+					ex.printStackTrace(System.err);
+
+					this.packageName = "";
+					this.version = "";
+					this.name = "";
+				}
 			}
 			else
 			{
 				this.packageName = "";
 				this.version = "";
-				this.name = "";			
+				this.name = "";
 			}
-			
+
 		}
 	}
 	
@@ -184,11 +169,11 @@ public class AppContext
 	{
 		if (null == messages)
 		{
-			File tempFolder = new File("e:/3/" + this.apkFile.getName());
+			var tempFolder = new File("e:/3/" + this.apkFile.getName());
 
 			try
 			{
-				if (false == tempFolder.exists())
+				if (!tempFolder.exists())
 				{
 					SystemUtils.executeCommand("java -jar ./tools/apktool_2.3.4.jar d " + this.apkFile.getAbsolutePath() + " -o " + tempFolder.getAbsolutePath());
 				}
@@ -209,60 +194,50 @@ public class AppContext
 		return this.systemContext;
 	}
 
+	public Map<String, List<ResourceText>> getResources()
+	{
+		return this.resources;
+	}
 	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+	private static final String stateFileExtension = "json";
+	private String name = "";
+	private String version = "";
+	private String packageName = "";
+	private final File dataFolder;	
+	private final List<TestDevice> testDevices;
+	private final List<State> states = new ArrayList<>();
+	private final SystemContext systemContext;
+	private LocalizedMessages messages = null;
+	private File apkFile = null;
+	private Set<Locale> locales = null;
 	private final Map<String, List<ResourceText>> resources = new HashMap<String, List<ResourceText>>();
 
-	public Map<String, List<ResourceText>> getResources() {
-		return resources;
-	}
-
-
-
-	public static class ResourceText {
-		private final String key;
-		
-		public String getKey() {
-			return key;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		
-
-
-		private final String value;
-		private final  String file;
-
-		public String getFile() {
-			return file;
-		}
-
-		public ResourceText(String key, String value, String file) {
+	public static class ResourceText
+	{
+		public ResourceText(String key, String value, String file)
+		{
 			this.key = key;
 			this.value = value;
 			this.file = file;
 		}
-	}
 
+		public String getKey()
+		{
+			return this.key;
+		}
+
+		public String getValue()
+		{
+			return this.value;
+		}
+
+		public String getFile()
+		{
+			return this.file;
+		}
+
+		private final String key;
+		private final String value;
+		private final String file;
+	}
 }

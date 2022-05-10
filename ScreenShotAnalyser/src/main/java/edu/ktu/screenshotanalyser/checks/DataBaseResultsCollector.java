@@ -57,7 +57,7 @@ public class DataBaseResultsCollector extends ResultsCollector
 	{
 	}
 	
-	private long testsRunId;
-	private StatisticsManager statisticsManager = new StatisticsManager();
+	private final long testsRunId;
+	private final StatisticsManager statisticsManager = new StatisticsManager();
 	private HashSet<String> checkedStates = null;
 }

@@ -47,7 +47,7 @@ public class TextExtractor
 
 	public TextExtractor(float confidenceLevel, String language)
 	{
-		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Tesseract.class.getName());
+		var logger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Tesseract.class.getName());
 		logger.setLevel(ch.qos.logback.classic.Level.ALL);
 		
 		//logger.getRootLogger().setLevel(Level.OFF);		
@@ -94,25 +94,17 @@ public class TextExtractor
 
 	public String extract(BufferedImage image)
 	{
-//		 
-		
-		
-		
-		
 		var result = "";
 
 		try
 		{
-
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			var os = new ByteArrayOutputStream();
 			ImageIO.write(image, "png", os);
-			
-			
-			
+
 			var process = Runtime.getRuntime().exec("gocr049.exe", new String[] { "PYTHONIOENCODING=utf8" }, null);
 
 			process.getOutputStream().write(os.toByteArray());
-			
+
 			try (var reader = new BufferedReader(new InputStreamReader(process.getInputStream())))
 			{
 				String line = null;
@@ -122,7 +114,7 @@ public class TextExtractor
 					result += line;
 				}
 			}
-			
+
 			try (var reader = new BufferedReader(new InputStreamReader(process.getErrorStream())))
 			{
 				String line = null;
@@ -131,19 +123,16 @@ public class TextExtractor
 				{
 					result += line;
 				}
-			}			
+			}
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
 
-//		System.out.println("[" + result + "]");
-		
-		return result;		
-		
-		
-		
+		// System.out.println("[" + result + "]");
+
+		return result;
 	}
 	
 	public String extract(BufferedImage image, Rect bounds, Predicate<String> accept)

@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
@@ -31,9 +30,9 @@ public abstract class BaseRuleCheck
 		
 		try
 		{
-			Path logFile = Paths.get("e:/log/" + this.ruleCode + ".txt");
+			var logFile = Paths.get("e:/log/" + this.ruleCode + ".txt");
 			
-			Files.write(logFile, message.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+			Files.write(logFile, message.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 		}
 		catch (IOException ex)
 		{
@@ -53,17 +52,17 @@ public abstract class BaseRuleCheck
 	
 	protected Set<String> loadLastRun(String fileName, String prefix)
 	{
-		HashSet<String> lastFunFiles = new HashSet<>();
+		var lastFunFiles = new HashSet<String>();
 
-		try (BufferedReader reader = new BufferedReader(new FileReader(fileName)))
+		try (var reader = new BufferedReader(new FileReader(fileName)))
 		{
-			String line = reader.readLine();
+			var line = reader.readLine();
 
 			while (line != null)
 			{
 				if (line.startsWith(prefix))
 				{
-					String file = line.substring(prefix.length());
+					var file = line.substring(prefix.length());
 
 					file = file.split(" ")[0];
 
@@ -92,7 +91,7 @@ public abstract class BaseRuleCheck
 	
 	protected static String executeShellCommand(String... command)
 	{
-		StringBuilder result = new StringBuilder("");
+		var result = new StringBuilder("");
 
 		try
 		{

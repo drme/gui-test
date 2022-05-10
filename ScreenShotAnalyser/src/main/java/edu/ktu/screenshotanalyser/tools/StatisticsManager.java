@@ -24,17 +24,17 @@ public class StatisticsManager
 			return;
 		}
 		
-    try (Connection connection = DriverManager.getConnection(this.connectionUrl)) 
+    try (var connection = DriverManager.getConnection(this.connectionUrl)) 
     {
-    	Long applicationId = getId(connection, "SELECT Id FROM Application WHERE Package = ?", appContext.getPackage());
+    	var applicationId = getId(connection, "SELECT Id FROM Application WHERE Package = ?", appContext.getPackage());
     	
     	if (null == applicationId)
     	{
     		applicationId = insert(connection, "INSERT INTO Application (Name, Package, Version, ApkFile) VALUES (?, ?, ?, ?)", appContext.getName(), appContext.getPackage(), appContext.getVersion(), appContext.getApkFile().getName());
     		
-    		for (Locale locale : appContext.getLocales())
+    		for (var locale : appContext.getLocales())
     		{
-    			Long localeId = getId(connection, "SELECT Id FROM Locale WHERE Code = ?", locale.toString());
+    			var localeId = getId(connection, "SELECT Id FROM Locale WHERE Code = ?", locale.toString());
     			
     			if (null == localeId)
     			{
@@ -53,16 +53,16 @@ public class StatisticsManager
 	
 	protected Long getId(Connection connection, String query, Object... arguments) throws SQLException
 	{
-		try (PreparedStatement statement = connection.prepareStatement(query))
+		try (var statement = connection.prepareStatement(query))
 		{
 			int id = 1;
 			
-			for (Object argument : arguments)
+			for (var argument : arguments)
 			{
 				statement.setObject(id++, argument);
 			}
 			
-		  try (ResultSet resultSet = statement.executeQuery())
+		  try (var resultSet = statement.executeQuery())
 		  {
 		  	if (resultSet.next())
 		  	{
@@ -76,18 +76,18 @@ public class StatisticsManager
 	
 	protected long insert(Connection connection, String query, Object... arguments) throws SQLException
 	{
-		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
+		try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
 		{
 			int id = 1;
 			
-			for (Object argument : arguments)
+			for (var argument : arguments)
 			{
 				statement.setObject(id++, argument);
 			}
 			
 			statement.execute();
 			
-		  try (ResultSet resultSet = statement.getGeneratedKeys())
+		  try (var resultSet = statement.getGeneratedKeys())
 		  {
 		  	resultSet.next();
 		  	
@@ -106,9 +106,9 @@ public class StatisticsManager
 	
 	protected List<String> getList(Connection connection, String query, Object... arguments) throws SQLException
 	{
-		ArrayList<String> result = new ArrayList<>();
+		var result = new ArrayList<String>();
 		
-		try (PreparedStatement statement = connection.prepareStatement(query))
+		try (var statement = connection.prepareStatement(query))
 		{
 			int id = 1;
 			
@@ -117,7 +117,7 @@ public class StatisticsManager
 				statement.setObject(id++, argument);
 			}
 			
-		  try (ResultSet resultSet = statement.executeQuery())
+		  try (var resultSet = statement.executeQuery())
 		  {
 		  	while (resultSet.next())
 		  	{
@@ -134,7 +134,7 @@ public class StatisticsManager
 	{
 		try (var connection = DriverManager.getConnection(connectionUrl))
 		{
-			if (true == resume)
+			if (resume)
 			{
 				var id = getId(connection, "SELECT TOP 1 Id FROM TestRun WHERE [Description] = ? AND Finished = 0 ORDER BY Id DESC", description);
 				
@@ -220,9 +220,7 @@ public class StatisticsManager
 			fileName = fileName.substring(Settings.appImagesFolder.getAbsolutePath().length() + 1);
 		}
 
-		var screenshotId = getId(connection, "SELECT Id FROM ScreenShot WHERE FileName = ?", fileName);
-		
-		return screenshotId;
+		return getId(connection, "SELECT Id FROM ScreenShot WHERE FileName = ?", fileName);
 	}
 
 	public void finishRun(long testsRunId)

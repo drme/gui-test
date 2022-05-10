@@ -1,7 +1,6 @@
 package edu.ktu.screenshotanalyser.tools;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
 import org.opencv.core.CvType;
@@ -11,11 +10,15 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 public class ImageUtils
 {
+	private ImageUtils()
+	{
+	}
+	
 	public static BufferedImage matToBufferedImage(Mat source)
 	{
 		try
 		{
-			MatOfByte bytes = new MatOfByte();
+			var bytes = new MatOfByte();
 
 			Imgcodecs.imencode(".png", source, bytes);
 

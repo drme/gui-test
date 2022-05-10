@@ -48,8 +48,8 @@ public class StartUp
 	
 	private static void runExperiments() throws IOException, InterruptedException
 	{
-		ResultsCollector failures = new DataBaseResultsCollector("sdssss", false);
-		RulesSetChecker checker = new RulesSetChecker();
+		var failures = new DataBaseResultsCollector("sdssss", false);
+		var checker = new RulesSetChecker();
 
 		//checker.addRule(new UnalignedControlsCheck());    +
 		//checker.addRule(new ClippedControlCheck());       +
@@ -68,11 +68,10 @@ public class StartUp
 		//checker.addRule(new TooHardToUnderstandCheck());  +
 		checker.addRule(new MissingTextCheck());          //+
 		
-		File[] apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
+		var apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
+		var exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());		
 
-		ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());		
-
-		for (File app : apps)
+		for (var app : apps)
 		{
 			runChecks(app, exec, checker, failures);
 		}
@@ -99,15 +98,16 @@ public class StartUp
 	
 	private static void runChecks(File appName, ExecutorService exec, RulesSetChecker rules, ResultsCollector failures) throws IOException, InterruptedException
 	{
-		AppChecker appChecker = new AppChecker();
+		var appChecker = new AppChecker();
 		
 		appChecker.runChecks(appName, rules, exec, failures);
 	}
 	
 	private static void enableLogs()
 	{
-		LoggerContext logContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		ch.qos.logback.classic.Logger log = logContext.getLogger("com.jayway.jsonpath.internal.path.CompiledPath");
+		var logContext = (LoggerContext)LoggerFactory.getILoggerFactory();
+		var log = logContext.getLogger("com.jayway.jsonpath.internal.path.CompiledPath");
+
 		log.setLevel(Level.ERROR);
 	}
 }

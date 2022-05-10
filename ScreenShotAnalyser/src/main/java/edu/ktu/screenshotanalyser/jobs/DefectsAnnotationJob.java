@@ -2,22 +2,17 @@ package edu.ktu.screenshotanalyser.jobs;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Locale;
 import org.opencv.core.Core;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
-import edu.ktu.screenshotanalyser.checks.experiments.ClippedControlCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesStateCheck;
 import edu.ktu.screenshotanalyser.checks.experiments.UnlocalizedIconsCheck;
-import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
@@ -42,7 +37,7 @@ public class DefectsAnnotationJob implements Runnable
 	
 	public void run()
 	{
-		while (true == this.running)
+		while (this.running)
 		{
 			try
 			{

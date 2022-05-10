@@ -9,6 +9,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import java.awt.image.DataBufferByte;
 
 public class ResultImage
 {
@@ -19,8 +20,9 @@ public class ResultImage
 
 	public ResultImage(BufferedImage source)
 	{
-    byte[] data = ((java.awt.image.DataBufferByte) source.getRaster().getDataBuffer()).getData();
-    Mat mat = new Mat(source.getHeight(), source.getWidth(), CvType.CV_8UC3);
+    var data = ((DataBufferByte)source.getRaster().getDataBuffer()).getData();
+    var mat = new Mat(source.getHeight(), source.getWidth(), CvType.CV_8UC3);
+
     mat.put(0, 0, data);
 
     this.image = mat;
@@ -60,7 +62,7 @@ public class ResultImage
 		return buffer.toArray();		
 	}
 
-	private Mat image;
+	private final Mat image;
 }
 
 

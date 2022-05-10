@@ -7,17 +7,6 @@ import org.opencv.core.Rect;
  */
 public class Control
 {
-	protected Rect bounds;
-	protected String contentDescription;
-	protected Control parent;
-	protected String text;
-	protected Integer parentId;
-	protected Integer id;
-	protected String type;
-	protected boolean visible;
-	protected State state;
-	protected String signature;
-
 	public Control(State state, String text, String contentDescription, Rect bounds, Integer parentId, Integer id, String type, boolean visible, String signature)
 	{
 		this.state = state;
@@ -97,4 +86,15 @@ public class Control
      
     return true;		
 	}
+
+	protected final Rect bounds;
+	protected final String contentDescription;
+	protected Control parent = null;
+	protected final String text;
+	protected final Integer parentId;
+	protected final Integer id;
+	protected final String type;
+	protected final boolean visible;
+	protected final State state;
+	protected final String signature;
 }

@@ -5,9 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import org.opencv.core.Rect;
@@ -18,25 +17,20 @@ public class SystemUtils
 	{
 		final Process process = Runtime.getRuntime().exec(command);
 
-		new Thread(new Runnable()
+		new Thread(() ->
 		{
-			@Override
-			public void run()
+			try
 			{
-				try
+				Thread.sleep(30000);
+
+				if (process.isAlive())
 				{
-					Thread.sleep(30000);
-					
-					if (process.isAlive())
-					{
-						process.destroyForcibly();
-					}
+					process.destroyForcibly();
 				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
 			}
 		}).start();
 		
@@ -85,9 +79,9 @@ public class SystemUtils
 		
 		try
 		{
-			Path logFile = Paths.get(fileName);
+			var logFile = Paths.get(fileName);
 			
-			Files.write(logFile, message.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+			Files.write(logFile, message.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 		}
 		catch (IOException ex)
 		{

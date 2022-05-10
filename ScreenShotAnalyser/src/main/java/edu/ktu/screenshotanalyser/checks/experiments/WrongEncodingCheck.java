@@ -1,38 +1,19 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.swing.text.html.HTMLDocument.HTMLReader.CharacterAction;
-import org.opencv.core.Rect;
 //import com.lowagie.text.pdf.PatternColor;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
-import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
-import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
-import edu.ktu.screenshotanalyser.tools.Settings;
-import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
 public class WrongEncodingCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
 	public WrongEncodingCheck()
 	{
 		super(27, "WrongEncodingCheck");
-	}
-	
-	
-	public static void main(String[] args)
-	{
-		System.out.println(ee("L\\'foo"));
 	}
 	
 	@Override

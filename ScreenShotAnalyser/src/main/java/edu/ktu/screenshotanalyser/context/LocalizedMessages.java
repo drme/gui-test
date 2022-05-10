@@ -6,10 +6,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -58,35 +56,33 @@ public class LocalizedMessages
 	
 	private void loadResources(File appFolder, AppContext appContext)
 	{
-		File[] valueFolders = new File(appFolder, "res").listFiles(pathName -> pathName.isDirectory() && pathName.getName().startsWith("values"));
-		
+		var valueFolders = new File(appFolder, "res").listFiles(pathName -> pathName.isDirectory() && pathName.getName().startsWith("values"));
+
 		if (null != valueFolders)
 		{
-			for (File valueFolder : valueFolders)
+			for (var valueFolder : valueFolders)
 			{
-				String languageCode = getLanguageCode(valueFolder);
+				var languageCode = getLanguageCode(valueFolder);
+				var resourceFiles = valueFolder.listFiles(pathName -> pathName.getName().equals("strings.xml"));
 
-				File[] resourceFiles = valueFolder.listFiles(pathName -> pathName.getName().equals("strings.xml"));
-
-				for (File resourceFile : resourceFiles)
+				for (var resourceFile : resourceFiles)
 				{
 					try
 					{
-						String resourceText = new String(Files.readAllBytes(resourceFile.toPath()), StandardCharsets.UTF_8);
-						
-						Resources resources = getResource(resourceText);
+						var resourceText = new String(Files.readAllBytes(resourceFile.toPath()), StandardCharsets.UTF_8);
+						var resources = getResource(resourceText);
 
 						if (languageCode.equals("default"))
 						{
-							String bigMessage = "";
-							
-							for (ResourceDao resource : resources.getString())
+							var bigMessage = new StringBuilder("");
+
+							for (var resource : resources.getString())
 							{
-								bigMessage += " " + resource.getValue();
+								bigMessage.append(resource.getValue());
 							}
 
-							String predictedLanguage = appContext.getSystemContext().predictLanguage(bigMessage);
-							
+							var predictedLanguage = appContext.getSystemContext().predictLanguage(bigMessage.toString());
+
 							if (null != predictedLanguage)
 							{
 								switch (predictedLanguage)
@@ -99,76 +95,48 @@ public class LocalizedMessages
 								}
 							}
 						}
-						
-						
+
 						this.languages.add(languageCode);
-						
-						
-						
-						for (ResourceDao resource : resources.getString())
+
+						for (var resource : resources.getString())
 						{
 							addMessage(languageCode, resource.getName(), resource.getValue());
 						}
-					
-			/*		List<ResourceText> textResources = Stream.of(resources.getString()).map(x -> {
 
-						return new ResourceText(x.getName(), x.getValue(), resourceFile.getAbsolutePath());
-					}).collect(Collectors.toList());
-
-					List<String> extractedKeys = Stream.of(resources.getString()).map(x -> {
-						return x.getName();
-					}).collect(Collectors.toList());
-					context.getResources().put(lang, textResources);
-
-					List<String> missingKeys = extractedKeys.stream().filter(i -> !context.getKeys().contains(i))
-							.collect(Collectors.toList());
-					context.getKeys().addAll(missingKeys); */
-				} catch (Throwable e) {
-					System.out.println("Can't read file: " + resourceFile.getAbsolutePath());
-					e.printStackTrace();
+						/*
+						 * List<ResourceText> textResources = Stream.of(resources.getString()).map(x -> { return new ResourceText(x.getName(), x.getValue(), resourceFile.getAbsolutePath()); }).collect(Collectors.toList()); List<String> extractedKeys = Stream.of(resources.getString()).map(x -> { return x.getName(); }).collect(Collectors.toList()); context.getResources().put(lang, textResources); List<String> missingKeys = extractedKeys.stream().filter(i -> !context.getKeys().contains(i)) .collect(Collectors.toList()); context.getKeys().addAll(missingKeys);
+						 */
+					}
+					catch (Throwable e)
+					{
+						System.out.println("Can't read file: " + resourceFile.getAbsolutePath());
+						e.printStackTrace();
+					}
 				}
 			}
-
 		}
-
-		}
-		
-		
-		
 	}
-
 	
 	private void addMessage(String languageCode, String key, String value)
 	{
-		Map<String, String> keyMessages = this.messages.get(key);
-		
-		if (null == keyMessages)
-		{
-			keyMessages = new HashMap<>();
-			
-			this.messages.put(key, keyMessages);
-		}
+		var keyMessages = this.messages.computeIfAbsent(key, p -> new HashMap<>());
 		
 		keyMessages.put(languageCode, value);
 	}
 	
 	private Resources getResource(String contents) throws Throwable
 	{
-		String a = "\\s+name=\"([^\"]*)\\\"";
-		
-		String pattern = "<string\\b" + a + "[^>]*>(.*?)<\\/string>";
-		
-		Resources resources = new Resources();
-		
-		Matcher matcher = Pattern.compile(pattern).matcher(contents);
+		var name = "\\s+name=\"([^\"]*)\\\"";
+		var pattern = "<string\\b" + name + "[^>]*>(.*?)<\\/string>";
+		var resources = new Resources();
+		var matcher = Pattern.compile(pattern).matcher(contents);
+		var resourcesList = new ArrayList<ResourceDao>();
 		
 		Pattern.compile(pattern, Pattern.MULTILINE);
 		
-		List<ResourceDao> resourcesList = new ArrayList<ResourceDao>();
-		
 		while (matcher.find())
 		{
-			ResourceDao dao = new ResourceDao();
+			var dao = new ResourceDao();
 			
 			dao.setName(matcher.group(1));
 			dao.setValue(matcher.group(2));
@@ -210,7 +178,6 @@ public class LocalizedMessages
 		private Object[] item = new Object[0];
 	}
 	
-	
 	@JacksonXmlRootElement(localName = "string")
 	public static class ResourceDao
 	{
@@ -247,6 +214,6 @@ public class LocalizedMessages
 		private String value;		
 	}
 	
-	private Map<String, Map<String, String>> messages = new HashMap<>();
-	private Set<String> languages = new HashSet<>();
+	private final Map<String, Map<String, String>> messages = new HashMap<>();
+	private final Set<String> languages = new HashSet<>();
 }

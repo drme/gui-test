@@ -24,14 +24,10 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 		super(16, "Obscured Control");
 	}
 
-
-	
-
 	@Override
 	public void analyze(State state, ResultsCollector failures)
 	{
 		var controls = state.getActualControls().stream().filter(p -> !shouldSkipControl(p, state)).collect(Collectors.toList());
-
 		var overlapped = new ArrayList<Control>();
 		
 		for (var control1 : controls)
@@ -78,28 +74,24 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 			}
 		}
 		
-		if (overlapped.size() > 0)
+		if (!overlapped.isEmpty())
 		{
 			var r1 = overlapped.get(0).getBounds();
 			var r2 = overlapped.get(0).getBounds();
-
 			
-			Rectangle rect1 = new Rectangle(r1.x, r1.y, r1.width, r1.height);
-			Rectangle rect2 = new Rectangle(r2.x, r2.y, r2.width, r2.height);
+			var rect1 = new Rectangle(r1.x, r1.y, r1.width, r1.height);
+			var rect2 = new Rectangle(r2.x, r2.y, r2.width, r2.height);
 			
-			Rectangle intersection = rect1.intersection(rect2);
-			
+			var intersection = rect1.intersection(rect2);
 			var image = state.getImage().getSubimage(intersection.x, intersection.y, intersection.width, intersection.height);
-			
 			var pixel = image.getRGB(0, 0);
-			
 			var uniform = true;
 			
-			for (int x = 0; x < image.getWidth(); x++)
+			for (var x = 0; x < image.getWidth(); x++)
 			{
-				for (int y = 0; y < image.getHeight(); y++)
+				for (var y = 0; y < image.getHeight(); y++)
 				{
-					int p = image.getRGB(x, y);
+					var p = image.getRGB(x, y);
 					
 					if (p != pixel)
 					{
@@ -108,46 +100,43 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 					}
 				}
 				
-				if (uniform == false)
+				if (!uniform)
 				{
 					break;
 				}
 			}
 			
-			
-			if (uniform == false)
+			if (!uniform)
 			{
-			
-			ResultImage resultImage = new ResultImage(state.getImageFile());						
-						
-			int i = 0;
-			
-			for (var control : overlapped)
-			{
-				if (i++ % 2 == 0)
-				{
-					resultImage.drawBounds(control.getBounds(), 255, 0, 0);
-				}
-				else
-				{
-					resultImage.drawBounds(control.getBounds(), 0, 255, 0);
-				}
-			}	
+				var resultImage = new ResultImage(state.getImageFile());
+				var i = 0;
 
-	//		System.out.println(state.getStateFile().toString());
-				
-			resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+				for (var control : overlapped)
+				{
+					if (i++ % 2 == 0)
+					{
+						resultImage.drawBounds(control.getBounds(), 255, 0, 0);
+					}
+					else
+					{
+						resultImage.drawBounds(control.getBounds(), 0, 255, 0);
+					}
+				}
 
-			failures.addFailure(new CheckResult(state, this, "1", overlapped.size()));
-			
+				// System.out.println(state.getStateFile().toString());
+
+				resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+
+				failures.addFailure(new CheckResult(state, this, "1", overlapped.size()));
+
 			}
 		}
 	}
-	
-  public boolean contains(Rect r, Point p) {
-    return r.x <= p.x && p.x <= r.x + r.width && r.y <= p.y && p.y <= r.y + r.height;
-}
 
+	public boolean contains(Rect r, Point p)
+	{
+		return r.x <= p.x && p.x <= r.x + r.width && r.y <= p.y && p.y <= r.y + r.height;
+	}
 	
 	private boolean isInside(Rect a, Rect b)
 	{
@@ -176,53 +165,48 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 	
 	private boolean shouldSkipControl(Control control, State state)
 	{
-		if (false == control.isVisible())
+		if (!control.isVisible())
 		{
 			return true;
 		}
-		
+
 		if (("Test Ad".equals(control.getText())) || (isAd(control)))
 		{
 			return true;
 		}
-		
-		
+
 		if (control.getSignature().contains("Layout"))
 		{
 			return true;
 		}
-		
+
 		var bounds = control.getBounds();
-		
+
 		if ((bounds.width <= 0) || (bounds.height <= 0))
 		{
 			return true;
 		}
-		
+
 		if ((bounds.width <= 3) || (bounds.height <= 5))
 		{
 			return true;
-		}		
+		}
 
-			if ((bounds.x >= state.getImageSize().width) || (bounds.y >= state.getImageSize().height))
-			{
-				return true;
-			}
-		
-		
-			if ((bounds.x  + bounds.width <= 0) || (bounds.y + bounds.height <= 0))
-			{
-				return true;
-			}
+		if ((bounds.x >= state.getImageSize().width) || (bounds.y >= state.getImageSize().height))
+		{
+			return true;
+		}
 
-			
-			
-		
-	//	if ((control.getBounds().x + control.getBounds().width >= state.getImageSize().width) || (control.getBounds().y + control.getBounds().height >= state.getImageSize().height))
-	//	{
-	//		return true;
-	//	}
-		
+		if ((bounds.x + bounds.width <= 0) || (bounds.y + bounds.height <= 0))
+		{
+			return true;
+		}
+
+		// if ((control.getBounds().x + control.getBounds().width >= state.getImageSize().width) || (control.getBounds().y + control.getBounds().height >= state.getImageSize().height))
+		// {
+		// return true;
+		// }
+
 		return false;
 	}
 	
@@ -403,17 +387,9 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 			{
 				return true;
 			}
-			
-		
 		}
 		
 		return false;		
-		
-		
-		
-		
-		
-		
 	}	
 	
 	

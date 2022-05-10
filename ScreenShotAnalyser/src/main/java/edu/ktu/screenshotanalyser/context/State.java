@@ -12,7 +12,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -34,19 +33,7 @@ import edu.ktu.screenshotanalyser.tools.TextExtractor;
  */
 public class State
 {
-	private final String name;
-	private final File imageFile;
-	private final File stateFile;
-	private final AppContext context;
-	private List<Control> actualControls = null;
-	private List<Control> imageControls = null;
-	private String imageTexts = null;
-	private TestDevice testDevice = null;
-	private Rect imageSize = null;
-	private BufferedImage image = null;
-	private boolean imageLoaded = false;
-	
-	public State(String name, AppContext context, File imageFile, File stateFile, TestDevice testDevice) throws IOException
+	public State(String name, AppContext context, File imageFile, File stateFile, TestDevice testDevice)
 	{
 		this.name = name;
 		this.context = context;
@@ -72,11 +59,11 @@ public class State
 	
 	public boolean isLauncherScreen()
 	{
-		try (Scanner scanner = new Scanner(this.stateFile))
+		try (var scanner = new Scanner(this.stateFile))
 		{
 			while (scanner.hasNextLine())
 			{
-				String line = scanner.nextLine();
+				var line = scanner.nextLine();
 					
 				if (line.contains("foreground_activity") && line.contains("com.google.android.apps.nexuslauncher/.NexusLauncherActivity"))
 				{
@@ -96,7 +83,7 @@ public class State
 	{
 		if (null == this.actualControls)
 		{
-			List<Control> result = new ArrayList<>();
+			var result = new ArrayList<Control>();
 			
 			try
 			{
@@ -124,9 +111,9 @@ public class State
 					}
 				});				
 				
-				DocumentContext document = JsonPath.parse(this.stateFile);
-				
-				HashMap<Long, Control> controls = getControls(document);
+				var document = JsonPath.parse(this.stateFile);
+				var controls = getControls(document);
+
 				assignParents(controls);
 				
 				controls.values().stream().forEach(p -> result.add(p));
@@ -146,7 +133,7 @@ public class State
 	
 	private void assignParents(HashMap<Long, Control> views)
 	{
-		for (Control view : views.values())
+		for (var view : views.values())
 		{
 			view.setParent(views.get(view.getParentId()));
 		}
@@ -154,16 +141,16 @@ public class State
 
 	private HashMap<Long, Control> getControls(DocumentContext document)
 	{
-		HashMap<Long, Control> views = new HashMap<>();
+		var views = new HashMap<Long, Control>();
 		
 		@SuppressWarnings("unchecked")
 		List<HashMap<String, Object>> viewObjects = document.read("$.views", List.class);
 		
-		for (HashMap<String, Object> viewObject : viewObjects)
+		for (var viewObject : viewObjects)
 		{
-			HashMap<String, Object> m = (HashMap<String, Object>)viewObject;
+			HashMap<String, Object> m = viewObject;
 			
-			Control view = new Control(this, getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"), getText(m, "signature"));
+			var view = new Control(this, getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"), getText(m, "signature"));
 			
 			views.put(view.getId(), view);
 		}
@@ -173,7 +160,7 @@ public class State
 	
 	private String getText(HashMap<String, Object> view, String key)
 	{
-		String text = (String)view.get(key);
+		var text = (String)view.get(key);
 
 		if (null != text)
 		{
@@ -196,9 +183,8 @@ public class State
 	private Rect getBounds(HashMap<String, Object> view)
 	{
 		@SuppressWarnings("unchecked")
-		List<List<Integer>> b = (List<List<Integer>>)view.get("bounds");
-
-		Rect r = new Rect();
+		var b = (List<List<Integer>>)view.get("bounds");
+		var r = new Rect();
 			
 		r.x = b.get(0).get(0); 
 		r.y = b.get(0).get(1); 
@@ -213,13 +199,12 @@ public class State
 	{
 		if (null == this.imageControls)
 		{
-			List<Control> result = new ArrayList<>();
-			
-			TextExtractor textsExtractor = new TextExtractor(0.65f, predictLanguage());
+			var result = new ArrayList<Control>();
+			var textsExtractor = new TextExtractor(0.65f, predictLanguage());
 				
-			for (Rect area : new ImageContoursProvider().getContours(this.imageFile))
+			for (var area : new ImageContoursProvider().getContours(this.imageFile))
 			{
-				String text = textsExtractor.extract(this.imageFile, area);
+				var text = textsExtractor.extract(this.imageFile, area);
 					
 				if (text.length() > 0)
 				{
@@ -237,14 +222,14 @@ public class State
 	{
 		if (null == this.imageTexts)
 		{
-			String language = predictLanguage();
+			var language = predictLanguage();
 				
 			if (!language.equals("deu") && !language.equals("eng"))
 			{
 				return null;
 			}
 				
-			TextExtractor textsExtractor = new TextExtractor(0.65f, language);
+			var textsExtractor = new TextExtractor(0.65f, language);
 				
 			this.imageTexts = textsExtractor.extract(this.imageFile);
 		}
@@ -254,18 +239,18 @@ public class State
 	
 	public String predictLanguage()
 	{
-		String message = getActualControls().stream().filter(x -> x.getText() != null).map(p-> p.getText()).collect(Collectors.joining(". "));
+		var message = getActualControls().stream().filter(x -> x.getText() != null).map(Control::getText).collect(Collectors.joining(". "));
 		
 		return this.context.getSystemContext().predictLanguage(message);		
 	}
 	
 	public void dumpRecognitionDebug()
 	{
-		Mat original = Imgcodecs.imread(this.imageFile.getAbsolutePath());
+		var original = Imgcodecs.imread(this.imageFile.getAbsolutePath());
 
-		for (Control text : getImageControls())
+		for (var text : getImageControls())
 		{
-			Rect rectangle = text.getBounds();
+			var rectangle = text.getBounds();
 			
 			Imgproc.rectangle(original, new Point(rectangle.x, rectangle.y), new Point(rectangle.x + rectangle.width, rectangle.y + rectangle.height), new Scalar(0, 0, 255), 2);
 			
@@ -289,9 +274,9 @@ public class State
 		{
 			try
 			{
-				BufferedImage image = ImageIO.read(this.imageFile);
+				var imageData = ImageIO.read(this.imageFile);
 				
-				this.imageSize = new Rect(0, 0, image.getWidth(), image.getHeight());
+				this.imageSize = new Rect(0, 0, imageData.getWidth(), imageData.getHeight());
 			}
 			catch (IOException ex)
 			{
@@ -329,4 +314,16 @@ public class State
 	{
 		return this.name;
 	}
+
+	private final String name;
+	private final File imageFile;
+	private final File stateFile;
+	private final AppContext context;
+	private List<Control> actualControls = null;
+	private List<Control> imageControls = null;
+	private String imageTexts = null;
+	private TestDevice testDevice = null;
+	private Rect imageSize = null;
+	private BufferedImage image = null;
+	private boolean imageLoaded = false;
 }

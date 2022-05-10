@@ -24,7 +24,7 @@ public class RulesSetChecker
 		}
 		
 		var checksFinished = new ArrayList<IStateRuleChecker>();
-		var checksAvailable = this.rulesCheckers.stream().filter(p -> p instanceof IStateRuleChecker).map(p -> (IStateRuleChecker)p).collect(Collectors.toList());
+		var checksAvailable = this.rulesCheckers.stream().filter(IStateRuleChecker.class::isInstance).map(IStateRuleChecker.class::cast).collect(Collectors.toList());
 		
 		exec.submit(() ->
 		{
@@ -51,7 +51,7 @@ public class RulesSetChecker
 			{ 
 				try
 				{
-					if (false == failures.wasChecked(state))
+					if (!failures.wasChecked(state))
 					{
 						check.analyze(state, failures);
 					}
@@ -73,11 +73,11 @@ public class RulesSetChecker
 
 	public void runAppChecks(AppContext context, ExecutorService exec, ResultsCollector failures)
 	{
-		for (BaseRuleCheck ruleCheck : this.rulesCheckers)
+		for (var ruleCheck : this.rulesCheckers)
 		{
 			if (ruleCheck instanceof IAppRuleChecker)
 			{
-				IAppRuleChecker check = (IAppRuleChecker)ruleCheck;
+				var check = (IAppRuleChecker)ruleCheck;
 
 				exec.submit(() -> check.analyze(context, failures));
 			}

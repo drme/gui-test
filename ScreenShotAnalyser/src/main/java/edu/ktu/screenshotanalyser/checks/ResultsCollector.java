@@ -20,7 +20,6 @@ public abstract class ResultsCollector
 		}
 	}
 	
-	
 	public abstract void addFailureImage(ResultImage image);
 
 	public abstract boolean wasChecked(State state);

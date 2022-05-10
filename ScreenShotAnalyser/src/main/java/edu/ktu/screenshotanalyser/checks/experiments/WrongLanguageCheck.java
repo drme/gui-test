@@ -1,25 +1,18 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import com.aliasi.util.Pair;
 import com.github.pemistahl.lingua.api.Language;
-import com.github.pemistahl.lingua.api.LanguageDetector;
-import com.github.pemistahl.lingua.api.LanguageDetectorBuilder;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
 import edu.ktu.screenshotanalyser.checks.CheckResult;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
-import opennlp.tools.util.featuregen.WordClusterFeatureGenerator;
 
 public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
@@ -191,15 +184,13 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 		*/
 	}
 	
-	
-	
 	private boolean isAppLanguage(Set<Locale> appLanguages, Language language)
 	{
 		if ("eng".equalsIgnoreCase(language.getIsoCode639_3().name()))
 		{
 			return true;
 		}
-		
+
 		for (var appLanguage : appLanguages)
 		{
 			try
@@ -213,69 +204,65 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 			{
 			}
 		}
-		
+
 		return false;
 	}
-	
-	
-	
-	
 	
 	@Override
 	protected String getText(Control control)
 	{
 		var message = super.getText(control);
-		
+
 		message = message.trim();
-		
+
 		if (message.endsWith("."))
 		{
-			message = message.substring(0, message.length() - 1); 
-		}		
-		
+			message = message.substring(0, message.length() - 1);
+		}
+
 		if (message.length() == 0)
 		{
 			return null;
-		}		
-		
+		}
+
 		String[] words = message.split("[ \t]");
-		
+
 		for (String word : words)
 		{
 			if (word.length() == 0)
 			{
 				continue;
 			}
-			
+
 			int letters = 0;
 			int caps = 0;
-			
+
 			for (int i = 0; i < word.length(); i++)
 			{
 				char c = word.charAt(i);
-				
+
 				if (Character.isAlphabetic(c))
 				{
 					letters++;
 				}
-				
+
 				if (Character.isUpperCase(c))
 				{
 					caps++;
 				}
 			}
-			
+
 			if (letters == 0)
 			{
 				message = message.replace(word, " ");
 			}
-			
+
 			if (caps == word.length())
 			{
 				message = message.replace(word, " ");
 			}
 		}
-		
+
 		return message.trim();
 	}
 	

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.languagetool.Language;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
@@ -13,8 +12,6 @@ import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
-import edu.ktu.screenshotanalyser.context.Control;
-import edu.ktu.screenshotanalyser.context.LocalizedMessages;
 import edu.ktu.screenshotanalyser.context.State;
 
 public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRuleChecker, IStateRuleChecker 
@@ -48,7 +45,7 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 					continue;
 				}
 				
-				if (false == isTranslateable(sourceMessage, appContext))
+				if (!isTranslateable(sourceMessage, appContext))
 				{
 					continue;
 				}				
@@ -106,14 +103,10 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 	public void analyze(State state, ResultsCollector failures)
 	{
 		var placeholders = new ArrayList<String>();
-		
-		
-		String allTexts = state.getActualControls().stream().map(this::getText).filter(x -> x != null && x.length() > 0).collect(Collectors.joining(". "));
-		
-		List<Language> languages = getLanguage(allTexts);
-			
-		
-		for (Control control : state.getActualControls())
+		var allTexts = state.getActualControls().stream().map(this::getText).filter(x -> x != null && x.length() > 0).collect(Collectors.joining(". "));
+		var languages = getLanguage(allTexts);
+
+		for (var control : state.getActualControls())
 		{
 			if ((isTranslateable(control.getText(), state.getAppContext())) && (isPlaceholder(control.getText(), state, languages)))
 			{
@@ -121,9 +114,9 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 			}
 		}
 
-		if (placeholders.size() > 0)
+		if (!placeholders.isEmpty())
 		{
-			failures.addFailure(new CheckResult(state, this, "unstranslated: " + String.join(", ", placeholders.toArray(new String[0])) , placeholders.size()));
+			failures.addFailure(new CheckResult(state, this, "unstranslated: " + String.join(", ", placeholders.toArray(new String[0])), placeholders.size()));
 		}
 	}
 	
@@ -146,15 +139,15 @@ public class MissingTranslationCheck extends BaseTextRuleCheck implements IAppRu
 			return false;
 		}
 		
-		LocalizedMessages messages = state.getAppContext().getMessages();
+		var messages = state.getAppContext().getMessages();
 		
 		if (null != messages)
 		{
-			Set<String> keys = messages.getKeys();
+			var keys = messages.getKeys();
 			
 			if (keys.contains(message))
 			{
-				if (false == isSpellingCorrect(message, stateLanguages))
+				if (!isSpellingCorrect(message, stateLanguages))
 				{
 					return true;
 				}
