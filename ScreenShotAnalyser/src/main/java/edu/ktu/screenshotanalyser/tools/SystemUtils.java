@@ -5,14 +5,21 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import org.opencv.core.Rect;
 
 public class SystemUtils
 {
+	private SystemUtils()
+	{
+	}
+	
 	public static void executeCommand(String command) throws IOException
 	{
 		final Process process = Runtime.getRuntime().exec(command);
@@ -93,4 +100,24 @@ public class SystemUtils
 	{
 		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
+	
+	public static List<String> readAllLines(String fileName, String prefixFilter) throws IOException
+	{
+		var result = new ArrayList<String>();
+		
+		try (var file = new RandomAccessFile(fileName, "r"))
+		{
+			String str;
+		
+			while ((str = file.readLine()) != null)
+			{
+				if (null == prefixFilter || str.startsWith(prefixFilter))
+				{
+					result.add(str);
+				}
+			}
+		}
+
+		return result;
+	}	
 }

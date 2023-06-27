@@ -3,6 +3,7 @@ package edu.ktu.screenshotanalyser.tools;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -13,51 +14,270 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.features2d.MSER;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import marvin.MarvinDefinitions;
 import marvin.image.MarvinImage;
 import marvin.image.MarvinSegment;
 import marvin.io.MarvinImageIO;
-import static marvin.MarvinPluginCollection.*;
+
+import static marvinplugins.MarvinPluginCollection.findTextRegions;
+
+import org.opencv.core.MatOfRect;
+
+//import marvin.MarvinPluginCollection.;
+
+import org.opencv.core.MatOfPoint2f;
 
 public class ImageContoursProvider
 {
-	static
+	public static boolean isOnlyImage(File imageFile)
 	{
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		// strange...
-    MarvinDefinitions.setImagePluginPath("E:\\Projects\\eclipse\\prj346\\gui-test\\ScreenShotAnalyser\\lib\\marvin\\marvin\\plugins\\image\\");
-	}
+		var original = Imgcodecs.imread(imageFile.getAbsolutePath());
+    var gray = new Mat(original.rows(), original.cols(), original.type());
+    Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
+    var binary = new Mat(original.rows(), original.cols(), original.type(), new Scalar(0));
+    Imgproc.threshold(gray, binary, 0, 255, Imgproc.THRESH_BINARY_INV);
+    var contours = new ArrayList<MatOfPoint>();
+    var hierarchy = new Mat();
 
+    Imgproc.findContours(binary, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+    for (var contour : contours)
+		{
+			var bounds = Imgproc.boundingRect(contour);
+
+			if ((bounds.height) >= 30 && (bounds.width >= 30))
+			{
+				return false;
+			}
+		}
+		
+		
+		return true;
+	}
 	
 	public List<Rect> getContours(File imageFile)
 	{
-		List<Rect> result = new ArrayList<>();
+		var result = new ArrayList<Rect>();
 
 		
-		MarvinImage image = MarvinImageIO.loadImage(imageFile.getAbsolutePath());
-
-
-		List<MarvinSegment> segments = findText(image, 15, 8, 30, 150);
+		//
 		
-		for(MarvinSegment s:segments){
-			if(s.height >= 5){
-				
-				result.add(new Rect(s.x1, s.y1, s.width, s.height));
-				
-				s.y1-=5;
-				s.y2+=5;
-				image.drawRect(s.x1, s.y1, s.x2-s.x1, s.y2-s.y1, Color.red);
-				image.drawRect(s.x1+1, s.y1+1, (s.x2-s.x1)-2, (s.y2-s.y1)-2, Color.red);
+	 //	var src = MarvinImageIO.loadImage("E:\\gui\\_analyzer_\\unpacked_apps\\com.trendind_mobile_apps.birthday_songs_2018-2.apk\\res\\drawable\\" + "new_bd_images1.png");
+		
+		
+//		var image = MarvinImageIO.loadImage(imageFile.getAbsolutePath());
+	//	var segments = marvinplugins.MarvinPluginCollection.findAllSubimages(src, image, 0.5);
+		
+		
+//		return segments.stream().filter(p -> p.height >= 5).map(p -> new Rect(p.x1, p.y1, p.width, p.height)).toList();
+		
+		
+		
+		/*
+		 * 
+		 * 
+		var original = Imgcodecs.imread(imageFile.getAbsolutePath());
+		 * 
+    Mat gray = new Mat(original.rows(), original.cols(), original.type());
+    Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
+		
+		
+
+		int threshold = 50;
+
+		Mat edges = new Mat();
+		Imgproc.Canny(gray, edges , threshold, threshold*3);
+		
+		
+		List<MatOfPoint> contours = new ArrayList<>();
+		Mat hierarchy = new Mat();
+		Imgproc.findContours(edges, contours, hierarchy , Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+		
+		
+		
+		
+		MatOfPoint2f matOfPoint2f = new MatOfPoint2f();
+		MatOfPoint2f approxCurve = new MatOfPoint2f();
+
+		for (int idx = 0; idx >= 0; idx = (int) hierarchy.get(0, idx)[0]) {
+		    MatOfPoint contour = contours.get(idx);
+		    Rect rect = Imgproc.boundingRect(contour);
+		    double contourArea = Imgproc.contourArea(contour);
+		    matOfPoint2f.fromList(contour.toList());
+		    Imgproc.approxPolyDP(matOfPoint2f, approxCurve, Imgproc.arcLength(matOfPoint2f, true) * 0.02, true);
+		    long total = approxCurve.total();
+		    if (total == 3) { // is triangle
+		        // do things for triangle
+		    }
+		    if (total >= 4 && total <= 6) {
+		        List<Double> cos = new ArrayList<>();
+		        Point[] points = approxCurve.toArray();
+		        for (int j = 2; j < total + 1; j++) {
+		            cos.add(angle(points[(int) (j % total)], points[j - 2], points[j - 1]));
+		        }
+		        Collections.sort(cos);
+		        Double minCos = cos.get(0);
+		        Double maxCos = cos.get(cos.size() - 1);
+		        boolean isRect = total == 4 && minCos >= -0.1 && maxCos <= 0.3;
+		        boolean isPolygon = (total == 5 && minCos >= -0.34 && maxCos <= -0.27) || (total == 6 && minCos >= -0.55 && maxCos <= -0.45);
+		        if (isRect) {
+		            double ratio = Math.abs(1 - (double) rect.width / rect.height);
+		            drawText(rect.tl(), ratio <= 0.02 ? "SQU" : "RECT");
+		            
+		            result.add(rect);
+		            
+		        }
+		        if (isPolygon) {
+		            drawText(rect.tl(), "Polygon");
+		            
+		            result.add(rect);
+		            
+		        }
+		    }
+		}		
+		
+		return result.stream().filter(p -> p.width > 100 && p.height > 100).toList();
+		
+		
+		*/
+		
+		
+		var original = Imgcodecs.imread(imageFile.getAbsolutePath());
+		 
+		
+	  Mat src = original;
+    //Converting the source image to binary
+    Mat gray = new Mat(src.rows(), src.cols(), src.type());
+    Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
+    Mat binary = new Mat(src.rows(), src.cols(), src.type(), new Scalar(0));
+    Imgproc.threshold(gray, binary, 0, 255, Imgproc.THRESH_BINARY_INV);
+    //Finding Contours
+    List<MatOfPoint> contours = new ArrayList<>();
+    Mat hierarchey = new Mat();
+    Imgproc.findContours(binary, contours, hierarchey, Imgproc.RETR_TREE,
+    Imgproc.CHAIN_APPROX_SIMPLE);
+
+    for (var contour : contours)
+		{
+			var bounds = Imgproc.boundingRect(contour);
+
+			if ((bounds.height) >= 30 && (bounds.width >= 30))
+			{
+				result.add(bounds);
 			}
 		}
-	
 		
 		
-		MarvinImageIO.saveImage(image, "d:/debug/" + imageFile.getName() + "-9.png");
+		return result;
 		
 
+		
+		/*
+
+		Imgproc.cvtColor(original, original, Imgproc.COLOR_RGB2GRAY);
+		MSER mser = MSER.create();
+		List<MatOfPoint> msers = new ArrayList<>();
+		MatOfRect bboxes = new MatOfRect();
+		mser.detectRegions(original, msers, bboxes);		
+		
+		
+		
+		return bboxes.toList();
+		*/
+		
+	//	return getTextContours(imageFile);
+		
+		
+		
+		/*
+		
+		
+
+		var original = Imgcodecs.imread(imageFile.getAbsolutePath());
+		var gray = new Mat();
+		Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
+
+		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-1.png").getAbsolutePath(), gray);
+		
+		var gradient = new Mat();
+		var morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
+		Imgproc.morphologyEx(gray, gradient, Imgproc.MORPH_GRADIENT, morphStructure);
+
+		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-2.png").getAbsolutePath(), gradient);
+		
+		var binary = new Mat();
+		Imgproc.threshold(gradient, binary, 0.0, 255.0, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-3.png").getAbsolutePath(), binary);
+		
+		var closed = new Mat();
+		morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 1));
+		Imgproc.morphologyEx(binary, closed, Imgproc.MORPH_CLOSE, morphStructure);
+
+		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-4.png").getAbsolutePath(), closed);
+		
+		//Mat mask = Mat.zeros(binary.size(), CvType.CV_8UC1);
+		var contours = new ArrayList<MatOfPoint>();
+		var hierarchy = new Mat();
+		Imgproc.findContours(closed, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
+
+		for (var contour : contours)
+		{
+			var bounds = Imgproc.boundingRect(contour);
+
+			if ((bounds.height) >= 10 && (bounds.width >= 10))
+			{
+				result.add(bounds);
+			}
+		}
+		
+		return result.stream().filter(p -> p.width > 100 && p.height > 100).toList();
+		
+		
+		
+
+		
+		
+		*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -70,60 +290,6 @@ public class ImageContoursProvider
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		Mat original = Imgcodecs.imread(imageFile.getAbsolutePath());
-
-		Mat gray = new Mat();
-		Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
-
-		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-1.png").getAbsolutePath(), gray);
-		
-		
-		Mat gradient = new Mat();
-		Mat morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
-		Imgproc.morphologyEx(gray, gradient, Imgproc.MORPH_GRADIENT, morphStructure);
-
-	Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-2.png").getAbsolutePath(), gradient);
-		
-		Mat binary = new Mat();
-		Imgproc.threshold(gradient, binary, 0.0, 255.0, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
-
-		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-3.png").getAbsolutePath(), binary);
-		
-		Mat closed = new Mat();
-		morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 1));
-		Imgproc.morphologyEx(binary, closed, Imgproc.MORPH_CLOSE, morphStructure);
-
-		Imgcodecs.imwrite(new File("d:/debug/", imageFile.getName() + "-4.png").getAbsolutePath(), closed);
-		
-		//Mat mask = Mat.zeros(binary.size(), CvType.CV_8UC1);
-		List<MatOfPoint> contours = new ArrayList<>();
-		Mat hierarchy = new Mat();
-		Imgproc.findContours(closed, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
-
-		List<Rect> result = new ArrayList<>();
-		
-		for (MatOfPoint contour : contours)
-		{
-			Rect bounds = Imgproc.boundingRect(contour);
-
-			if ((bounds.height) >= 10 && (bounds.width >= 10))
-			{
-				result.add(bounds);
-			}
-		}
 		
 		
 		
@@ -173,116 +339,41 @@ public class ImageContoursProvider
 		
 		
 		
-		return result;		
-	}
-	
-	
-	
-	public List<MarvinSegment> findText(MarvinImage image, int maxWhiteSpace, int maxFontLineWidth, int minTextWidth, int grayScaleThreshold){
-		List<MarvinSegment> segments = findTextRegions(image, maxWhiteSpace, maxFontLineWidth, minTextWidth, grayScaleThreshold);
-		
-		return segments;
+	//	return result;		
 	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
+	private double angle(Point pt1, Point pt2, Point pt0) {
+    double dx1 = pt1.x - pt0.x;
+    double dy1 = pt1.y - pt0.y;
+    double dx2 = pt2.x - pt0.x;
+    double dy2 = pt2.y - pt0.y;
+    return (dx1*dx2 + dy1*dy2)/Math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
 }
 
+private void drawText(Point ofs, String text) {
+ //   Imgproc.putText(colorImage, text, ofs, Core.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255,255,25));
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public List<Rect> getTextContours(File imageFile)
+	{
+		var image = MarvinImageIO.loadImage(imageFile.getAbsolutePath());
+		var segments = findTextRegions(image, 15, 8, 30, 150);
 
-
-
-/*
-
-
-
-package edu.ktu.screenshotanalyser;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
-public class ImageContoursProvider implements IImageContoursProvider {
-	private static final Logger logger = Logger.getGlobal();
-
-	public ImageContoursResponse getContours(ImageContoursProviderRequest request) {
-
-		File file = request.getFile();
-		Mat original = Imgcodecs.imread(file.getAbsolutePath());
-		Mat gray = new Mat();
-		Imgproc.cvtColor(original, gray, Imgproc.COLOR_BGR2GRAY);
-
-		Mat gradient = new Mat();
-		Mat morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
-		Imgproc.morphologyEx(gray, gradient, Imgproc.MORPH_GRADIENT, morphStructure);
-
-		Mat binary = new Mat();
-		Imgproc.threshold(gradient, binary, 0.0, 255.0, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
-
-		Mat closed = new Mat();
-		morphStructure = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 1));
-		Imgproc.morphologyEx(binary, closed, Imgproc.MORPH_CLOSE, morphStructure);
-
-		Mat mask = Mat.zeros(binary.size(), CvType.CV_8UC1);
-		List<MatOfPoint> contours = new ArrayList<>();
-		Mat hierarchy = new Mat();
-		Imgproc.findContours(closed, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE,
-				new Point(0, 0));
-		final ImageContoursResponse response = new ImageContoursResponse();
-		response.getContours().addAll(contours);
-		return response;
-	}
-
-	public static class ImageContoursResponse {
-		private final List<MatOfPoint> contours = new ArrayList<>();
-
-		public List<MatOfPoint> getContours() {
-			return contours;
-		}
-
-		public List<Rect> getBounds() {
-			final List<Rect> rects = new ArrayList<>();
-			for (final MatOfPoint contour : this.contours) {
-				Rect bounds = Imgproc.boundingRect(contour);
-
-				if ((bounds.height < 10 || bounds.width < 10)) {
-					continue;
-				}
-				rects.add(bounds);
-			}
-			return rects;
-		}
-	}
-
-	public static class ImageContoursProviderRequest {
-		private final File file;
-
-		public ImageContoursProviderRequest(final File file) {
-			this.file = file;
-		}
-
-		public File getFile() {
-			return file;
-		}
+		return segments.stream().filter(p -> p.height >= 5).map(p -> new Rect(p.x1, p.y1, p.width, p.height)).toList();
 	}
 }
-
-
-
-*/

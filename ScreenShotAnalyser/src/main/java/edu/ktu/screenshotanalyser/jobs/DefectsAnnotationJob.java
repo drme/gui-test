@@ -9,18 +9,14 @@ import java.sql.SQLException;
 import org.opencv.core.Core;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
-import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesStateCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.UnlocalizedIconsCheck;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
-import edu.ktu.screenshotanalyser.utils.Tuple;
 
 public class DefectsAnnotationJob implements Runnable
 {
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) throws IOException, SQLException
 	{
 		new DefectsAnnotationJob().run();
 	}
@@ -30,7 +26,7 @@ public class DefectsAnnotationJob implements Runnable
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);				
 	}	
 	
-	private DefectsAnnotationJob() throws IOException
+	private DefectsAnnotationJob() throws IOException, SQLException
 	{
 		 this.contextProvider = new DefaultContextProvider(Settings.appImagesFolder);		
 	}
@@ -45,7 +41,14 @@ public class DefectsAnnotationJob implements Runnable
 				
 				if (null != task)
 				{
-					task.first.analyze(task.second, new ImagesLogger(task.third));
+		/////			var collector = new ImagesLogger(task.testRunDefectImageId());
+					
+		/////////////			var result = task.checker().analyze(task.state());
+					
+	///////////////////////				if (null != result)
+					{
+			//////////////			collector.addFailure(result);
+					}
 				}
 				else
 				{
@@ -60,7 +63,11 @@ public class DefectsAnnotationJob implements Runnable
 		}
 	}
 	
-	private Tuple<IStateRuleChecker, State, Long> getAnnotationTask() throws IOException
+	private record AnnotationTask(IStateRuleChecker checker, State state, Long testRunDefectImageId)
+	{
+	}
+	
+	private AnnotationTask getAnnotationTask() throws IOException
 	{
     try (var connection = DriverManager.getConnection(this.connectionUrl)) 
     {
@@ -98,6 +105,8 @@ public class DefectsAnnotationJob implements Runnable
     					ff = new File(Settings.appsFolder + apkFile.substring(0, apkFile.length() - 3)); 
     				}
     				
+    				/*
+    				
    					var context = this.contextProvider.getContext(ff);		
    					var state = context.getStates().stream().filter(p -> p.getImageFile().getAbsolutePath().substring(Settings.appImagesFolder.getAbsolutePath().length() + 1).equals(imageFile)).findFirst().get();
    					
@@ -115,7 +124,9 @@ public class DefectsAnnotationJob implements Runnable
 								yield null;
 						};
 
-   					return new Tuple<>(check, state, resultSet.getLong("Id"));
+   					return new Tuple<>(check, state, resultSet.getLong("Id")); */
+    				
+    				return null;
     			}
     		}
     	}
@@ -128,7 +139,8 @@ public class DefectsAnnotationJob implements Runnable
     return null;
 	}
 
-	class ImagesLogger extends ResultsCollector
+	/*
+	class ImagesLogger extends IResultsCollector
 	{
 		public ImagesLogger(long testRunDefectImageId)
 		{
@@ -136,32 +148,17 @@ public class DefectsAnnotationJob implements Runnable
 			
 			this.testRunDefectImageId = testRunDefectImageId;
 		}
+*/
+		/*
+		
+ */
 
-		@Override
-		public void addFailureImage(ResultImage image)
-		{
-	    try (var connection = DriverManager.getConnection(connectionUrl)) 
-	    {		
-	    	try (PreparedStatement statement = connection.prepareStatement("UPDATE TestRunDefectImage SET ImageData = ? WHERE Id = ?"))
-	    	{
-					statement.setObject(1, image.encodeToPng());
-					statement.setObject(2, this.testRunDefectImageId);
-				
-					statement.executeUpdate();
-	    	}		
-	    }
-	    catch (Exception ex)
-	    {
-	    	ex.printStackTrace();
-	    }
-		}
-
-		@Override
-		public boolean wasChecked(State state)
-		{
-			return false;
-		}
-
+	//	@Override
+//		public boolean wasChecked(State state)
+//		{//
+//			return false;
+//		}
+/*
 		@Override
 		public void finishRun()
 		{
@@ -169,7 +166,7 @@ public class DefectsAnnotationJob implements Runnable
 		
 		private final long testRunDefectImageId;
 	}	
-	
+	*/
 	private final DefaultContextProvider contextProvider;
 	private boolean running = true;
 	protected String connectionUrl = "jdbc:sqlserver://localhost;database=defects-db;integratedSecurity=true;";

@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import com.aliasi.util.Pair;
 import com.github.pemistahl.lingua.api.Language;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -21,8 +21,10 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 		super(37, "WrongLanguageCheck");
 	}
 
-	@Override
-	public void analyze(State state, ResultsCollector failures)
+	
+	/*
+//	@Override
+	public StateCheckResults analyze(State state)
 	{
 //		HashMap<Language, List<String>> uniqueLanguages = new HashMap<>();
 		
@@ -63,15 +65,13 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 					m.add(message.a());
 					
 					uniqueLanguages.put(language, m);
-				}		*/		
+				}		*-/		
 				}
 			}
 			
 			if (false == languageFound)
 			{
-				failures.addFailure(new CheckResult(state, this, "missing language " + message.a() + " " + message.b().toString(), 1));
-				
-				return;
+		//		return new StateCheckResults(state, this, "missing language " + message.a() + " " + message.b().toString(), 1);
 			}
 		}
 
@@ -100,7 +100,7 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 			
 		}
 		
-		*/
+		*-/
 		
 		/*
 		
@@ -181,8 +181,12 @@ public class WrongLanguageCheck extends BaseTextRuleCheck implements IStateRuleC
 //		failures.addFailure(new CheckResult(state, this, error, 1));			
 		
 		
-		*/
+		*-/
+		
+		return null;
 	}
+	
+	*/
 	
 	private boolean isAppLanguage(Set<Locale> appLanguages, Language language)
 	{

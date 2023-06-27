@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
@@ -24,8 +24,8 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 		super(16, "Obscured Control");
 	}
 
-	@Override
-	public void analyze(State state, ResultsCollector failures)
+	//@Override
+	public StateCheckResults analyze(State state)
 	{
 		var controls = state.getActualControls().stream().filter(p -> !shouldSkipControl(p, state)).collect(Collectors.toList());
 		var overlapped = new ArrayList<Control>();
@@ -127,10 +127,12 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 
 				resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
 
-				failures.addFailure(new CheckResult(state, this, "1", overlapped.size()));
+				return null;//new StateCheckResults(state, this, "1", overlapped.size());
 
 			}
 		}
+		
+		return null;
 	}
 
 	public boolean contains(Rect r, Point p)
@@ -163,14 +165,14 @@ public class ObscuredControlCheck extends BaseTextRuleCheck implements IStateRul
 		return true;
 	}
 	
-	private boolean shouldSkipControl(Control control, State state)
+	protected boolean shouldSkipControl(Control control, State state)
 	{
 		if (!control.isVisible())
 		{
 			return true;
 		}
 
-		if (("Test Ad".equals(control.getText())) || (isAd(control)))
+		if (("Test Ad".equals(control.getText())) || (control.isAd()))
 		{
 			return true;
 		}

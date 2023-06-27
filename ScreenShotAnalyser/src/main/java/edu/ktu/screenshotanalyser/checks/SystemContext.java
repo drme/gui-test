@@ -1,25 +1,20 @@
 package edu.ktu.screenshotanalyser.checks;
 
-import java.io.IOException;
+import edu.ktu.screenshotanalyser.utils.LazyObject;
 import opennlp.tools.langdetect.LanguageDetector;
 import opennlp.tools.langdetect.LanguageDetectorME;
 import opennlp.tools.langdetect.LanguageDetectorModel;
 
 public class SystemContext
 {
-	public SystemContext() throws IOException
-	{
-		this.categorizer = new LanguageDetectorME(new LanguageDetectorModel(getClass().getResourceAsStream("/langdetect-183.bin")));
-	}
-
 	public String predictLanguage(String message)
 	{
-		var bestLanguage = this.categorizer.predictLanguage(message);
+		var bestLanguage = this.categorizer.instance().predictLanguage(message);
 		// System.out.println("Best language: " + bestLanguage.getLang());
 		// System.out.println("Best language confidence: " + bestLanguage.getConfidence());
 
 		// Get an array with the most probable languages
-		for (var language : categorizer.predictLanguages(message))
+		for (var language : this.categorizer.instance().predictLanguages(message))
 		{
 			// System.out.println("language: " + language.getLang());
 			// System.out.println("language confidence: " + language.getConfidence());
@@ -28,5 +23,5 @@ public class SystemContext
 		return bestLanguage.getLang();
 	}
 
-	private final LanguageDetector categorizer;
+	private LazyObject<LanguageDetector> categorizer = new LazyObject<LanguageDetector>(() -> new LanguageDetectorME(new LanguageDetectorModel(getClass().getResourceAsStream("/langdetect-183.bin"))));
 }

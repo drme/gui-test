@@ -1,3 +1,4 @@
+/*
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
@@ -6,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
@@ -23,7 +24,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	}
 	
 	@Override
-	public void analyze(State state, ResultsCollector failures)
+	public StateCheckResults analyze(State state)
 	{
 		var language = state.predictLanguage();
 
@@ -38,7 +39,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 
 		textControls.forEach(control ->
 		{
-			if ((isAd(control)) || ("Test Ad".equals(control.getText())))
+			if ((control.isAd()) || ("Test Ad".equals(control.getText())))
 			{
 				// defects.add(new DefectResult(control.getParent().getBounds(), "", ""));
 			}
@@ -51,7 +52,14 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			}
 		});
 
-		logDefects(state, failures, defects);
+		//logDefects(state, failures, defects);
+		
+		if (defects.size() > 0)
+		{
+			return new StateCheckResults(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
+		}
+		
+		return null;
 	}
 	
 	private boolean findText(String actualText, Rect bounds, String expectedText, Control control, List<DefectResult> defects)
@@ -143,7 +151,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	{
 	}
 	
-	private boolean shouldSkipControl(Control control, State state)
+	protected boolean shouldSkipControl(Control control, State state)
 	{
 		if (!control.isVisible())
 		{
@@ -222,23 +230,23 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			return;
 		}
 		
-		var result = new CheckResult(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
+		var result = new StateCheckResults(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
 
 		failures.addFailure(result);
 		
 		if (failures.acceptsResultImages)
 		{
-			var debugImage = result.getResultImage();
+//			var debugImage = result.getResultImage();
 				
 			defects.forEach(defect -> 
 			{
-				debugImage.drawBounds(defect.bounds);
-				debugImage.drawText(defect.toString(), defect.bounds);
+//				debugImage.drawBounds(defect.bounds);
+//				debugImage.drawText(defect.toString(), defect.bounds);
 			});
 		
 //			debugImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
 			
-			failures.addFailureImage(debugImage);
+//			failures.addFailureImage(debugImage);
 		}
 	}
 	
@@ -277,3 +285,4 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		public final String actualMessage;
 	}	
 }
+*/

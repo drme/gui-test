@@ -1,9 +1,12 @@
-package edu.ktu.screenshotanalyser.checks.experiments;
+/*
+ * 
+ * package edu.ktu.screenshotanalyser.checks.experiments;
+ *
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
@@ -18,7 +21,7 @@ public class OffensiveMessagesCheck extends BaseTextRuleCheck implements IStateR
 	}
 
 	@Override
-	public void analyze(State state, ResultsCollector failures)
+	public StateCheckResults analyze(State state)
 	{
 		var messages = state.getActualControls().stream().map(this::getText).filter(p -> isTranslateable(p, state.getAppContext())).collect(Collectors.toList());
 		var offensiveMessages = messages.stream().filter(p -> isOffensive(p)).map(p -> p.replace("\r", " ").replace("\n", " ")).collect(Collectors.toList());
@@ -27,7 +30,7 @@ public class OffensiveMessagesCheck extends BaseTextRuleCheck implements IStateR
 		{
 			var error = ">> " + String.join(" | ", offensiveMessages.toArray(new String[0]));
 
-			failures.addFailure(new CheckResult(state, this, error, offensiveMessages.size()));
+			return new StateCheckResults(state, this, error, offensiveMessages.size());
 		}
 
 		var longMessage = messages.stream().collect(Collectors.joining(". ")).replace("\r", " ").replace("\n", " ");
@@ -37,8 +40,10 @@ public class OffensiveMessagesCheck extends BaseTextRuleCheck implements IStateR
 		{
 			var error = ">> AI: " + badWords + " " + longMessage;
 
-			failures.addFailure(new CheckResult(state, this, error, 1));
+			return new StateCheckResults(state, this, error, 1);
 		}
+		
+		return null;
 	}
 	
 	private static boolean isOffensive(String message)
@@ -140,14 +145,14 @@ public class OffensiveMessagesCheck extends BaseTextRuleCheck implements IStateR
 					{
 						var error = ">> AI: " + badWords + " " + message;
 
-						failures.addFailure(new CheckResult(appContext, this, error));
+						failures.addFailure(new StateCheckResults(appContext, this, error));
 					}
 
 					if (isOffensive(message))
 					{
 						var error = ">> " + message;
 
-						failures.addFailure(new CheckResult(appContext, this, error));
+						failures.addFailure(new StateCheckResults(appContext, this, error));
 					}
 
 				}
@@ -167,5 +172,7 @@ public class OffensiveMessagesCheck extends BaseTextRuleCheck implements IStateR
 					}
 	 * 
 	 * 
-	 */
+	 *=/
 }
+
+*/

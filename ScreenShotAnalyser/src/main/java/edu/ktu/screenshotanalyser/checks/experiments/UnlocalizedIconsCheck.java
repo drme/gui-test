@@ -17,11 +17,11 @@ import javax.imageio.ImageIO;
 import org.languagetool.Language;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
@@ -34,9 +34,9 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 		super(33, "UnlocalizedIconsCheck");
 	}
 
-	@Override
-	public void analyze(State state, ResultsCollector failures)
-	{
+//	@Override
+	public StateCheckResults analyze(State state)
+	{/*
 		try
 		{
 			
@@ -100,20 +100,20 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 						ImageIO.write(icon, "png", outputfile);
 
 						
+						/*
+						var result = new StateCheckResults(state, this, msg + " != " + lang, 1);
+				//		failures.addFailure(result);									
 						
-						var result = new CheckResult(state, this, msg + " != " + lang, 1);
-						failures.addFailure(result);									
-						
-						if (failures.acceptsResultImages)
-						{
-							var debugImage = result.getResultImage();
+					//	if (failures.acceptsResultImages)
+				//		{
+					//		var debugImage = result.getResultImage();
 							
-							debugImage.drawBounds(bounds);
+						//	debugImage.drawBounds(bounds);
 
-							failures.addFailureImage(debugImage);									
-						}
+					//		failures.addFailureImage(debugImage);									
+					//	}
 						
-						return; 
+						return result;  *0/
 							} 
 						} 
 					}
@@ -210,8 +210,10 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 		{
 			ex.printStackTrace();
 		}
+		*/
+		return null;
 	}
-	
+	/*
 	private String getBestLanguage(File image, Rect bounds, AppContext context, String firstLanguage)
 	{
 		var languages = new String[] { 
@@ -238,11 +240,11 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"chr",
 				"cos",
 				"cym",
-				"dan",*/
+				"dan",*-/
 				"deu",
 /*				"div",
 				"dzo",
-				"ell", */
+				"ell", *-/
 				"eng",
 /*				"enm",
 				"epo",
@@ -251,7 +253,7 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"fao",
 				"fas",
 				"fil",
-				"fin", */
+				"fin", *-/
 				"fra",
 /*				"frk",
 				"frm",
@@ -261,7 +263,7 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"glg",
 				"grc",
 				"guj",
-				"hat", */
+				"hat", *-/
 				"heb",
 				"hin",
 /*				"hrv",
@@ -281,12 +283,12 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"kaz",
 				"khm",
 				"kir",
-				"kmr", */
+				"kmr", *-/
 				"kor",
 /*				"kor_vert",
 				"lao",
 				"lat",
-				"lav", */
+				"lav", *-/
 				"lit",
 /*				"ltz",
 				"mal",
@@ -308,13 +310,13 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"por",
 				"pus",
 				"que",
-				"ron", */
+				"ron", *-/
 				"rus",
 /*				"san",
 				"sin",
 				"slk",
 				"slv",
-				"snd", */
+				"snd", *-/
 				"spa"
 /*				"spa_old",
 				"sqi",
@@ -341,7 +343,7 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 				"yid",
 				"yor"
 				
-				 */
+				 *-/
 				 };
 
 		var ll = new ArrayList<String>();
@@ -397,6 +399,6 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 		
 		return null;
 	}
-	
+	*/
 	private static HashMap<String, TextExtractor> vv = new HashMap<>();
 }

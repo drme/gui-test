@@ -16,10 +16,10 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.Settings;
@@ -73,7 +73,7 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	}	
 	
 	
-	private boolean shouldSkipControl(Control control, State state)
+	protected boolean shouldSkipControl(Control control, State state)
 	{
 		if (false == control.isVisible())
 		{
@@ -169,21 +169,21 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	
 	private String normalize(String source)
 	{
-		source = source.replace('’', '\'');
+		source = source.replace('ï¿½', '\'');
 		source = source.replace('\u00a0', ' ');
 		
 		return source;
 	}	
 	
 	
-	private void logDefects(State state, ResultsCollector failures, ResultImage resultImage, long invalidControls, String errors)
+	private void logDefects(State state, IResultsCollector failures, ResultImage resultImage, long invalidControls, String errors)
 	{
 		if (invalidControls > 0)
 		{
 			//resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
 		}
 		
-		failures.addFailure(new CheckResult(state, this, errors, invalidControls));
+	//	failures.addFailure(new StateCheckResults(state, this, errors, invalidControls));
 		
 		
 			
@@ -257,13 +257,13 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	
 
 	@Override
-	public void analyze(State state, ResultsCollector failures)
+	public void analyze(State state, StateCheckResults re)
 	{
 		if (null != this.lastRun)
 		{
 			if (false == this.lastRun.contains(state.getImageFile().getAbsolutePath()))
 			{
-				return;
+				return ;
 			}
 		}
 		
@@ -382,7 +382,15 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		if (errors.length() > 0)
 		{
 		
-		logDefects(state, failures, null /*resultImage*/, invalidControls, errors);		
+	//	logDefects(state, failures, null /*resultImage*/, invalidControls, errors);
+			
+			
+			if (invalidControls > 0)
+			{
+				//resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
+			}
+			
+	//		return new StateCheckResults(state, this, errors, invalidControls);			
 		
 		}
 		
@@ -554,6 +562,8 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		{
 //			logSuccess(state.getImageFile().getAbsolutePath() + "ex: " + e.getMessage() + " " + failures);
 		} */
+		
+		return ;
 	}
 	
 	private boolean isTooSmallScreen(Rect screenSize)
@@ -664,7 +674,7 @@ public class MissingTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			return true;
 		}
 		
-		searchMessage = searchMessage.replace(' ', ' ').replace('\n', ' ').replace('\r', ' ');
+		searchMessage = searchMessage.replace('ï¿½', ' ').replace('\n', ' ').replace('\r', ' ');
 
 		String[] words = searchMessage.split("[ ]");
 		String[] targetWords = targetMessage.split("[ ]");

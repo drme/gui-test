@@ -1,9 +1,9 @@
+/*
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -11,7 +11,7 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 {
 	/**
 	 * Minimum readable text size in millimeters.
-	 */
+	 *-/
 	private final double minHeight = 2.0;
 
 	public UnreadableTextCheck()
@@ -20,7 +20,7 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 	}
 
 	@Override
-	public void analyze(State state, ResultsCollector failures)
+	public StateCheckResults analyze(State state)
 	{
 		var tooSmall = new StringBuilder("");
 
@@ -39,8 +39,10 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 		if (tooSmallText.length() > 0)
 		{
 			// ???
-			failures.addFailure(new CheckResult(state, this, tooSmallText.replace('\n', ' '), tooSmallText.length()));
+			return new StateCheckResults(state, this, tooSmallText.replace('\n', ' '), tooSmallText.length());
 		}
+		
+		return null;
 	}
 
 	private String isTextTooSmall(Control message, State state)
@@ -78,3 +80,4 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 		return null;
 	}
 }
+*/

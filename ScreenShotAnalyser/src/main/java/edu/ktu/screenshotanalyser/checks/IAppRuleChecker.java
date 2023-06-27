@@ -7,5 +7,5 @@ import edu.ktu.screenshotanalyser.context.AppContext;
  */
 public interface IAppRuleChecker
 {
-	void analyze(AppContext appContext, ResultsCollector failures);
+	void analyze(AppContext appContext, IResultsCollector failures);
 }

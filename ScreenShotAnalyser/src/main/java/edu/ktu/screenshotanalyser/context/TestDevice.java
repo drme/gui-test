@@ -10,8 +10,9 @@ import java.util.Properties;
  */
 public class TestDevice
 {
-	public TestDevice(File folder)
+	public TestDevice(File folder, edu.ktu.screenshotanalyser.database.DataBase.TestDevice device)
 	{
+		this.device = device;
 		this.folder = folder;
 
 		try (var input = new FileInputStream(folder.getAbsoluteFile() + "/dev.txt"))
@@ -42,6 +43,11 @@ public class TestDevice
 	{
 		return (double) pixels * 25.4 / (double) this.screenDpi;
 	}
+	
+	public edu.ktu.screenshotanalyser.database.DataBase.TestDevice device()
+	{
+		return this.device;
+	}
 
 	public final String name = "";
 	public int screenWidth = 0;
@@ -49,4 +55,5 @@ public class TestDevice
 	private int screenDpi = 0;
 	public final String locale = "";
 	public final File folder;
+	private final edu.ktu.screenshotanalyser.database.DataBase.TestDevice device;
 }

@@ -55,7 +55,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 
 		return languages;
 	}	
-	
+	/*
 	protected boolean isSpellingCorrect(String languageCode, String message, AppContext appContext)
 	{
 		var languages = getLanguageByCode(languageCode);
@@ -68,8 +68,8 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		var mistypes = isSpellingCorrect(appContext, null, languages, message, false);
 		
 		return mistypes.trim().length() == 0;
-	}
-
+	} */
+/*
 	protected String isSpellingCorrect(AppContext appContext, String mistypes, List<Language> languages, String message, boolean last)
 	{
 		var errors = new HashMap<Language, HashSet<String>>();
@@ -135,8 +135,8 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		}
 
 		return mistypes;
-	}
-	
+	}*/
+	/*
 	private boolean isSpellingCorrectAnyLanguage(AppContext appContext, String message)
 	{
 		var strange = new String[] { "ą", "č", "ę", "ė", "į", "š", "ų", "ū", "ž" };
@@ -192,7 +192,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 
 		return fail != languages.length;
 	}
-	
+	*/
 	protected String getText(Control control)
 	{
 		var result = new StringBuilder("");
@@ -328,7 +328,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		return result;
 	}
-
+/*
 	protected static boolean ignoreSpellingError(String badWord, AppContext appContext)
 	{
 		if (badWord == null || badWord.length() == 0)
@@ -364,7 +364,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 	{
 		badWord = badWord.toUpperCase();
 		
-		if (appContext.getName().toUpperCase().equals(badWord))
+		if (appContext.getApp.name().toUpperCase().equals(badWord))
 		{
 			return true;
 		}
@@ -379,7 +379,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		return badWord.contains("@");
 	}
-	
+	*/
 	protected String getString(String string)
 	{
 		if (null == string)
@@ -450,7 +450,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 		
 		return true;
 	}
-	
+	/*
 	protected boolean isTranslateable(String message, AppContext appContext)
 	{
 		if (null == message)
@@ -500,7 +500,7 @@ public abstract class BaseTextRuleCheck extends BaseRuleCheck
 
 		return true;
 	}	
-	
+	*/
 	private static synchronized JLanguageTool getSpellChecker(Language language)
 	{
 		var checker = spellCheckers.get(language);

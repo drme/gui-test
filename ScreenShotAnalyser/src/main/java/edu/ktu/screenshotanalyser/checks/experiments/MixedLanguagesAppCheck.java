@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import com.aliasi.util.Pair;
 import com.github.pemistahl.lingua.api.Language;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -22,9 +22,9 @@ public class MixedLanguagesAppCheck extends  BaseTextRuleCheck implements IAppRu
 	}
 
 	@Override
-	public void analyze(AppContext appContext, ResultsCollector failures)
+	public void analyze(AppContext appContext, IResultsCollector failures)
 	{
-		var languages = new HashSet<Language>();
+		/* var languages = new HashSet<Language>();
 		var deviceStates = appContext.getStates().stream().collect(Collectors.groupingBy(State::getTestDevice));
 
 		for (var testDevice : deviceStates.keySet())
@@ -109,7 +109,7 @@ public class MixedLanguagesAppCheck extends  BaseTextRuleCheck implements IAppRu
 
 			/*
 			 * //forEach(message -> mergeLanguages(message, uniqueLanguages)); if (uniqueLanguages.keySet().size() > 1) { var message = "multiple langauges: "; for (var key : uniqueLanguages.keySet()) { message += key + uniqueLanguages.get(key) + "; "; } failures.addFailure(new CheckResult(state, this, message, 1)); }
-			 */
+			 *-/
 
 			var error = "";
 
@@ -132,20 +132,20 @@ public class MixedLanguagesAppCheck extends  BaseTextRuleCheck implements IAppRu
 				error += message.a().replace("\n", " ").replace("\r", " ") + "[" + language.getIsoCode639_1() + " " + maxScore + "] ";
 			}
 
-			failures.addFailure(new CheckResult(appContext, this, testDevice.name + ": " + error));
+//			failures.addFailure(new StateCheckResults(appContext, this, testDevice.name + ": " + error));
 
 		}
 
 		/*
 		 * var languages = new HashSet<Language>(); Map<TestDevice, List<State>> deviceStates = appContext.getStates().stream().collect(Collectors.groupingBy(State::getTestDevice)); for (var testDevice : deviceStates.keySet()) { for (var state : deviceStates.get(testDevice)) { var stateLanguage = determineStateLanguage(state); if (stateLanguage.size() > 0) { languages.add(stateLanguage.get(0)); } } if (languages.size() > 1) { failures.addFailure(new CheckResult(appContext, this, "multiple langs: " + testDevice.folder.getName() + ": " + languages.toString())); } }
-		 */
+		 *-/ */
 	}
-
+/*999999999
 	private String getMessage(State state)
 	{
 		return state.getActualControls().stream().map(this::getText).filter(p -> isTranslateable(p, state.getAppContext())).collect(Collectors.joining(". "));
 	}
-
+*/
 	/*
 	 * private List<Language> determineStateLanguage(State state) { var allTexts = state.getActualControls().stream().map(this::getText).filter(p -> isTranslateable(p, state.getAppContext())).collect(Collectors.joining(". ")); return getLanguage(allTexts); }
 	 */

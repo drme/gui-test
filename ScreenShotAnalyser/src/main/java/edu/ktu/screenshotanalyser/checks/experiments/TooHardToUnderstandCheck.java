@@ -5,10 +5,10 @@ import java.util.List;
 import com.ipeirotis.readability.engine.Readability;
 import com.ipeirotis.readability.enums.MetricType;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -35,9 +35,9 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 	
 	//TODO run on texts extracted from screenshots also, skip garbage from resource files like $1 place-holders
 	//@Override
-	public CheckResult[] analyze(Object request, AppContext context)
+	public StateCheckResults[] analyze(Object request, AppContext context)
 	{
-		List<CheckResult> results = new ArrayList<>();
+		List<StateCheckResults> results = new ArrayList<>();
 		/*
 		 * for (Entry<String, List<ResourceText>> languageDetails : context.getResources().entrySet()) { String resourceLanguage = languageDetails.getKey(); String readabilityAnalysisLanguage = resourceLanguage.equals("default") ? "en" : resourceLanguage; // no indexes for other languages.. if ("en".equals(readabilityAnalysisLanguage)) { //ReadabilityMeasures measures = new ReadabilityMeasures(readabilityAnalysisLanguage); for (ResourceText resourceText : languageDetails.getValue()) { String text = resourceText.getValue(); is REadable.TooHardToUnderstandCheck.class.9 System.out.println("[" + text + "] - FleschReadingEase: " + flecshReading + ", ari: " + ari); results.add(CheckResult.Nok(type, String.format("Fairly difficult to read text: %s", text), resourceText.getFile() + "@" + resourceText.getKey(), resourceLanguage)); } } }
 		 */
@@ -45,11 +45,11 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 		 * Document document = new Document(actualText); List<Sentence> sentences = document.sentences(); int sentencesCount = sentences.size(); List<String> words = new ArrayList<>(); sentences.forEach(x -> words.addAll(x.words())); if (words.size() < minWords) { continue; } final double fog = measures.fog(words, sentencesCount); if (fog > this.threshold) { results.add(CheckResult.Nok(type, String.format("Found text violating readalibity index: %s (max: %s) for text: %s", fog, threshold, actualText), resourceText.getFile() + "@" + resourceText.getKey(), resourceLanguage)); }
 		 */
 
-		return results.toArray(new CheckResult[0]);
+		return results.toArray(new StateCheckResults[0]);
 	}
 
-	@Override
-	public void analyze(State state, ResultsCollector failures)
+//	@Override
+	public StateCheckResults analyze(State state)
 	{
 		var messages = new ArrayList<String>();
 
@@ -71,12 +71,14 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 		if (errors.length() > 0)
 		{
 			// ???
-			failures.addFailure(new CheckResult(state, this, "hard 2 understand " + errors, errors.length()));
+			return null;//new StateCheckResults(state, this, "hard 2 understand " + errors, errors.length());
 		}
+		
+		return null;
 	}
 
 	@Override
-	public void analyze(AppContext appContext, ResultsCollector failures)
+	public void analyze(AppContext appContext, IResultsCollector failures)
 	{
 	}
 	

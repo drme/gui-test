@@ -2,8 +2,9 @@ package edu.ktu.screenshotanalyser.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -14,74 +15,67 @@ public class RulesSetChecker
 		this.rulesCheckers.add(rule);
 	}
 
-	public void runStateChecks(State state, ExecutorService exec, ResultsCollector failures)
+	public void runStateChecks(State state, ExecutorService exec, IResultsCollector failures)
 	{
-		if (failures.wasChecked(state))
+//		if (!state.getImageFile().getAbsolutePath().contains("10.1_WXGA_Tablet_API_28\\com.tickledmedia.ParentTown\\states\\screen_2019-01-07_182440.png")) return;
+		
+		var checkResults = new StateCheckResults(state);
+		var checksAvailable = this.rulesCheckers.stream().filter(IStateRuleChecker.class::isInstance).map(IStateRuleChecker.class::cast);
+		var checksFutures = checksAvailable.map(check -> CompletableFuture.runAsync(() -> runStateCheck(check, state, checkResults), exec)).toList(); 
+		var allChecksDoneFuture = CompletableFuture.allOf(checksFutures.toArray(new CompletableFuture[checksFutures.size()]));
+
+		allChecksDoneFuture.thenRun(() -> finishStateChecks(state, failures, checkResults));
+	}
+
+	private void runStateCheck(@Nonnull IStateRuleChecker check, State state, StateCheckResults results)
+	{
+		try
 		{
-			//System.out.println("Skip: " + state.getImageFile().getAbsolutePath());
-			
-			return;
+			check.analyze(state, results);
 		}
-		
-		var checksFinished = new ArrayList<IStateRuleChecker>();
-		var checksAvailable = this.rulesCheckers.stream().filter(IStateRuleChecker.class::isInstance).map(IStateRuleChecker.class::cast).collect(Collectors.toList());
-		
-		exec.submit(() ->
+		catch (Exception ex)
 		{
-			while (true)
+			ex.printStackTrace();
+		}		
+	}
+	
+	private void finishStateChecks(State state, IResultsCollector failures, StateCheckResults results)
+	{
+		annotateResultImage(state, results);
+		
+		failures.finishedState(state, results);
+		
+		state.unloadData();
+	}
+	
+	private void annotateResultImage(State state, StateCheckResults results)
+	{
+		var annotations = results.getAnnotations();
+
+		if (!annotations.isEmpty())
+		{
+			var debugImage = state.getResultImage();
+			
+			annotations.forEach(p ->
 			{
-				synchronized(checksFinished)
-				{
-					if (checksAvailable.size() == checksFinished.size())
-					{
-						break;
-					}
-				}
-				
-				var finsihedRule = new BaseRuleCheck(34, "Finished") {};
-				var result = new CheckResult(state, finsihedRule, "", 0);
-		
-				failures.addFailure(result);
-			}
-		});
-		
-		for (var check : checksAvailable)
-		{
-			exec.submit(() ->
-			{ 
-				try
-				{
-					if (!failures.wasChecked(state))
-					{
-						check.analyze(state, failures);
-					}
-				}
-				catch (Throwable ex)
-				{
-					ex.printStackTrace();
-				}
-				finally
-				{
-					synchronized (checksFinished)
-					{
-						checksFinished.add(check);
-					}
-				}
+				debugImage.drawBounds(p.bounds());
+				debugImage.drawText(p.message(), p.bounds());
 			});
 		}
 	}
 
-	public void runAppChecks(AppContext context, ExecutorService exec, ResultsCollector failures)
+	public void runAppChecks(AppContext context, ExecutorService exec, IResultsCollector failures)
 	{
-		for (var ruleCheck : this.rulesCheckers)
-		{
-			if (ruleCheck instanceof IAppRuleChecker)
-			{
-				var check = (IAppRuleChecker)ruleCheck;
-
-				exec.submit(() -> check.analyze(context, failures));
-			}
-		}
+		var checksAvailable = this.rulesCheckers.stream().filter(IAppRuleChecker.class::isInstance).map(IAppRuleChecker.class::cast).toList();
+		
+		checksAvailable.forEach(check -> exec.submit(() -> check.analyze(context, failures)));
+	}
+	
+	public String buildRunName()
+	{
+		var names = this.rulesCheckers.stream().map(p -> p.getRuleCode());
+		
+		return String.join("-", names.toArray(String[]::new));
 	}
 
 	private final List<BaseRuleCheck> rulesCheckers = new ArrayList<>();

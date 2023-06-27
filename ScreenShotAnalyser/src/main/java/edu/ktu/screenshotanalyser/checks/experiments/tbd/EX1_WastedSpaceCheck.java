@@ -3,7 +3,7 @@ package edu.ktu.screenshotanalyser.checks.experiments.tbd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.AppContext.ResourceText;
 
@@ -26,9 +26,9 @@ public class EX1_WastedSpaceCheck// implements IRuleChecker
 
 	
 //	@Override
-	public CheckResult[] analyze(Object request, AppContext context)
+	public StateCheckResults[] analyze(Object request, AppContext context)
 	{
-		List<CheckResult> results = new ArrayList<>();
+		List<StateCheckResults> results = new ArrayList<>();
 
 //		clasify each screenshot - has wasted spacem does not have wasted space...
 		
@@ -73,6 +73,6 @@ public class EX1_WastedSpaceCheck// implements IRuleChecker
 		}
 */
 
-		return results.toArray(new CheckResult[0]);
+		return results.toArray(new StateCheckResults[0]);
 	}
 }

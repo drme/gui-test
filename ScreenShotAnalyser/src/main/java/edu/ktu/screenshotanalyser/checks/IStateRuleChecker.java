@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.checks;
 
+import javax.annotation.Nonnull;
 import edu.ktu.screenshotanalyser.context.State;
 
 /**
@@ -7,5 +8,15 @@ import edu.ktu.screenshotanalyser.context.State;
  */
 public interface IStateRuleChecker
 {
-	void analyze(State state, ResultsCollector failures);
+	/**
+	 * Analyzes sate and adds defects to result.
+	 * 
+	 * @param state state to analyze.
+	 * @param result results collector
+	 */
+	void analyze(@Nonnull State state, @Nonnull StateCheckResults result);
+	/**
+	 * @return defects identifier.
+	 */
+	long getId();
 }

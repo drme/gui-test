@@ -1,7 +1,7 @@
 package edu.ktu.screenshotanalyser;
 
-import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -11,24 +11,13 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import edu.ktu.screenshotanalyser.checks.AppChecker;
 import edu.ktu.screenshotanalyser.checks.DataBaseResultsCollector;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.IResultsCollector;
 import edu.ktu.screenshotanalyser.checks.RulesSetChecker;
-import edu.ktu.screenshotanalyser.checks.experiments.ClippedControlCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.ClippedTextCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.GrammarCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MissingTextCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MissingTranslationCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesAppCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.MixedLanguagesStateCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.ObscuredControlCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.ObscuredTextCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.OffensiveMessagesCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.UnalignedControlsCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.UnlocalizedIconsCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.WrongEncodingCheck;
-import edu.ktu.screenshotanalyser.checks.experiments.WrongLanguageCheck;
+import edu.ktu.screenshotanalyser.checks.experiments.BlurredImagesCheck;
+import edu.ktu.screenshotanalyser.context.DefaultContextProvider;
+import edu.ktu.screenshotanalyser.database.DataBase;
+import edu.ktu.screenshotanalyser.database.DataBase.Application;
 import edu.ktu.screenshotanalyser.tools.Settings;
-import net.sourceforge.tess4j.TessAPI1;
 
 public class StartUp
 {
@@ -39,16 +28,17 @@ public class StartUp
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);				
 	}
 	
-	public static void main(String[] args) throws IOException, InterruptedException
+	public static void main(String[] args) throws IOException, InterruptedException, SQLException
 	{
 		enableLogs();
 		
 		runExperiments();
 	}
 	
-	private static void runExperiments() throws IOException, InterruptedException
+	private static void runExperiments() throws IOException, InterruptedException, SQLException
 	{
-		var failures = new DataBaseResultsCollector("sdssss", false);
+		defaultContextProvider = new DefaultContextProvider(Settings.appImagesFolder);
+		
 		var checker = new RulesSetChecker();
 
 		//checker.addRule(new UnalignedControlsCheck());    +
@@ -66,10 +56,18 @@ public class StartUp
 		//checker.addRule(new OffensiveMessagesCheck());    + 
 		//checker.addRule(new UnreadableTextCheck());       +
 		//checker.addRule(new TooHardToUnderstandCheck());  +
-		checker.addRule(new MissingTextCheck());          //+
+		//checker.addRule(new MissingTextCheck());          +
 		
-		var apps = new File(Settings.appsFolder).listFiles(p -> p.isDirectory());
+		
+//		checker.addRule(new BadScalingCheck());
+		checker.addRule(new BlurredImagesCheck());
+//		checker.addRule(new ClashingBackgroundCheck());
+		
+		var failures = new DataBaseResultsCollector(checker.buildRunName(), false);
+		var dataBase = new DataBase();
+		var apps = dataBase.getApplications();
 		var exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());		
+//		var exec = Executors.newFixedThreadPool(1);		
 
 		for (var app : apps)
 		{
@@ -96,18 +94,30 @@ public class StartUp
 		exec.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);		
 	}*/
 	
-	private static void runChecks(File appName, ExecutorService exec, RulesSetChecker rules, ResultsCollector failures) throws IOException, InterruptedException
+	private static void runChecks(Application app, ExecutorService exec, RulesSetChecker rules, IResultsCollector failures) throws IOException, InterruptedException
 	{
-		var appChecker = new AppChecker();
+		var appChecker = new AppChecker(defaultContextProvider);
 		
-		appChecker.runChecks(appName, rules, exec, failures);
+		appChecker.runChecks(app, rules, exec, failures);
 	}
 	
 	private static void enableLogs()
 	{
 		var logContext = (LoggerContext)LoggerFactory.getILoggerFactory();
-		var log = logContext.getLogger("com.jayway.jsonpath.internal.path.CompiledPath");
+		
+		setLogLevelToError(logContext, "com.jayway.jsonpath.internal.path.CompiledPath");
+		setLogLevelToError(logContext, "com.zaxxer.hikari.HikariConfig");
+		setLogLevelToError(logContext, "com.zaxxer.hikari.pool.HikariPool");
+		setLogLevelToError(logContext, "com.zaxxer.hikari.HikariDataSource");
+		setLogLevelToError(logContext, "com.zaxxer.hikari.util.DriverDataSource");
+	}
+	
+	private static void setLogLevelToError(LoggerContext logContext, String logger)
+	{
+		var log = logContext.getLogger(logger);
 
 		log.setLevel(Level.ERROR);
 	}
+	
+	private static DefaultContextProvider defaultContextProvider;
 }

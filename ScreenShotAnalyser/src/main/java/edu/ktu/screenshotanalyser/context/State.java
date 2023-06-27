@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.opencv.core.Point;
@@ -17,16 +15,13 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.json.JsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-import com.jayway.jsonpath.spi.mapper.MappingProvider;
+import edu.ktu.screenshotanalyser.checks.ResultImage;
 import edu.ktu.screenshotanalyser.tools.ImageContoursProvider;
 import edu.ktu.screenshotanalyser.tools.TextExtractor;
+import edu.ktu.screenshotanalyser.utils.ImageUtils;
+import edu.ktu.screenshotanalyser.utils.JsonParser;
+import edu.ktu.screenshotanalyser.utils.LazyObject;
 
 /**
  * Application's screenshot window state.
@@ -79,6 +74,42 @@ public class State
 		return false;
 	}
 	
+	public boolean isSplashScreen()
+	{
+		var stackLine = 0;
+		var splashLine = 0;
+		
+		try (var scanner = new Scanner(this.stateFile))
+		{
+			var lineNo = 0;
+			
+			while (scanner.hasNextLine())
+			{
+				var line = scanner.nextLine();
+					
+				lineNo++;
+				
+				if (line.contains("activity_stack"))
+				{
+					stackLine = lineNo;
+				}
+				
+				if (line.contains(".Splash"))
+				{
+					splashLine = lineNo;
+					
+					return splashLine > stackLine && splashLine - stackLine == 1;
+				}
+			}
+		}
+		catch (FileNotFoundException ex)
+		{
+			ex.printStackTrace(System.err);
+		}	  	
+	  	
+		return false;
+	}
+	
 	public synchronized List<Control> getActualControls()
 	{
 		if (null == this.actualControls)
@@ -87,37 +118,14 @@ public class State
 			
 			try
 			{
-				Configuration.setDefaults(new Configuration.Defaults()
-				{
-					private final JsonProvider jsonProvider = new JacksonJsonProvider();
-					private final MappingProvider mappingProvider = new JacksonMappingProvider();
-					private final Set<Option> options = EnumSet.noneOf(Option.class);
-
-					public JsonProvider jsonProvider()
-					{
-						return this.jsonProvider;
-					}
-
-					@Override
-					public MappingProvider mappingProvider()
-					{
-						return this.mappingProvider;
-					}
-
-					@Override
-					public Set<Option> options()
-					{
-						return this.options;
-					}
-				});				
-				
-				var document = JsonPath.parse(this.stateFile);
+				var document = JsonParser.parse(this.stateFile);
 				var controls = getControls(document);
 
 				assignParents(controls);
 				
-				controls.values().stream().forEach(p -> result.add(p));
+				controls.values().stream().forEach(result::add);
 				
+				this.rootControl = result.isEmpty() ? null : result.get(0);
 				this.actualControls = result;
 			}
 			catch (IOException ex)
@@ -135,7 +143,10 @@ public class State
 	{
 		for (var view : views.values())
 		{
-			view.setParent(views.get(view.getParentId()));
+			var parent = views.get(view.getParentId());
+			var children = views.values().stream().filter(p -> p.getParentId() == view.getId()).toList();
+			
+			view.setLinks(parent, children);
 		}
 	}
 
@@ -150,7 +161,17 @@ public class State
 		{
 			HashMap<String, Object> m = viewObject;
 			
-			var view = new Control(this, getText(m, "text"), getText(m, "content_description"), getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), (String)m.get("class"), (boolean)m.get("visible"), getText(m, "signature"));
+			var resourceId = (String)m.get("resource_id");
+			var signature = getText(m, "signature");
+			var packageName = getText(m, "package");
+			var text = getText(m, "text");
+			var contentDescription = getText(m, "content_description");
+			var className = (String)m.get("class");
+			var visible = (boolean)m.get("visible");
+			var clickable = (boolean)m.get("clickable");
+			var children = (List<Integer>)m.get("children");
+			
+			var view = new Control(this, text, contentDescription, getBounds(m), (Integer)m.get("parent"), (Integer)m.get("temp_id"), className, visible, signature, resourceId, packageName, clickable, children);
 			
 			views.put(view.getId(), view);
 		}
@@ -158,7 +179,7 @@ public class State
 		return views;
 	}
 	
-	private String getText(HashMap<String, Object> view, String key)
+	private static String getText(HashMap<String, Object> view, String key)
 	{
 		var text = (String)view.get(key);
 
@@ -200,16 +221,22 @@ public class State
 		if (null == this.imageControls)
 		{
 			var result = new ArrayList<Control>();
-			var textsExtractor = new TextExtractor(0.65f, predictLanguage());
+	//		var textsExtractor = new TextExtractor(0.65f, predictLanguage());
 				
-			for (var area : new ImageContoursProvider().getContours(this.imageFile))
+			for (var area : imageContoursProvider.instance().getContours(this.imageFile))
 			{
-				var text = textsExtractor.extract(this.imageFile, area);
+//				var text = textsExtractor.extract(this.imageFile, area);
 					
-				if (text.length() > 0)
-				{
-					result.add(new Control(this, text, null, area, null, null, null, true, null));
-				}
+	//			if (text.length() > 0)
+		//		{
+				var text = "";
+				
+				var control = new Control(this, text, null, area, null, null, null, true, null, null, null, false, null);
+				
+			//		result.add();
+//				}
+				
+				result.add(control);
 			}
 			
 			this.imageControls = result;
@@ -268,62 +295,141 @@ public class State
 		return this.testDevice;
 	}
 	
-	public synchronized Rect getImageSize()
+	public Rect getImageSize()
 	{
-		if (null == this.imageSize)
-		{
-			try
-			{
-				var imageData = ImageIO.read(this.imageFile);
-				
-				this.imageSize = new Rect(0, 0, imageData.getWidth(), imageData.getHeight());
-			}
-			catch (IOException ex)
-			{
-				ex.printStackTrace(System.err);
-				
-				this.imageSize = new Rect(0, 0, this.testDevice.screenWidth, this.testDevice.screenHeight);
-			}
-		}
-		
-		return this.imageSize;
+		return this.imageSize.instance();
 	}
 	
-	public synchronized BufferedImage getImage()
+	public BufferedImage getImage()
 	{
-		if (false == this.imageLoaded)
-		{
-			try
-			{
-				this.image = ImageIO.read(getImageFile());
-			}
-			catch (IOException ex)
-			{
-				ex.printStackTrace();
-				
-				this.image = null;
-			}
-			
-			this.imageLoaded = true;
-		}
-		
-		return this.image;
+		return this.image.instance();
 	}
 	
 	public String getName()
 	{
 		return this.name;
 	}
+	
+	public boolean isLandscape()
+	{
+		return this.isLandscape.instance();
+	}
 
+	public ResultImage getResultImage()
+	{
+		return this.resultImage.instance();
+	}
+	
+	public BufferedImage getControlImage(Control control)
+	{
+		var stateImage = getImage();
+		
+		if (stateImage == null || stateImage.getWidth() == 0 || stateImage.getHeight() == 0)
+		{
+			return null;
+		}
+		
+  	var x = control.getBounds().x;
+  	var y = control.getBounds().y;
+  	var w = control.getBounds().width;
+  	var h = control.getBounds().height;
+  	
+  	var stateImageWidth = stateImage.getWidth();
+  	var stateImageHeight = stateImage.getHeight();
+
+  	if (x < 0)
+  	{
+  		w += x;
+  		x = 0;
+  	}
+
+  	if (y < 0)
+  	{
+  		h += y;
+  		y = 0;
+  	}
+  	
+  	if (x + w > stateImageWidth)
+  	{
+  		w = stateImageWidth - x;
+  	}
+
+  	if (y + h > stateImageHeight)
+  	{
+  		h = stateImageHeight - y;
+  	}
+
+  	if (h <= 0 || w <= 0)
+  	{
+  		return null;
+  	}
+
+  	try
+  	{
+  		return stateImage.getSubimage(x, y, w, h);
+  	}
+  	catch (Throwable ex)
+  	{
+  		ex.printStackTrace();
+  		
+  		return null;
+  	}
+	}
+	
+	public Integer getNavigationBarY()
+	{
+		return this.navigationBarY.instance();
+	}
+
+	private Rect loadImageSize()
+	{
+		if (this.image.instance() == ImageUtils.NULL_IMAGE)
+		{
+			return new Rect(0, 0, this.testDevice.screenWidth, this.testDevice.screenHeight);
+		}
+		
+		return new Rect(0, 0, this.image.instance().getWidth(), this.image.instance().getHeight());
+	}
+
+	public Control getControl(String id)
+	{
+		for (var control : getActualControls())
+		{
+			if (id.equals(control.getResourceId()))
+			{
+				return control;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Control getRootControl()
+	{
+		return this.rootControl;
+	}
+	
+	public void unloadData()
+	{
+		this.actualControls = null;
+		this.imageControls = null;
+		this.image.unload();
+		this.resultImage.unload();
+	}
+	
 	private final String name;
 	private final File imageFile;
 	private final File stateFile;
 	private final AppContext context;
+	private final TestDevice testDevice;
 	private List<Control> actualControls = null;
 	private List<Control> imageControls = null;
 	private String imageTexts = null;
-	private TestDevice testDevice = null;
-	private Rect imageSize = null;
-	private BufferedImage image = null;
-	private boolean imageLoaded = false;
+	private Control rootControl = null;
+	private final LazyObject<Rect> imageSize = new LazyObject<>(() -> loadImageSize());
+	private final LazyObject<BufferedImage> image = new LazyObject<>(() -> ImageUtils.loadImage(getImageFile()));
+	private final LazyObject<Boolean> isLandscape = new LazyObject<>(() -> getImage().getWidth() > getImage().getHeight());
+	private final LazyObject<ResultImage> resultImage = new LazyObject<>(() -> new ResultImage(getImageFile()));
+	private final LazyObject<Integer>navigationBarY = new LazyObject<>(() -> getActualControls().stream().filter(p -> "android:id/navigationBarBackground".equals(p.getResourceId())).findFirst().map(p -> p.getBounds().y).orElse(null));
+	private static LazyObject<ImageContoursProvider> imageContoursProvider = new LazyObject<>(ImageContoursProvider::new);
 }

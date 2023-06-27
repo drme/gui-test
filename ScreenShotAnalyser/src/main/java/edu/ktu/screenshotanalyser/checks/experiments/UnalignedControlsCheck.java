@@ -1,3 +1,5 @@
+/*
+
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.awt.ComponentOrientation;
@@ -19,7 +21,8 @@ import org.opencv.core.Core;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.CheckResult;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
 import edu.ktu.screenshotanalyser.checks.ResultImage;
 import edu.ktu.screenshotanalyser.checks.ResultsCollector;
@@ -45,7 +48,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		
 		var db = new StatisticsManager();
 		var rule = new UnalignedControlsCheck();
-		var images = db.getList("select s.FileName from ScreenShot s LEFT join TestRunDefect d on d.ScreenShotId = s.Id WHERE d.TestRunId = 10316 and d.DefectTypeId <> 34");
+		var images = db.getList(rs -> rs.getString(1), "select s.FileName from ScreenShot s LEFT join TestRunDefect d on d.ScreenShotId = s.Id WHERE d.TestRunId = 10316 and d.DefectTypeId <> 34");
 		
 		for (var image : images)
 		{
@@ -54,23 +57,27 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 			
 			var state = new State("AA", null, new File(file), new File(stateFile), null);
 
-			rule.analyze(state, null);
+			rule.analyze(state);
 		}
 	}
 	
 	
 	@Override
-	public void analyze(State state, ResultsCollector failures)
+	public StateCheckResults analyze(State state)
 	{
-		if (true == checkVerticalAlingment(state, failures))
+		var result = new StateCheckResults(state, this);		
+		
+		if (checkVerticalAlingment(result, state))
 		{
-			return;
+			return result;
 		}
 
-		if (true == checkLabelAlignment(state, failures))
+		if (checkLabelAlignment(result, state))
 		{
-			return;
+			return result;
 		}
+
+		
 		
 		/*
 		
@@ -161,19 +168,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 					/*
 					 * 
 					 * 
-					 * 				System.out.println(state.getStateFile().toString());
-				
-
-				ResultImage resultImage = null;
-				 resultImage = new ResultImage(state.getImageFile());								
-				
-					resultImage.drawBounds(editfield.getBounds());
-					resultImage.drawBounds(labels.get(0).getBounds());
-								 
-					resultImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
-				 
-
-					return;
+					 * 				
 					
 
 					 *-/
@@ -226,7 +221,9 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 			failures.addFailure(result);
 		}
 		
-		*/
+		*-/
+		
+		return null;
 	}
 	
 	private boolean isUseable(Control control)
@@ -251,12 +248,11 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		return true;
 	}
 	
-	private boolean checkVerticalAlingment(State state, ResultsCollector failures)
+	private boolean checkVerticalAlingment(StateCheckResults result, State state)
 	{
-		float pixelScale = state.getImageSize().height / 1080.0f;
+		var pixelScale = state.getImageSize().height / 1080.0f;
 		var centerYdelta = 50.0f * pixelScale;
-		var controls = state.getActualControls().stream().filter(p -> isUseable(p)).collect(Collectors.toList());
-		var defectiveControls = new HashSet<Control>();
+		var controls = state.getActualControls().stream().filter(this::isUseable).toList();
 
 		for (var sourceControl : controls)
 		{
@@ -265,9 +261,8 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 				continue;
 			}
 
-			var nearbyControls = controls.stream().filter(p -> p.getParent() == sourceControl.getParent()).filter(p -> sourceControl != p && (isOnLeft(sourceControl, p, centerYdelta) || isOnRight(sourceControl, p, centerYdelta))).collect(Collectors.toList());
-
-			nearbyControls = nearbyControls.stream().filter(p -> Math.abs(p.getBounds().height - sourceControl.getBounds().height) < 10 * pixelScale).collect(Collectors.toList());
+			var nearbyControls = controls.stream().filter(p -> p.getParent() == sourceControl.getParent()).filter(p -> sourceControl != p && (isOnLeft(sourceControl, p, centerYdelta) || isOnRight(sourceControl, p, centerYdelta))).toList();
+			nearbyControls = nearbyControls.stream().filter(p -> Math.abs(p.getBounds().height - sourceControl.getBounds().height) < 10 * pixelScale).toList();
 
 			var sourceControlCenterY = getCenterY(sourceControl);
 
@@ -278,54 +273,43 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 			{
 				var deltaY = Math.abs(getCenterY(nc) - sourceControlCenterY);
 
-				if (deltaY < minDeltaY)
+				if (deltaY < minDeltaY && (!isEmpty(nc, state.getImage())))
 				{
-					if (false == isEmpty(nc, state.getImage()))
-					{
-						minDeltaY = deltaY;
-						nearest = nc;
-					}
+					minDeltaY = deltaY;
+					nearest = nc;
 				}
 			}
 
-			if (null != nearest)
+			if (null != nearest &&  (minDeltaY > 3 * pixelScale))
 			{
-				if (minDeltaY > 3 * pixelScale)
-				{
-					defectiveControls.add(sourceControl);
-					defectiveControls.add(nearest);
-
-					if (null != failures)
-					{
-						failures.addFailure(new CheckResult(state, this, "unaligned vertically", 1));
-					}
-
-					annotateDefectImage(state, defectiveControls.stream().collect(Collectors.toList()));
-
-					return true;
-				}
+				var message = "unaligned vertically";
+				
+				result.addAnnotation(new DefectAnnotation(sourceControl.getBounds(), message));
+				result.addAnnotation(new DefectAnnotation(nearest.getBounds(), message));
+				
+				return true;
 			}
 		}
 
 		return false;
 	}
 	
-	private boolean checkLabelAlignment(State state, ResultsCollector failures)
+	private boolean checkLabelAlignment(StateCheckResults result, State state)
 	{
 		var allTexts = state.getActualControls().stream().map(this::getText).collect(Collectors.joining(". "));
 		var languages = determineLanguageAll(allTexts, 0.8f);
 
-		if (0 == languages.size())
+		if (languages.isEmpty())
 		{
 			languages = determineLanguageShort(allTexts, 0.8f);
 		}
 
-		if (languages.size() == 0)
+		if (languages.isEmpty())
 		{
 			return false;
 		}
 
-		var distinctLanguages = languages.stream().map(this::isRtl).distinct().collect(Collectors.toList());
+		var distinctLanguages = languages.stream().map(this::isRtl).distinct().toList();
 
 		if (distinctLanguages.size() > 1)
 		{
@@ -333,9 +317,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		}
 
 		var isRtl = distinctLanguages.get(0);
-
-		var textFields = state.getActualControls().stream().filter(p -> p.getText() != null && p.getText().trim().length() > 0 && p.isVisible()).collect(Collectors.toList());
-
+		var textFields = state.getActualControls().stream().filter(p -> p.getText() != null && p.getText().trim().length() > 0 && p.isVisible()).toList();
 		var b1 = new ArrayList<Control>();
 
 		for (var t : textFields)
@@ -346,10 +328,9 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 			}
 
 			var txx = t.getText().trim();
+			var letters = 0;
 
-			int letters = 0;
-
-			for (int i = 0; i < txx.length(); i++)
+			for (var i = 0; i < txx.length(); i++)
 			{
 				if (Character.isAlphabetic(txx.charAt(i)))
 				{
@@ -377,23 +358,20 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 					int leftMargin = getLeftMargin(image);
 					int rightMargin = getRightMargin(image);
 
-					if (!isRtl)
+					if (!isRtl && (leftMargin > rightMargin))
 					{
-						if (leftMargin > rightMargin)
+						var lp = (float) leftMargin / (float) image.getWidth();
+						var rp = (float) rightMargin / (float) image.getWidth();
+
+						if ((lp > rp * 2) && (lp > 0.2))
 						{
-							float lp = (float) leftMargin / (float) image.getWidth();
-							float rp = (float) rightMargin / (float) image.getWidth();
+							b1.add(t);
 
-							if ((lp > rp * 2) && (lp > 0.2))
+							if (((float) b1.size() / (float) textFields.size()) > 0.7)
 							{
-								b1.add(t);
-
-								if (((float) b1.size() / (float) textFields.size()) > 0.7)
-								{
-									annotateDefectImage(state, b1);
-
-									return true;
-								}
+								b1.forEach(p -> result.addAnnotation(new DefectAnnotation(p.getBounds(), "unaligned horizontally")));
+									
+								return true;
 							}
 						}
 					}
@@ -406,11 +384,11 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 
 	private int getLeftMargin(BufferedImage image)
 	{
-		int c = image.getRGB(0, 0);
+		var c = image.getRGB(0, 0);
 		
-		for (int x = 0; x < image.getWidth(); x++)
+		for (var x = 0; x < image.getWidth(); x++)
 		{
-			for (int y = 0; y < image.getHeight(); y++)
+			for (var y = 0; y < image.getHeight(); y++)
 			{
 				if (c != image.getRGB(x, y))
 				{
@@ -424,11 +402,11 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 	
 	private int getRightMargin(BufferedImage image)
 	{
-		int c = image.getRGB(image.getWidth() - 1, 0);
+		var c = image.getRGB(image.getWidth() - 1, 0);
 		
-		for (int x = image.getWidth() - 1; x >= 0; x--)
+		for (var x = image.getWidth() - 1; x >= 0; x--)
 		{
-			for (int y = 0; y < image.getHeight(); y++)
+			for (var y = 0; y < image.getHeight(); y++)
 			{
 				if (c != image.getRGB(x, y))
 				{
@@ -451,11 +429,11 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		
 		image = image.getSubimage(r.x, r.y, r.width, r.height);
 		
-		int c = image.getRGB(0, 0);
+		var c = image.getRGB(0, 0);
 		
-		for (int x = 0; x < image.getWidth(); x++)
+		for (var x = 0; x < image.getWidth(); x++)
 		{
-			for (int y = 0; y < image.getHeight(); y++)
+			for (var y = 0; y < image.getHeight(); y++)
 			{
 				if (c != image.getRGB(x, y))
 				{
@@ -501,7 +479,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 			{
 				return false;
 			}
-			else*/
+			else*-/
 			{
 				return (onlyLeft && onLeft) || (onlyRight && onRight);
 			}
@@ -596,10 +574,7 @@ public class UnalignedControlsCheck extends BaseTextRuleCheck implements IStateR
 		return -1;
 	}
 	
-	static
-	{
-		rtlLanguages = Pattern.compile("^(ar|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)");
-	}
-	
-	private static final Pattern rtlLanguages;
+	private static final Pattern rtlLanguages = Pattern.compile("^(ar|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)");
 }
+
+*/
