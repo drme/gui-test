@@ -993,4 +993,11 @@ public class Tesseract implements ITesseract {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public List<Word> getWords(List<BufferedImage> biList, int pageIteratorLevel)
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
 }
