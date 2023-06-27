@@ -1,3 +1,5 @@
+/*
+
 package edu.ktu.screenshotanalyser.utils;
 
 import java.sql.SQLException;
@@ -78,3 +80,5 @@ public class Aaa extends StatisticsManager
 				
 	}
 }
+
+*/
