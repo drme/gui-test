@@ -1,14 +1,14 @@
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
-import java.util.List;
 import com.ipeirotis.readability.engine.Readability;
 import com.ipeirotis.readability.enums.MetricType;
+import edu.ktu.screenshotanalyser.checks.AppCheckResults;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.StateCheckResults;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.IResultsCollector;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.AppContext;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -34,54 +34,41 @@ public class TooHardToUnderstandCheck extends BaseTextRuleCheck implements IStat
 	}
 	
 	//TODO run on texts extracted from screenshots also, skip garbage from resource files like $1 place-holders
-	//@Override
-	public StateCheckResults[] analyze(Object request, AppContext context)
+	@Override
+	public void analyze(AppContext appContext, AppCheckResults results)
 	{
-		List<StateCheckResults> results = new ArrayList<>();
 		/*
 		 * for (Entry<String, List<ResourceText>> languageDetails : context.getResources().entrySet()) { String resourceLanguage = languageDetails.getKey(); String readabilityAnalysisLanguage = resourceLanguage.equals("default") ? "en" : resourceLanguage; // no indexes for other languages.. if ("en".equals(readabilityAnalysisLanguage)) { //ReadabilityMeasures measures = new ReadabilityMeasures(readabilityAnalysisLanguage); for (ResourceText resourceText : languageDetails.getValue()) { String text = resourceText.getValue(); is REadable.TooHardToUnderstandCheck.class.9 System.out.println("[" + text + "] - FleschReadingEase: " + flecshReading + ", ari: " + ari); results.add(CheckResult.Nok(type, String.format("Fairly difficult to read text: %s", text), resourceText.getFile() + "@" + resourceText.getKey(), resourceLanguage)); } } }
 		 */
 		/*
 		 * Document document = new Document(actualText); List<Sentence> sentences = document.sentences(); int sentencesCount = sentences.size(); List<String> words = new ArrayList<>(); sentences.forEach(x -> words.addAll(x.words())); if (words.size() < minWords) { continue; } final double fog = measures.fog(words, sentencesCount); if (fog > this.threshold) { results.add(CheckResult.Nok(type, String.format("Found text violating readalibity index: %s (max: %s) for text: %s", fog, threshold, actualText), resourceText.getFile() + "@" + resourceText.getKey(), resourceLanguage)); }
 		 */
-
-		return results.toArray(new StateCheckResults[0]);
 	}
 
-//	@Override
-	public StateCheckResults analyze(State state)
+	@Override
+	public void analyze(State state, StateCheckResults results)
 	{
 		var messages = new ArrayList<String>();
 
 		state.getActualControls().stream().filter(p -> null != p.getText()).forEach(p -> messages.add(p.getText()));
 		state.getActualControls().stream().filter(p -> null != p.getContentDescription()).forEach(p -> messages.add(p.getContentDescription()));
 
-		var errors = "";
+		var errors = new StringBuilder("");
 
 		for (var message : messages)
 		{
-			if (false == isUnderstandable(message))
+			if (!isUnderstandable(message))
 			{
-				errors += "[" + message.replace('\n', ' ').replace('\r', ' ') + "] ";
+				errors.append("[" + message.replace('\n', ' ').replace('\r', ' ') + "] ");
 			}
 		}
 
-		errors = errors.trim();
-
 		if (errors.length() > 0)
 		{
-			// ???
-			return null;//new StateCheckResults(state, this, "hard 2 understand " + errors, errors.length());
+			results.addAnnotation(new DefectAnnotation(this, state.getImageSize(), "hard 2 understand " + errors));
 		}
-		
-		return null;
 	}
 
-	@Override
-	public void analyze(AppContext appContext, IResultsCollector failures)
-	{
-	}
-	
 	protected boolean isUnderstandable(String text)
 	{
 		if (text == null)

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import org.languagetool.Language;
 import org.opencv.core.Rect;
@@ -34,8 +35,8 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 		super(33, "UnlocalizedIconsCheck");
 	}
 
-//	@Override
-	public StateCheckResults analyze(State state)
+	@Override
+	public void analyze(@Nonnull State state, @Nonnull StateCheckResults result)
 	{/*
 		try
 		{
@@ -211,7 +212,6 @@ public class UnlocalizedIconsCheck extends BaseTextRuleCheck implements IStateRu
 			ex.printStackTrace();
 		}
 		*/
-		return null;
 	}
 	/*
 	private String getBestLanguage(File image, Rect bounds, AppContext context, String firstLanguage)

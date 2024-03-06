@@ -1,22 +1,20 @@
-/*
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import org.opencv.core.Rect;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.StateCheckResults;
-import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
-import edu.ktu.screenshotanalyser.context.AppContext;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 import edu.ktu.screenshotanalyser.tools.TextExtractor;
 
-public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
+public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChecker
 {
 	public ClippedTextCheck()
 	{
@@ -24,7 +22,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 	}
 	
 	@Override
-	public StateCheckResults analyze(State state)
+	public void analyze(@Nonnull State state, @Nonnull StateCheckResults result)
 	{
 		var language = state.predictLanguage();
 
@@ -52,14 +50,7 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 			}
 		});
 
-		//logDefects(state, failures, defects);
-		
-		if (defects.size() > 0)
-		{
-			return new StateCheckResults(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
-		}
-		
-		return null;
+		defects.forEach(defect -> result.addAnnotation(new DefectAnnotation(this, defect.bounds, defect.toString())));
 	}
 	
 	private boolean findText(String actualText, Rect bounds, String expectedText, Control control, List<DefectResult> defects)
@@ -146,11 +137,6 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		return false;
 	}
 
-	@Override
-	public void analyze(AppContext appContext, ResultsCollector failures)
-	{
-	}
-	
 	protected boolean shouldSkipControl(Control control, State state)
 	{
 		if (!control.isVisible())
@@ -223,33 +209,6 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		return source.equals(imageText) || imageText.contains(source); //isSimillar(source.getText(), imageText) || (imageText.contains(source.getText()));
 	}
 	
-	private void logDefects(State state, ResultsCollector failures, List<DefectResult> defects)
-	{
-		if (defects.isEmpty())
-		{
-			return;
-		}
-		
-		var result = new StateCheckResults(state, this, defects.stream().map(p -> p.toString()).collect(Collectors.joining()), defects.size());
-
-		failures.addFailure(result);
-		
-		if (failures.acceptsResultImages)
-		{
-//			var debugImage = result.getResultImage();
-				
-			defects.forEach(defect -> 
-			{
-//				debugImage.drawBounds(defect.bounds);
-//				debugImage.drawText(defect.toString(), defect.bounds);
-			});
-		
-//			debugImage.save(Settings.debugFolder + "a_" + UUID.randomUUID().toString() + "1.png");
-			
-//			failures.addFailureImage(debugImage);
-		}
-	}
-	
 	private String fixWhiteSpaces(String string)
 	{
 		return Arrays.stream(string.split("[\n\r \u00a0]")).filter(p -> p.length() > 0).collect(Collectors.joining(" ")).trim();
@@ -265,24 +224,12 @@ public class ClippedTextCheck extends BaseTextRuleCheck implements IStateRuleChe
 		return source.replace('�', '\'').replace('\u00a0', ' ');
 	}
 	
-	private static class DefectResult
+	private record DefectResult(Rect bounds, String expectedMessage, String actualMessage)
 	{
-		public DefectResult(Rect bounds, String expectedMessage, String actualMessage)
-		{
-			this.bounds = bounds;
-			this.expectedMessage = expectedMessage;
-			this.actualMessage = actualMessage;
-		}
-		
 		@Override
 		public String toString()
 		{
 			return String.format("Expected: [%s], found: [%s]", this.expectedMessage, this.actualMessage); 
 		}
-		
-		public final String expectedMessage;
-		public final Rect bounds;
-		public final String actualMessage;
-	}	
+	}
 }
-*/

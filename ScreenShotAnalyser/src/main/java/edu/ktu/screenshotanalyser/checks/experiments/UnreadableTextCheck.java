@@ -1,9 +1,9 @@
-/*
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import edu.ktu.screenshotanalyser.checks.BaseRuleCheck;
-import edu.ktu.screenshotanalyser.checks.StateCheckResults;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -11,8 +11,8 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 {
 	/**
 	 * Minimum readable text size in millimeters.
-	 *-/
-	private final double minHeight = 2.0;
+	 */
+	private static final double MIN_HEIGHT = 2.0;
 
 	public UnreadableTextCheck()
 	{
@@ -20,59 +20,50 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 	}
 
 	@Override
-	public StateCheckResults analyze(State state)
+	public void analyze(State state, StateCheckResults results)
 	{
-		var tooSmall = new StringBuilder("");
-
-		for (var message : state.getActualControls())
+		for (var control : state.getActualControls())
 		{
-			String result = isTextTooSmall(message, state);
+			var result = isTextTooSmall(control, state);
 
 			if (null != result)
 			{
-				tooSmall.append(" " + result);
+				results.addAnnotation(new DefectAnnotation(this, control.getBounds(), result));	
+				
+				return;
 			}
 		}
-
-		var tooSmallText = tooSmall.toString().trim();
-
-		if (tooSmallText.length() > 0)
-		{
-			// ???
-			return new StateCheckResults(state, this, tooSmallText.replace('\n', ' '), tooSmallText.length());
-		}
-		
-		return null;
 	}
 
 	private String isTextTooSmall(Control message, State state)
 	{
-		if (message.getText() != null)
+		if ((message.getText() == null) || (message.getText().trim().isEmpty()))
 		{
-			if (message.getText().trim().length() > 0)
-			{
-				if ((message.getBounds().height > 3) && (message.getBounds().width > 3))
-				{
-					var actualHeight = state.getTestDevice().getPhysicalSize(message.getBounds().height);
+			return null;
+		}
+			
+		if ((message.getBounds().height <= 3) || (message.getBounds().width <= 3))
+		{
+			return null;
+		}
+				
+		var actualHeight = state.getTestDevice().getPhysicalSize(message.getBounds().height);
 
-					if (actualHeight < this.minHeight)
-					{
-						if (message.getBounds().y + message.getBounds().height >= state.getImageSize().height)
-						{
-							System.out.println("skipp - screen edge");
-						}
-						else
-						{
-							if ((null != message.getParent()) && (message.getBounds().y + message.getBounds().height >= message.getParent().getBounds().y + message.getParent().getBounds().height))
-							{
-								System.out.println("skipp - parent edge");
-							}
-							else
-							{
-								return "Text : [" + message.getText() + "] too small " + actualHeight + "mm " + message.getBounds().toString();
-							}
-						}
-					}
+		if (actualHeight < MIN_HEIGHT)
+		{
+			if (message.getBounds().y + message.getBounds().height >= state.getImageSize().height)
+			{
+				// skip screen edge
+			}
+			else
+			{
+				if ((null != message.getParent()) && (message.getBounds().y + message.getBounds().height >= message.getParent().getBounds().y + message.getParent().getBounds().height))
+				{
+					// skip parent edge
+				}
+				else
+				{
+					return "Text : [" + message.getText() + "] too small " + actualHeight + "mm " + message.getBounds().toString();
 				}
 			}
 		}
@@ -80,4 +71,3 @@ public class UnreadableTextCheck extends BaseRuleCheck implements IStateRuleChec
 		return null;
 	}
 }
-*/

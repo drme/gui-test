@@ -1,16 +1,18 @@
-/*
-
 package edu.ktu.screenshotanalyser.checks.experiments;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import org.languagetool.Language;
+import edu.ktu.screenshotanalyser.checks.AppCheckResults;
+import edu.ktu.screenshotanalyser.checks.AppDefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.StateCheckResults;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IAppRuleChecker;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.AppContext;
+import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 
 public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker, IAppRuleChecker
@@ -21,95 +23,78 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 	}
 	
 	@Override
-	public StateCheckResults analyze(State state)
+	public void analyze(@Nonnull State state, @Nonnull StateCheckResults result)
 	{
 		var allTexts = state.getActualControls().stream().map(this::getText).collect(Collectors.joining(". "));
-		var ll = determineLanguageAll(allTexts);
+		var candidateLanguages = determineLanguageAll(allTexts);
 
-		if (ll.isEmpty())
+		if (candidateLanguages.isEmpty())
 		{
-			return null;
+			return;
 		}
 
-		for (var language : ll)
+		for (var language : candidateLanguages)
 		{
 			if (language.equals("lt"))
 			{
-				return null;
+				return;
 			}
 		}
 
 		var languages = new ArrayList<Language>();
-
-		for (var q : ll)
-		{
-			languages.addAll(getLanguageByCode(q));
-		}
-
+		candidateLanguages.forEach(p -> languages.addAll(getLanguageByCode(p)));
+		
 		if (languages.isEmpty())
 		{
-			return null;
+			return;
 		}
-
-		// var messages = new ArrayList<String>();
-
-		var mistypes = "";
-		var errors = "";
 
 		for (var control : state.getActualControls())
 		{
-			if (null != control.getText() && control.getText().trim().length() > 0)
+			if (checkControlTexts(state, result, languages, control))
 			{
-				// messages.add(control.getText());
-
-				mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, control.getText().trim(), false);
-
-				if ((mistypes != null) && (mistypes.length() > 0))
-				{
-					return new StateCheckResults(state, this, mistypes, 1);
-				}
+				return;
 			}
+		}
+	}
 
-			if (null != control.getContentDescription())
+	private boolean checkControlTexts(State state, StateCheckResults result, ArrayList<Language> languages, Control control)
+	{
+		if (null != control.getText() && control.getText().trim().length() > 0)
+		{
+			var mistypes = isSpellingCorrect(state.getAppContext(), "", languages, control.getText().trim(), false);
+
+			if ((mistypes != null) && (mistypes.length() > 0))
 			{
-				// messages.add(control.getContentDescription());
-
-				if (null != control.getContentDescription() && control.getContentDescription().trim().length() > 0)
-				{
-					mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, control.getContentDescription().trim(), false);
-
-					if ((mistypes != null) && (mistypes.length() > 0))
-					{
-						return new StateCheckResults(state, this, mistypes, 1);
-					}
-				}
+				result.addAnnotation(new DefectAnnotation(this, control.getBounds(), mistypes));
+				
+				return true;
 			}
 		}
 
-		// for (var expected : messages)
-		// {
-		// mistypes = isSpellingCorrect(state.getAppContext(), mistypes, languages, expected);
-		//
-		// errors += " " + mistypes;
-		// errors = errors.trim();
-		// }
-		//
-		// if (errors.length() > 0)
-		// {
-		// failures.addFailure(new CheckResult(state, this, errors, errors.length()));
-		// }
+		if (null != control.getContentDescription() && (null != control.getContentDescription() && control.getContentDescription().trim().length() > 0))
+		{
+			var mistypes = isSpellingCorrect(state.getAppContext(), "", languages, control.getContentDescription().trim(), false);
+
+			if ((mistypes != null) && (mistypes.length() > 0))
+			{
+				result.addAnnotation(new DefectAnnotation(this, control.getBounds(), mistypes));
+				
+				return true;
+			}
+		}
 		
-		return null;
+		return false;
 	}
 
 	@Override
-	public void analyze(AppContext appContext, ResultsCollector failures)
+	public void analyze(@Nonnull AppContext appContext, @Nonnull AppCheckResults results)
 	{
 		var messages = appContext.getMessages();
 		
 		if (null != messages)
 		{
-			var languages = messages.getLanguages().stream().sorted((x, y) -> x.length() - y.length()).collect(Collectors.toList()).toArray(new String[0]);
+			var languages = messages.getLanguages().stream().sorted((x, y) -> x.length() - y.length()).toList();
 		
 			for (var key : messages.getKeys())
 			{
@@ -124,12 +109,10 @@ public class GrammarCheck extends BaseTextRuleCheck implements IStateRuleChecker
 					
 					if (errors.length() > 0)
 					{
-						failures.addFailure(new StateCheckResults(appContext, this, errors));
+						results.addAnnotation(new AppDefectAnnotation(this, errors));
 					}
 				}
 			}
 		}
 	}
 }
-
-*/

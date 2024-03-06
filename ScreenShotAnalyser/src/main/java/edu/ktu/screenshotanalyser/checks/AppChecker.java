@@ -21,7 +21,11 @@ public class AppChecker
 			checker.runStateChecks(state, exec, failures);
 		}
 		
-		checker.runAppChecks(context, exec, failures); 
+		var appFailures = new AppCheckResults(app);
+		
+		checker.runAppChecks(context, exec, appFailures);
+		
+		// TODO: log appFailures...
 	}	
 
 	private final DefaultContextProvider contextProvider;

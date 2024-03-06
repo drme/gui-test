@@ -1,5 +1,6 @@
 package edu.ktu.screenshotanalyser.checks;
 
+import javax.annotation.Nonnull;
 import edu.ktu.screenshotanalyser.context.AppContext;
 
 /**
@@ -7,5 +8,5 @@ import edu.ktu.screenshotanalyser.context.AppContext;
  */
 public interface IAppRuleChecker
 {
-	void analyze(AppContext appContext, IResultsCollector failures);
+	void analyze(@Nonnull AppContext appContext, @Nonnull AppCheckResults results);
 }

@@ -1,11 +1,10 @@
-/*
 package edu.ktu.screenshotanalyser.checks.experiments;
 
-import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import edu.ktu.screenshotanalyser.checks.BaseTextRuleCheck;
-import edu.ktu.screenshotanalyser.checks.StateCheckResults;
+import edu.ktu.screenshotanalyser.checks.DefectAnnotation;
 import edu.ktu.screenshotanalyser.checks.IStateRuleChecker;
-import edu.ktu.screenshotanalyser.checks.ResultsCollector;
+import edu.ktu.screenshotanalyser.checks.StateCheckResults;
 import edu.ktu.screenshotanalyser.context.Control;
 import edu.ktu.screenshotanalyser.context.State;
 
@@ -16,32 +15,26 @@ public class ClippedControlCheck extends BaseTextRuleCheck implements IStateRule
 		super(11, "Clipped Control");
 	}
 
-//	@Override
-	public StateCheckResults analyze(State state)
+	@Override
+	public void analyze(@Nonnull State state, @Nonnull StateCheckResults result)
 	{
 		var controls = state.getActualControls().stream().filter(p -> !shouldSkipControl(p, state));
-		var clippedControls = controls.filter(p -> isClipped(p, state)).collect(Collectors.toList());
+		var clippedControls = controls.filter(p -> isClipped(p, state)).toList();
 
-		if (!clippedControls.isEmpty())
-		{
-			return new StateCheckResults(state, this, "1", clippedControls.size());
-		}
-		
-		return null;
+		clippedControls.forEach(p -> result.addAnnotation(new DefectAnnotation(this, p.getBounds(), "clipped " + p.getBounds().toString() + " | " + p.getSignature() + " | " + (p.getBounds().x + p.getBounds().width) + " > " + state.getImageSize().width + " | " + (p.getBounds().y + p.getBounds().height) + " > " + state.getImageSize().height)));
 	}
 
 	private boolean isClipped(Control control, State state)
 	{
 		if ((control.getBounds().x + control.getBounds().width > state.getImageSize().width + 5) || (control.getBounds().y + control.getBounds().height > state.getImageSize().height + 5))
 		{
-			System.out.println("clipped " + control.getBounds().toString() + " | " + control.getSignature() + " | " + (control.getBounds().x + control.getBounds().width) + " > " + state.getImageSize().width + " | " + (control.getBounds().y + control.getBounds().height) + " > " + state.getImageSize().height);
-
 			return true;
 		}
 
 		return false;
 	}
 
+	@Override
 	protected boolean shouldSkipControl(Control control, State state)
 	{
 		if (!control.isVisible())
@@ -84,4 +77,3 @@ public class ClippedControlCheck extends BaseTextRuleCheck implements IStateRule
 		return false;
 	}
 }
-*/

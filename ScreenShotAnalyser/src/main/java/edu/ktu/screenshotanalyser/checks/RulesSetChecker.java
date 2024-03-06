@@ -64,11 +64,11 @@ public class RulesSetChecker
 		}
 	}
 
-	public void runAppChecks(AppContext context, ExecutorService exec, IResultsCollector failures)
+	public void runAppChecks(AppContext context, ExecutorService exec, AppCheckResults results)
 	{
 		var checksAvailable = this.rulesCheckers.stream().filter(IAppRuleChecker.class::isInstance).map(IAppRuleChecker.class::cast).toList();
 		
-		checksAvailable.forEach(check -> exec.submit(() -> check.analyze(context, failures)));
+		checksAvailable.forEach(check -> exec.submit(() -> check.analyze(context, results)));
 	}
 	
 	public String buildRunName()

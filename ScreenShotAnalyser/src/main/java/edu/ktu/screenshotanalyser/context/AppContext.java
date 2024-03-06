@@ -377,7 +377,12 @@ public class AppContext
 	public String getPackage()
 	{
 		return this.app.packageName();
-	}	
+	}
+	
+	public String getName()
+	{
+		return this.app.name();
+	}
 
 	private LocalizedMessages messages = null;
 	private List<Layout> layouts = null;

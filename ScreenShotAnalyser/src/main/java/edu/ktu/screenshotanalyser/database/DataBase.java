@@ -82,14 +82,14 @@ public class DataBase
     }
 	}
 	
-	public record Application(long id, String folder, boolean noEmulator, String apkFile, String packageName)
+	public record Application(long id, String folder, boolean noEmulator, String apkFile, String packageName, String name)
 	{
 	}
 	
 	public List<Application> getApplications() throws SQLException
 	{
-		var query = "SELECT Id, Folder, NoEmulator, ApkFile, Package FROM Application";
-		return getList(rs -> new Application(rs.getLong(1), rs.getString(2), rs.getBoolean(3), rs.getString(4), rs.getString(5)), query);
+		var query = "SELECT Id, Folder, NoEmulator, ApkFile, Package, Name FROM Application";
+		return getList(rs -> new Application(rs.getLong(1), rs.getString(2), rs.getBoolean(3), rs.getString(4), rs.getString(5), rs.getString(6)), query);
 	}
 	
 	public record ApplicationFile(long id, byte[] fileData, String fileName, long fileTypeId)
